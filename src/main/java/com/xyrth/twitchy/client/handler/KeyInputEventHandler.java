@@ -1,7 +1,7 @@
 package com.xyrth.twitchy.client.handler;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.client.entity.EntityClientPlayerMP;
 
 import com.xyrth.twitchy.client.settings.Keybindings;
 import com.xyrth.twitchy.network.TwitchyPacket;
@@ -21,10 +21,22 @@ public class KeyInputEventHandler {
 
     public static Key getPressedKeybinding() {
 
-        if (Keybindings.spawnskeleton.isPressed()) {
-            return Key.SPAWNSKELETON;
-        } else if (Keybindings.potion.isPressed()) {
-            return Key.POTION;
+        if (Keybindings.skeleton.isPressed()) {
+            return Key.SKELETON;
+        } else if (Keybindings.instantdamage.isPressed()) {
+            return Key.INSTANTDAMAGE;
+        } else if (Keybindings.wither.isPressed()) {
+            return Key.WITHER;
+        } else if (Keybindings.paralysis.isPressed()) {
+            return Key.PARALYSIS;
+        } else if (Keybindings.possession.isPressed()) {
+            return Key.POSSESSION;
+        } else if (Keybindings.speed.isPressed()) {
+            return Key.SPEED;
+        } else if (Keybindings.resized.isPressed()) {
+            return Key.RESIZED;
+        } else if (Keybindings.firefuse.isPressed()) {
+            return Key.FIREFUSE;
         }
         return Key.UNKNOWN;
     }
@@ -33,11 +45,24 @@ public class KeyInputEventHandler {
     public void handleKeyInputEvent(InputEvent.KeyInputEvent event) {
         // LogHelper.info(getPressedKeybinding());
 
-        if (Keybindings.spawnskeleton.isPressed()) {
-            EntityPlayer player = Minecraft.getMinecraft().thePlayer;
-            Events.spawnskeleton();
-        } else if (Keybindings.potion.isPressed()) {
-            Events.potion();
+        EntityClientPlayerMP player = Minecraft.getMinecraft().thePlayer;
+
+        if (Keybindings.skeleton.isPressed()) {
+            Events.skeleton(player);
+        } else if (Keybindings.instantdamage.isPressed()) {
+            Events.instantdamage(player);
+        } else if (Keybindings.wither.isPressed()) {
+            Events.wither(player);
+        } else if (Keybindings.paralysis.isPressed()) {
+            Events.paralysis(player);
+        } else if (Keybindings.possession.isPressed()) {
+            Events.possession(player);
+        } else if (Keybindings.speed.isPressed()) {
+            Events.speed(player);
+        } else if (Keybindings.resized.isPressed()) {
+            Events.resized(player);
+        } else if (Keybindings.firefuse.isPressed()) {
+            Events.firefuse(player);
         }
 
         // send packet to server

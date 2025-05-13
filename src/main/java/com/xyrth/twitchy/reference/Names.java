@@ -4,9 +4,15 @@ public final class Names {
 
     public static final class Keys {
 
-        public static final String CATEGORY = "Twitchy";
-        public static final String SPAWNSKELETON = "Spawn Skeleton";
-        public static final String POTION = "Spawn Potion";
-        public static final String RESIZE = "Resize Potion";
+        public static final String CATEGORYMOB = "Twitchy Mobs";
+        public static final String CATEGORYPOTIONS = "Twitchy Potions";
+        public static final String SKELETON = "Spawn Skeleton";
+        public static final String INSTANTDAMAGE = "Instant Damage Potion";
+        public static final String RESIZED = "Resize Potion";
+        public static final String WITHER = "Wither Potion";
+        public static final String PARALYSIS = "Paralysis Potion";
+        public static final String POSSESSION = "Possession Potion";
+        public static final String FIREFUSE = "Fire Fuse Potion";
+        public static final String SPEED = "Speed Potion";
     }
 }
