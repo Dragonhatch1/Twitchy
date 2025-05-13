@@ -12,6 +12,10 @@ public class Keybindings {
         Names.Keys.SKELETON,
         Keyboard.KEY_NUMPAD9,
         Names.Keys.CATEGORYMOB);
+    public static KeyBinding randomspawn = new KeyBinding(
+        Names.Keys.RANDOMSPAWN,
+        Keyboard.KEY_NUMPAD1,
+        Names.Keys.CATEGORYMOB);
     public static KeyBinding instantdamage = new KeyBinding(
         Names.Keys.INSTANTDAMAGE,
         Keyboard.KEY_NUMPAD8,

@@ -14,5 +14,6 @@ public final class Names {
         public static final String POSSESSION = "Possession Potion";
         public static final String FIREFUSE = "Fire Fuse Potion";
         public static final String SPEED = "Speed Potion";
+        public static final String RANDOMSPAWN = "Spawn Random Mob";
     }
 }

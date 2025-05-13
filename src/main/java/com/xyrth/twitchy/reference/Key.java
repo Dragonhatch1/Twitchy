@@ -9,5 +9,6 @@ public enum Key {
     POSSESSION,
     SPEED,
     RESIZED,
-    FIREFUSE
+    FIREFUSE,
+    RANDOMSPAWN
 }

@@ -1,5 +1,7 @@
 package com.xyrth.twitchy.client.handler;
 
+import java.util.Random;
+
 import net.minecraft.client.entity.EntityClientPlayerMP;
 
 public class Events {
@@ -10,6 +12,21 @@ public class Events {
     public static void skeleton(EntityClientPlayerMP player) {
 
         player.sendChatMessage("/summon Skeleton");
+    }
+
+    public static void randomspawn(EntityClientPlayerMP player) {
+        Random r = new Random();
+        int mob = r.nextInt(2);
+        switch (mob) {
+            case 0:
+                player.sendChatMessage("/summon Skeleton");
+                break;
+            case 1:
+                player.sendChatMessage("/summon Zombie");
+                break;
+            default:
+                break;
+        }
     }
 
     /**
