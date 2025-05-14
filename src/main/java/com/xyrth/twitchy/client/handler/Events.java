@@ -46,13 +46,12 @@ public class Events {
     /**
      * Potion Section
      */
-    // TODO delete old potion keybinds
     public static void randompotion(EntityClientPlayerMP player) {
         Random r = new Random();
         // Rolls 1-100
         int x = (r.nextInt(100) + 1);
         int potion;
-        // Percentages || Needs to equal 1.00 or 100%
+        // Percentages or Weights || Needs to equal 1.00 or 100%
         double wither = 0.09;
         double paralysis = 0.10;
         double possession = 0.09;
@@ -101,67 +100,67 @@ public class Events {
         }
         switch (potion) {
             case 0:
-                // wither 16%
+                // wither 9%
                 // player.sendChatMessage("wither 16%");
                 player.sendChatMessage(
                     "/summon ThrownPotion ~ ~2 ~ {Potion:{id:373,Damage:16395,Count:1,tag:{CustomPotionEffects:[{Id:20,Amplifier:10,Duration:200}]}},Riding:{id:XPOrb}}");
                 break;
             case 1:
-                // paralysis 16%
+                // paralysis 10%
                 // player.sendChatMessage("paralysis 16%");
                 player.sendChatMessage(
                     "/summon ThrownPotion ~ ~2 ~ {Potion:{id:373,Damage:16395,Count:1,tag:{CustomPotionEffects:[{Id:25,Amplifier:0,Duration:200}]}},Riding:{id:XPOrb}}");
                 break;
             case 2:
-                // possession 16%
+                // possession 9%
                 // player.sendChatMessage("possession 16%");
                 player.sendChatMessage(
                     "/summon ThrownPotion ~ ~2 ~ {Potion:{id:373,Damage:16395,Count:1,tag:{CustomPotionEffects:[{Id:26,Amplifier:0,Duration:100}]}},Riding:{id:XPOrb}}");
                 break;
             case 3:
-                // speed 16%
+                // speed 10%
                 // player.sendChatMessage("speed 16%");
                 player.sendChatMessage(
                     "/summon ThrownPotion ~ ~2 ~ {Potion:{id:373,Damage:16395,Count:1,tag:{CustomPotionEffects:[{Id:1,Amplifier:100,Duration:1200}]}},Riding:{id:XPOrb}}");
                 break;
             case 4:
-                // Fire fuse 16%
+                // Fire fuse 9%
                 // player.sendChatMessage("Fire Fuse 16%");
                 player.sendChatMessage(
                     "/summon ThrownPotion ~ ~2 ~ {Potion:{id:373,Damage:16395,Count:1,tag:{CustomPotionEffects:[{Id:109,Amplifier:2,Duration:25}]}},Riding:{id:XPOrb}}");
                 break;
             case 5:
-                // Resized 16%
+                // Resized 11%
                 // player.sendChatMessage("Resized 16%");
                 player.sendChatMessage(
                     "/summon ThrownPotion ~ ~2 ~ {Potion:{id:373,Damage:16395,Count:1,tag:{CustomPotionEffects:[{Id:77,Amplifier:100,Duration:3600}]}},Riding:{id:XPOrb}}");
                 break;
             case 6:
-                // Waking Nightmare 16%
+                // Waking Nightmare 10%
                 // player.sendChatMessage("Waking Nightmare 16%");
                 player.sendChatMessage(
                     "/summon ThrownPotion ~ ~2 ~ {Potion:{id:373,Damage:16395,Count:1,tag:{CustomPotionEffects:[{Id:92,Amplifier:10,Duration:3600}]}},Riding:{id:XPOrb}}");
                 break;
             case 7:
-                // Boost 16%
+                // Boost 10%
                 // player.sendChatMessage("Boost 16%");
                 player.sendChatMessage(
                     "/summon ThrownPotion ~ ~2 ~ {Potion:{id:373,Damage:16395,Count:1,tag:{CustomPotionEffects:[{Id:101,Amplifier:10,Duration:1200}]}},Riding:{id:XPOrb}}");
                 break;
             case 8:
-                // Heavy Heart 16%
+                // Heavy Heart 9%
                 // player.sendChatMessage("Heavy Heart 16%");
                 player.sendChatMessage(
                     "/summon ThrownPotion ~ ~2 ~ {Potion:{id:373,Damage:16395,Count:1,tag:{CustomPotionEffects:[{Id:108,Amplifier:10,Duration:200}]}},Riding:{id:XPOrb}}");
                 break;
             case 9:
-                // Hallucinations 16%
+                // Hallucinations 10%
                 // player.sendChatMessage("Hallucinations 16%");
                 player.sendChatMessage(
                     "/summon ThrownPotion ~ ~2 ~ {Potion:{id:373,Damage:16395,Count:1,tag:{CustomPotionEffects:[{Id:64,Amplifier:10,Duration:3600}]}},Riding:{id:XPOrb}}");
                 break;
             case 10:
-                // Instant Damage 4% Chance
+                // Instant Damage 3%
                 player.sendChatMessage("Oop, here comes the boom! :)");
                 player.sendChatMessage(
                     "/summon ThrownPotion ~ ~2 ~ {Potion:{id:373,Damage:16395,Count:1,tag:{CustomPotionEffects:[{Id:7,Amplifier:1000,Duration:200}]}},Riding:{id:XPOrb}}");
@@ -175,47 +174,4 @@ public class Events {
      * Mob Raid Section
      */
     // TODO setup Raid keybind and method. Will spawn many mobs when raided. Can just copy original mob spawner and up the loops.
-
-    public static void instantdamage(EntityClientPlayerMP player) {
-
-        player.sendChatMessage(
-            "/summon ThrownPotion ~ ~2 ~ {Potion:{id:373,Damage:16395,Count:1,tag:{CustomPotionEffects:[{Id:7,Amplifier:1000,Duration:200}]}},Riding:{id:XPOrb}}");
-    }
-
-    public static void wither(EntityClientPlayerMP player) {
-
-        player.sendChatMessage(
-            "/summon ThrownPotion ~ ~2 ~ {Potion:{id:373,Damage:16395,Count:1,tag:{CustomPotionEffects:[{Id:20,Amplifier:10,Duration:200}]}},Riding:{id:XPOrb}}");
-    }
-
-    public static void paralysis(EntityClientPlayerMP player) {
-
-        player.sendChatMessage(
-            "/summon ThrownPotion ~ ~2 ~ {Potion:{id:373,Damage:16395,Count:1,tag:{CustomPotionEffects:[{Id:25,Amplifier:0,Duration:200}]}},Riding:{id:XPOrb}}");
-    }
-
-    public static void possession(EntityClientPlayerMP player) {
-
-        player.sendChatMessage(
-            "/summon ThrownPotion ~ ~2 ~ {Potion:{id:373,Damage:16395,Count:1,tag:{CustomPotionEffects:[{Id:26,Amplifier:0,Duration:100}]}},Riding:{id:XPOrb}}");
-    }
-
-    public static void speed(EntityClientPlayerMP player) {
-
-        player.sendChatMessage(
-            "/summon ThrownPotion ~ ~2 ~ {Potion:{id:373,Damage:16395,Count:1,tag:{CustomPotionEffects:[{Id:1,Amplifier:100,Duration:1200}]}},Riding:{id:XPOrb}}");
-    }
-
-    public static void resized(EntityClientPlayerMP player) {
-
-        player.sendChatMessage(
-            "/summon ThrownPotion ~ ~2 ~ {Potion:{id:373,Damage:16395,Count:1,tag:{CustomPotionEffects:[{Id:77,Amplifier:100,Duration:3600}]}},Riding:{id:XPOrb}}");
-    }
-
-    public static void firefuse(EntityClientPlayerMP player) {
-
-        player.sendChatMessage(
-            "/summon ThrownPotion ~ ~2 ~ {Potion:{id:373,Damage:16395,Count:1,tag:{CustomPotionEffects:[{Id:109,Amplifier:2,Duration:25}]}},Riding:{id:XPOrb}}");
-    }
-
 }

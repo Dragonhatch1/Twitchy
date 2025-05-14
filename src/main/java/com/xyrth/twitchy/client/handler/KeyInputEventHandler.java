@@ -21,21 +21,7 @@ public class KeyInputEventHandler {
 
     public static Key getPressedKeybinding() {
 
-        if (Keybindings.instantdamage.isPressed()) {
-            return Key.INSTANTDAMAGE;
-        } else if (Keybindings.wither.isPressed()) {
-            return Key.WITHER;
-        } else if (Keybindings.paralysis.isPressed()) {
-            return Key.PARALYSIS;
-        } else if (Keybindings.possession.isPressed()) {
-            return Key.POSSESSION;
-        } else if (Keybindings.speed.isPressed()) {
-            return Key.SPEED;
-        } else if (Keybindings.resized.isPressed()) {
-            return Key.RESIZED;
-        } else if (Keybindings.firefuse.isPressed()) {
-            return Key.FIREFUSE;
-        } else if (Keybindings.randomspawn.isPressed()) {
+        if (Keybindings.randomspawn.isPressed()) {
             return Key.RANDOMSPAWN;
         } else if (Keybindings.randompotion.isPressed()) {
             return Key.RANDOMPOTION;
@@ -49,21 +35,7 @@ public class KeyInputEventHandler {
 
         EntityClientPlayerMP player = Minecraft.getMinecraft().thePlayer;
 
-        if (Keybindings.instantdamage.isPressed()) {
-            Events.instantdamage(player);
-        } else if (Keybindings.wither.isPressed()) {
-            Events.wither(player);
-        } else if (Keybindings.paralysis.isPressed()) {
-            Events.paralysis(player);
-        } else if (Keybindings.possession.isPressed()) {
-            Events.possession(player);
-        } else if (Keybindings.speed.isPressed()) {
-            Events.speed(player);
-        } else if (Keybindings.resized.isPressed()) {
-            Events.resized(player);
-        } else if (Keybindings.firefuse.isPressed()) {
-            Events.firefuse(player);
-        } else if (Keybindings.randomspawn.isPressed()) {
+        if (Keybindings.randomspawn.isPressed()) {
             Events.randomspawn(player);
         } else if (Keybindings.randompotion.isPressed()) {
             Events.randompotion(player);
