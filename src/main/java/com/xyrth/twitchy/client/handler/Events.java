@@ -46,7 +46,7 @@ public class Events {
     /**
      * Potion Section
      */
-    // TODO add more potions and fix percentages
+    // TODO delete old potion keybinds
     public static void randompotion(EntityClientPlayerMP player) {
         Random r = new Random();
         // Rolls 1-100
@@ -170,6 +170,11 @@ public class Events {
                 break;
         }
     }
+
+    /**
+     * Mob Raid Section
+     */
+    // TODO setup Raid keybind and method. Will spawn many mobs when raided. Can just copy original mob spawner and up the loops.
 
     public static void instantdamage(EntityClientPlayerMP player) {
 
