@@ -16,4 +16,8 @@ public class Keybindings {
         Names.Keys.RANDOMPOTION,
         Keyboard.KEY_NUMPAD2,
         Names.Keys.CATEGORY);
+    public static KeyBinding mobraid = new KeyBinding(
+        Names.Keys.MOBRAID,
+        Keyboard.KEY_NUMPAD3,
+        Names.Keys.CATEGORY);
 }

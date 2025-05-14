@@ -10,5 +10,6 @@ public class ClientProxy extends CommonProxy {
     public void registerKeyBindings() {
         ClientRegistry.registerKeyBinding(Keybindings.randomspawn);
         ClientRegistry.registerKeyBinding(Keybindings.randompotion);
+        ClientRegistry.registerKeyBinding(Keybindings.mobraid);
     }
 }

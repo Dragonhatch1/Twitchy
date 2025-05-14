@@ -173,5 +173,37 @@ public class Events {
     /**
      * Mob Raid Section
      */
-    // TODO setup Raid keybind and method. Will spawn many mobs when raided. Can just copy original mob spawner and up the loops.
+    public static void mobraid(EntityClientPlayerMP player) {
+        Random r = new Random();
+        int mob = r.nextInt(5);
+        switch (mob) {
+            case 0:
+                for (int x = 0; x < 40; x++) {
+                    player.sendChatMessage("/summon Skeleton");
+                }
+                break;
+            case 1:
+                for (int x = 0; x < 100; x++) {
+                    player.sendChatMessage("/summon Zombie");
+                }
+                break;
+            case 2:
+                for (int x = 0; x < 100; x++) {
+                    player.sendChatMessage("/summon Chicken");
+                }
+                break;
+            case 3:
+                for (int x = 0; x < 100; x++) {
+                    player.sendChatMessage("/summon Cow");
+                }
+                break;
+            case 4:
+                for (int x = 0; x < 30; x++) {
+                    player.sendChatMessage("/summon Slime");
+                }
+                break;
+            default:
+                break;
+        }
+    }
 }
