@@ -6,7 +6,6 @@ public final class Names {
 
         public static final String CATEGORYMOB = "Twitchy Mobs";
         public static final String CATEGORYPOTIONS = "Twitchy Potions";
-        public static final String SKELETON = "Spawn Skeleton";
         public static final String INSTANTDAMAGE = "Instant Damage Potion";
         public static final String RESIZED = "Resize Potion";
         public static final String WITHER = "Wither Potion";

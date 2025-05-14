@@ -8,10 +8,6 @@ import com.xyrth.twitchy.reference.Names;
 
 public class Keybindings {
 
-    public static KeyBinding skeleton = new KeyBinding(
-        Names.Keys.SKELETON,
-        Keyboard.KEY_NUMPAD9,
-        Names.Keys.CATEGORYMOB);
     public static KeyBinding randomspawn = new KeyBinding(
         Names.Keys.RANDOMSPAWN,
         Keyboard.KEY_NUMPAD1,

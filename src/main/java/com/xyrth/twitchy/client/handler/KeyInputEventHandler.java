@@ -21,9 +21,7 @@ public class KeyInputEventHandler {
 
     public static Key getPressedKeybinding() {
 
-        if (Keybindings.skeleton.isPressed()) {
-            return Key.SKELETON;
-        } else if (Keybindings.instantdamage.isPressed()) {
+        if (Keybindings.instantdamage.isPressed()) {
             return Key.INSTANTDAMAGE;
         } else if (Keybindings.wither.isPressed()) {
             return Key.WITHER;
@@ -51,9 +49,7 @@ public class KeyInputEventHandler {
 
         EntityClientPlayerMP player = Minecraft.getMinecraft().thePlayer;
 
-        if (Keybindings.skeleton.isPressed()) {
-            Events.skeleton(player);
-        } else if (Keybindings.instantdamage.isPressed()) {
+        if (Keybindings.instantdamage.isPressed()) {
             Events.instantdamage(player);
         } else if (Keybindings.wither.isPressed()) {
             Events.wither(player);
