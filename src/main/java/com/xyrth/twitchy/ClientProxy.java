@@ -17,5 +17,6 @@ public class ClientProxy extends CommonProxy {
         ClientRegistry.registerKeyBinding(Keybindings.resized);
         ClientRegistry.registerKeyBinding(Keybindings.firefuse);
         ClientRegistry.registerKeyBinding(Keybindings.randomspawn);
+        ClientRegistry.registerKeyBinding(Keybindings.randompotion);
     }
 }

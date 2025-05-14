@@ -39,6 +39,8 @@ public class KeyInputEventHandler {
             return Key.FIREFUSE;
         } else if (Keybindings.randomspawn.isPressed()) {
             return Key.RANDOMSPAWN;
+        } else if (Keybindings.randompotion.isPressed()) {
+            return Key.RANDOMPOTION;
         }
         return Key.UNKNOWN;
     }
@@ -67,6 +69,8 @@ public class KeyInputEventHandler {
             Events.firefuse(player);
         } else if (Keybindings.randomspawn.isPressed()) {
             Events.randomspawn(player);
+        } else if (Keybindings.randompotion.isPressed()) {
+            Events.randompotion(player);
         }
 
         // send packet to server

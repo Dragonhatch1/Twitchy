@@ -41,4 +41,8 @@ public class Keybindings {
         Names.Keys.FIREFUSE,
         Keyboard.KEY_NUMPAD2,
         Names.Keys.CATEGORYPOTIONS);
+    public static KeyBinding randompotion = new KeyBinding(
+        Names.Keys.RANDOMPOTION,
+        Keyboard.KEY_NUMPAD2,
+        Names.Keys.CATEGORYPOTIONS);
 }
