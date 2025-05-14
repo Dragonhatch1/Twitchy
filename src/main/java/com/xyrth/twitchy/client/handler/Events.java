@@ -178,27 +178,32 @@ public class Events {
         int mob = r.nextInt(5);
         switch (mob) {
             case 0:
-                for (int x = 0; x < 40; x++) {
+                player.sendChatMessage("A Horde of Skeletons has chased some raiders from the previous channel!");
+                for (int x = 0; x < 60; x++) {
                     player.sendChatMessage("/summon Skeleton");
                 }
                 break;
             case 1:
-                for (int x = 0; x < 100; x++) {
+                player.sendChatMessage("The arrival of Raiders seems to have stirred up a Zombie Horde!");
+                for (int x = 0; x < 150; x++) {
                     player.sendChatMessage("/summon Zombie");
                 }
                 break;
             case 2:
-                for (int x = 0; x < 100; x++) {
+                player.sendChatMessage("WHO DID DAMAGE TO THE CHICKEN?!");
+                for (int x = 0; x < 300; x++) {
                     player.sendChatMessage("/summon Chicken");
                 }
                 break;
             case 3:
-                for (int x = 0; x < 100; x++) {
+                player.sendChatMessage("The Raiders have brought a stampede of Cows with them!");
+                for (int x = 0; x < 300; x++) {
                     player.sendChatMessage("/summon Cow");
                 }
                 break;
             case 4:
-                for (int x = 0; x < 30; x++) {
+                player.sendChatMessage("The Raiders brought some Slimes with em!");
+                for (int x = 0; x < 40; x++) {
                     player.sendChatMessage("/summon Slime");
                 }
                 break;
