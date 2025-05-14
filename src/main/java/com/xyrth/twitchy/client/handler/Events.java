@@ -52,6 +52,7 @@ public class Events {
         int x = (r.nextInt(100) + 1);
         int potion;
         // Percentages or Weights || Needs to equal 1.00 or 100%
+        //Instant Damage goes no where, its there to remind you to add up to 1.00 or 100%. its Percentage is whatever is leftover from the others to reach 100%.
         double wither = 0.09;
         double paralysis = 0.10;
         double possession = 0.09;
@@ -211,4 +212,14 @@ public class Events {
                 break;
         }
     }
+
+    /**
+     * Sub Section
+     */
+    // TODO Add Subscriber section and have events on Sub.
+
+    /**
+     * Follow Section
+     */
+    // TODO Add Follower section and have events on Follow.
 }
