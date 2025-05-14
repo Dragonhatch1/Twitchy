@@ -51,35 +51,55 @@ public class Events {
         Random r = new Random();
         // Rolls 1-100
         int x = (r.nextInt(100) + 1);
-        int mob;
-        //Percentages
-        double wither = 0.15;
-        double paralysis = 0.15;
+        int potion;
+        // Percentages || Needs to equal 1.00 or 100%
+        double wither = 0.09;
+        double paralysis = 0.10;
+        double possession = 0.09;
+        double speed = 0.10;
+        double firefuse = 0.09;
+        double resized = 0.11;
+        double wakingnightmare = 0.10;
+        double boost = 0.10;
+        double heavyheart = 0.09;
+        double hallucinations = 0.10;
+        double instantdamage = 0.03;
 
-        if (x <= 15) {
-            mob = 0;
-        } else if (x > 15 && x <= 31) {
-            mob = 1;
-        } else if (x > 31 && x <= 47) {
-            mob = 2;
-        } else if (x > 47 && x <= 63) {
-            mob = 3;
-        } else if (x > 63 && x <= 79) {
-            mob = 4;
-        } else if (x > 79 && x <= 95) {
-            mob = 5;
-        } else if (x > 79 && x <= 95) {
-            mob = 6;
-        } else if (x > 79 && x <= 95) {
-            mob = 7;
-        } else if (x > 79 && x <= 95) {
-            mob = 8;
-        } else if (x > 79 && x <= 95) {
-            mob = 9;
+        double withern = wither * 100;
+        double paralysisn = ((paralysis * 100) + withern);
+        double possessionn = ((possession * 100) + paralysisn);
+        double speedn = ((speed * 100) + possessionn);
+        double firefusen = ((firefuse * 100) + speedn);
+        double resizedn = ((resized * 100) + firefusen);
+        double wakingnightmaren = ((wakingnightmare * 100) + resizedn);
+        double boostn = ((boost * 100) + wakingnightmaren);
+        double heavyheartn = ((heavyheart * 100) + boostn);
+        double hallucinationsn = ((hallucinations * 100) + heavyheartn);
+
+        if (x <= withern) {
+            potion = 0;
+        } else if (x > withern && x <= paralysisn) {
+            potion = 1;
+        } else if (x > paralysisn && x <= possessionn) {
+            potion = 2;
+        } else if (x > possessionn && x <= speedn) {
+            potion = 3;
+        } else if (x > speedn && x <= firefusen) {
+            potion = 4;
+        } else if (x > firefusen && x <= resizedn) {
+            potion = 5;
+        } else if (x > resizedn && x <= wakingnightmaren) {
+            potion = 6;
+        } else if (x > wakingnightmaren && x <= boostn) {
+            potion = 7;
+        } else if (x > boostn && x <= heavyheartn) {
+            potion = 8;
+        } else if (x > heavyheartn && x <= hallucinationsn) {
+            potion = 9;
         } else {
-            mob = 10;
+            potion = 10;
         }
-        switch (mob) {
+        switch (potion) {
             case 0:
                 // wither 16%
                 // player.sendChatMessage("wither 16%");
@@ -120,25 +140,25 @@ public class Events {
                 // Waking Nightmare 16%
                 // player.sendChatMessage("Waking Nightmare 16%");
                 player.sendChatMessage(
-                    "/summon ThrownPotion ~ ~2 ~ {Potion:{id:373,Damage:16395,Count:1,tag:{CustomPotionEffects:[{Id:92,Amplifier:100,Duration:3600}]}},Riding:{id:XPOrb}}");
+                    "/summon ThrownPotion ~ ~2 ~ {Potion:{id:373,Damage:16395,Count:1,tag:{CustomPotionEffects:[{Id:92,Amplifier:10,Duration:3600}]}},Riding:{id:XPOrb}}");
                 break;
             case 7:
                 // Boost 16%
                 // player.sendChatMessage("Boost 16%");
                 player.sendChatMessage(
-                    "/summon ThrownPotion ~ ~2 ~ {Potion:{id:373,Damage:16395,Count:1,tag:{CustomPotionEffects:[{Id:101,Amplifier:100,Duration:3600}]}},Riding:{id:XPOrb}}");
+                    "/summon ThrownPotion ~ ~2 ~ {Potion:{id:373,Damage:16395,Count:1,tag:{CustomPotionEffects:[{Id:101,Amplifier:10,Duration:1200}]}},Riding:{id:XPOrb}}");
                 break;
             case 8:
                 // Heavy Heart 16%
                 // player.sendChatMessage("Heavy Heart 16%");
                 player.sendChatMessage(
-                    "/summon ThrownPotion ~ ~2 ~ {Potion:{id:373,Damage:16395,Count:1,tag:{CustomPotionEffects:[{Id:108,Amplifier:100,Duration:3600}]}},Riding:{id:XPOrb}}");
+                    "/summon ThrownPotion ~ ~2 ~ {Potion:{id:373,Damage:16395,Count:1,tag:{CustomPotionEffects:[{Id:108,Amplifier:10,Duration:200}]}},Riding:{id:XPOrb}}");
                 break;
             case 9:
                 // Hallucinations 16%
                 // player.sendChatMessage("Hallucinations 16%");
                 player.sendChatMessage(
-                    "/summon ThrownPotion ~ ~2 ~ {Potion:{id:373,Damage:16395,Count:1,tag:{CustomPotionEffects:[{Id:64,Amplifier:100,Duration:3600}]}},Riding:{id:XPOrb}}");
+                    "/summon ThrownPotion ~ ~2 ~ {Potion:{id:373,Damage:16395,Count:1,tag:{CustomPotionEffects:[{Id:64,Amplifier:10,Duration:3600}]}},Riding:{id:XPOrb}}");
                 break;
             case 10:
                 // Instant Damage 4% Chance
