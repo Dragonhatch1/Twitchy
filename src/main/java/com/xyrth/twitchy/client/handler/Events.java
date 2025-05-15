@@ -11,7 +11,7 @@ public class Events {
      */
     public static void randomspawn(EntityClientPlayerMP player) {
         Random r = new Random();
-        int mob = r.nextInt(5);
+        int mob = r.nextInt(11);
         switch (mob) {
             case 0:
                 for (int x = 0; x < 10; x++) {
@@ -38,6 +38,36 @@ public class Events {
                     player.sendChatMessage("/summon Slime");
                 }
                 break;
+            case 5:
+                for (int x = 0; x < 10; x++) {
+                    player.sendChatMessage("/summon enderzoo.DireWolf");
+                }
+                break;
+            case 6:
+                for (int x = 0; x < 10; x++) {
+                    player.sendChatMessage("/summon enderzoo.FallenKnight");
+                }
+                break;
+            case 7:
+                for (int x = 0; x < 10; x++) {
+                    player.sendChatMessage("/summon VillagerGolem");
+                }
+                break;
+            case 8:
+                for (int x = 0; x < 10; x++) {
+                    player.sendChatMessage("/summon Sheep");
+                }
+                break;
+            case 9:
+                for (int x = 0; x < 10; x++) {
+                    player.sendChatMessage("/summon Pig");
+                }
+                break;
+            case 10:
+                for (int x = 0; x < 10; x++) {
+                    player.sendChatMessage("/summon sentryRobot");
+                }
+                break;
             default:
                 break;
         }
@@ -52,7 +82,7 @@ public class Events {
         int x = (r.nextInt(100) + 1);
         int potion;
         // Percentages or Weights || Needs to equal 1.00 or 100%
-        //Instant Damage goes no where, its there to remind you to add up to 1.00 or 100%. its Percentage is whatever is leftover from the others to reach 100%.
+        //Instant Damage goes nowhere, it's there to remind you to add up to 1.00 or 100%. its Percentage is whatever is leftover from the others to reach 100%.
         double wither = 0.09;
         double paralysis = 0.10;
         double possession = 0.09;
@@ -176,7 +206,7 @@ public class Events {
      */
     public static void mobraid(EntityClientPlayerMP player) {
         Random r = new Random();
-        int mob = r.nextInt(5);
+        int mob = r.nextInt(11);
         switch (mob) {
             case 0:
                 player.sendChatMessage("A Horde of Skeletons has chased some raiders from the previous channel!");
@@ -208,6 +238,42 @@ public class Events {
                     player.sendChatMessage("/summon Slime");
                 }
                 break;
+            case 5:
+                player.sendChatMessage("With the arrival of raiders, an old friend has come to visit! :)");
+                for (int x = 0; x < 150; x++) {
+                    player.sendChatMessage("/summon enderzoo.DireWolf");
+                }
+                break;
+            case 6:
+                player.sendChatMessage("The sudden rush of Raiders has awoken a horde of Fallen Knights!");
+                for (int x = 0; x < 100; x++) {
+                    player.sendChatMessage("/summon enderzoo.FallenKnight");
+                }
+                break;
+            case 7:
+                player.sendChatMessage("It seems the Raiders have brought a few golems with them!");
+                for (int x = 0; x < 50; x++) {
+                    player.sendChatMessage("/summon VillagerGolem");
+                }
+                break;
+            case 8:
+                player.sendChatMessage("Turns out the Raiders were shepherds in a past life.");
+                for (int x = 0; x < 300; x++) {
+                    player.sendChatMessage("/summon Sheep");
+                }
+                break;
+            case 9:
+                player.sendChatMessage("With squealing in the distance, you hear them approach.... Raiders....");
+                for (int x = 0; x < 300; x++) {
+                    player.sendChatMessage("/summon Pig");
+                }
+                break;
+            case 10:
+                player.sendChatMessage("Holy smokes! The Sentries spotted the Raiders! Kill 'em quick!");
+                for (int x = 0; x < 100; x++) {
+                    player.sendChatMessage("/summon sentryRobot");
+                }
+                break;
             default:
                 break;
         }
@@ -217,6 +283,29 @@ public class Events {
      * Sub Section
      */
     // TODO Add Subscriber section and have events on Sub.
+    public static void substuff(EntityClientPlayerMP player) {
+        Random r = new Random();
+        int mob = r.nextInt(4);
+        switch (mob) {
+            case 0:
+                player.sendChatMessage("That sub just amped up some Sentries. Have fun :)");
+                for (int x = 0; x < 100; x++) {
+                    player.sendChatMessage("/summon sentryRobot");
+                }
+                //
+                player.sendChatMessage(
+                    "/summon ThrownPotion ~ ~ ~ {Potion:{id:373,Damage:16395,Count:1,tag:{CustomPotionEffects:[{Id:77,Amplifier:100,Duration:3600}]}},Riding:{id:XPOrb}}");
+                break;
+            case 1:
+                break;
+            case 2:
+                break;
+            case 3:
+                break;
+            default:
+                break;
+        }
+    }
 
     /**
      * Follow Section
