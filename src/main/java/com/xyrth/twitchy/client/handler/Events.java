@@ -289,12 +289,12 @@ public class Events {
         switch (mob) {
             case 0:
                 player.sendChatMessage("That sub just amped up some Sentries. Have fun :)");
+                //Speed Potion || They be zoomin.
+                player.sendChatMessage(
+                    "/summon ThrownPotion ~ ~ ~ {Potion:{id:373,Damage:16395,Count:1,tag:{CustomPotionEffects:[{Id:1,Amplifier:2,Duration:3600}]}},Riding:{id:XPOrb}}");
                 for (int x = 0; x < 100; x++) {
                     player.sendChatMessage("/summon sentryRobot");
                 }
-                //
-                player.sendChatMessage(
-                    "/summon ThrownPotion ~ ~ ~ {Potion:{id:373,Damage:16395,Count:1,tag:{CustomPotionEffects:[{Id:77,Amplifier:100,Duration:3600}]}},Riding:{id:XPOrb}}");
                 break;
             case 1:
                 break;

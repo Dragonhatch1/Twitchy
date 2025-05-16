@@ -27,6 +27,8 @@ public class KeyInputEventHandler {
             return Key.RANDOMPOTION;
         } else if (Keybindings.mobraid.isPressed()) {
             return Key.MOBRAID;
+        } else if (Keybindings.substuff.isPressed()) {
+            return Key.SUBSTUFF;
         }
         return Key.UNKNOWN;
     }
@@ -43,6 +45,8 @@ public class KeyInputEventHandler {
             Events.randompotion(player);
         } else if (Keybindings.mobraid.isPressed()) {
             Events.mobraid(player);
+        } else if (Keybindings.substuff.isPressed()) {
+            Events.substuff(player);
         }
 
         // send packet to server

@@ -4,5 +4,6 @@ public enum Key {
     UNKNOWN,
     RANDOMSPAWN,
     RANDOMPOTION,
-    MOBRAID
+    MOBRAID,
+    SUBSTUFF
 }

@@ -17,4 +17,5 @@ public class Keybindings {
         Keyboard.KEY_NUMPAD2,
         Names.Keys.CATEGORY);
     public static KeyBinding mobraid = new KeyBinding(Names.Keys.MOBRAID, Keyboard.KEY_NUMPAD3, Names.Keys.CATEGORY);
+    public static KeyBinding substuff = new KeyBinding(Names.Keys.SUBSTUFF, Keyboard.KEY_NUMPAD3, Names.Keys.CATEGORY);
 }
