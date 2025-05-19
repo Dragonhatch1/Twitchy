@@ -13,6 +13,7 @@ import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 
 public class KeyInputEventHandler {
 
+    // Setting up Player, World, and the other thingy
     private final SimpleNetworkWrapper networkWrapper;
 
     public KeyInputEventHandler(SimpleNetworkWrapper networkWrapper) {
@@ -29,6 +30,8 @@ public class KeyInputEventHandler {
             return Key.MOBRAID;
         } else if (Keybindings.substuff.isPressed()) {
             return Key.SUBSTUFF;
+        } else if (Keybindings.spawningtest.isPressed()) {
+            return Key.SPAWNINGTEST;
         }
         return Key.UNKNOWN;
     }
@@ -36,8 +39,8 @@ public class KeyInputEventHandler {
     @SubscribeEvent
     public void handleKeyInputEvent(InputEvent.KeyInputEvent event) {
         // LogHelper.info(getPressedKeybinding());
-
         EntityClientPlayerMP player = Minecraft.getMinecraft().thePlayer;
+        // World world = .getEntityWorld();
 
         if (Keybindings.randomspawn.isPressed()) {
             Events.randomspawn(player);
@@ -48,6 +51,9 @@ public class KeyInputEventHandler {
         } else if (Keybindings.substuff.isPressed()) {
             Events.substuff(player);
         }
+        // } else if (Keybindings.spawningtest.isPressed()) {
+        // Events.spawningtest(player, world);
+        // }
 
         // send packet to server
         networkWrapper.sendToAll(new TwitchyPacket());

@@ -18,4 +18,8 @@ public class Keybindings {
         Names.Keys.CATEGORY);
     public static KeyBinding mobraid = new KeyBinding(Names.Keys.MOBRAID, Keyboard.KEY_NUMPAD3, Names.Keys.CATEGORY);
     public static KeyBinding substuff = new KeyBinding(Names.Keys.SUBSTUFF, Keyboard.KEY_NUMPAD3, Names.Keys.CATEGORY);
+    public static KeyBinding spawningtest = new KeyBinding(
+        Names.Keys.SPAWNINGTEST,
+        Keyboard.KEY_NUMPAD3,
+        Names.Keys.CATEGORY);
 }

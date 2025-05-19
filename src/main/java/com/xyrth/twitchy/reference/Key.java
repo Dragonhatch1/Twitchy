@@ -5,5 +5,6 @@ public enum Key {
     RANDOMSPAWN,
     RANDOMPOTION,
     MOBRAID,
-    SUBSTUFF
+    SUBSTUFF,
+    SPAWNINGTEST
 }

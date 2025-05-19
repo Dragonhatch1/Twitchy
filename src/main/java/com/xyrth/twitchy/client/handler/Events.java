@@ -3,6 +3,10 @@ package com.xyrth.twitchy.client.handler;
 import java.util.Random;
 
 import net.minecraft.client.entity.EntityClientPlayerMP;
+import net.minecraft.entity.EntityList;
+import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.IEntityLivingData;
+import net.minecraft.world.World;
 
 public class Events {
 
@@ -82,7 +86,8 @@ public class Events {
         int x = (r.nextInt(100) + 1);
         int potion;
         // Percentages or Weights || Needs to equal 1.00 or 100%
-        //Instant Damage goes nowhere, it's there to remind you to add up to 1.00 or 100%. its Percentage is whatever is leftover from the others to reach 100%.
+        // Instant Damage goes nowhere, it's there to remind you to add up to 1.00 or 100%. its Percentage is whatever
+        // is leftover from the others to reach 100%.
         double wither = 0.09;
         double paralysis = 0.10;
         double possession = 0.09;
@@ -282,21 +287,28 @@ public class Events {
     /**
      * Sub Section
      */
-    // TODO Add Subscriber section and have events on Sub.
+    // TODO add more Events to Sub Method
     public static void substuff(EntityClientPlayerMP player) {
         Random r = new Random();
-        int mob = r.nextInt(4);
+        int mob = r.nextInt(2);
         switch (mob) {
             case 0:
-                player.sendChatMessage("That sub just amped up some Sentries. Have fun :)");
-                //Speed Potion || They be zoomin.
+                player.sendChatMessage("Zoomin' Sentries incoming! Thanks for the Sub!");
+                // Speed Potion || They be zoomin.
                 player.sendChatMessage(
                     "/summon ThrownPotion ~ ~ ~ {Potion:{id:373,Damage:16395,Count:1,tag:{CustomPotionEffects:[{Id:1,Amplifier:2,Duration:3600}]}},Riding:{id:XPOrb}}");
-                for (int x = 0; x < 100; x++) {
+                for (int x = 0; x < 50; x++) {
                     player.sendChatMessage("/summon sentryRobot");
                 }
                 break;
             case 1:
+                player.sendChatMessage("Fireballs and Hallucinations? What's not to love? Thanks for the Sub!");
+                // Potion ||
+                player.sendChatMessage(
+                    "/summon ThrownPotion ~ ~2 ~ {Potion:{id:373,Damage:16395,Count:1,tag:{CustomPotionEffects:[{Id:64,Amplifier:10,Duration:3600}]}},Riding:{id:XPOrb}}");
+                for (int x = 0; x < 100; x++) {
+                    player.sendChatMessage("/summon Blaze");
+                }
                 break;
             case 2:
                 break;
@@ -311,4 +323,23 @@ public class Events {
      * Follow Section
      */
     // TODO Add Follower section and have events on Follow.
+
+    // TODO finish working on spawning mobs better.
+    public static void spawningtest(EntityClientPlayerMP player, World world) {
+        String temp = "Skeleton";
+        double d0 = (double) player.getPlayerCoordinates().posX + 0.5D;
+        double d1 = (double) player.getPlayerCoordinates().posY;
+        double d2 = (double) player.getPlayerCoordinates().posZ + 0.5D;
+
+        player.sendChatMessage("Outside");
+        if (!world.isRemote) {
+            player.sendChatMessage("Beginning");
+            EntityLiving entity1 = (EntityLiving) EntityList.createEntityByName(temp, world);
+            entity1.setLocationAndAngles(d0, d1, d2, entity1.rotationYaw, entity1.rotationPitch);
+            ((EntityLiving) entity1).onSpawnWithEgg((IEntityLivingData) null);
+            player.sendChatMessage("End");
+            world.spawnEntityInWorld(entity1);
+        }
+
+    }
 }

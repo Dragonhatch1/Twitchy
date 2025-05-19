@@ -9,5 +9,6 @@ public final class Names {
         public static final String RANDOMPOTION = "Spawn Random Potion";
         public static final String MOBRAID = "Spawn Raid Mobs";
         public static final String SUBSTUFF = "Sub Stuff";
+        public static final String SPAWNINGTEST = "Test Entity Spawn";
     }
 }
