@@ -2,7 +2,9 @@ package com.xyrth.twitchy.client.handler;
 
 import java.util.Random;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityClientPlayerMP;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.IEntityLivingData;
@@ -326,6 +328,7 @@ public class Events {
 
     // TODO finish working on spawning mobs better.
     public static void spawningtest(EntityClientPlayerMP player, World world) {
+
         String temp = "Skeleton";
         double d0 = (double) player.getPlayerCoordinates().posX + 0.5D;
         double d1 = (double) player.getPlayerCoordinates().posY;
@@ -340,6 +343,12 @@ public class Events {
             player.sendChatMessage("End");
             world.spawnEntityInWorld(entity1);
         }
+    }
 
+    public static void guiclose() {
+        Minecraft.getMinecraft()
+            .displayGuiScreen((GuiScreen) null);
+        Minecraft.getMinecraft()
+            .setIngameFocus();
     }
 }
