@@ -1,4 +1,4 @@
-package com.xyrth.twitchy.client.handler;
+package com.xyrth.twitchy.event;
 
 import java.util.Random;
 
