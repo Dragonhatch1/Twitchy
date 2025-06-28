@@ -1,7 +1,5 @@
 package com.xyrth.twitchy.reference;
 
-//
-
 import com.xyrth.twitchy.event.EventMobRaid;
 import com.xyrth.twitchy.event.EventRandomPotion;
 import com.xyrth.twitchy.event.EventRandomSpawn;
@@ -9,6 +7,7 @@ import com.xyrth.twitchy.event.EventSpawnTest;
 import com.xyrth.twitchy.event.EventSubscribe;
 import com.xyrth.twitchy.event.GenericEvent;
 
+// This class provides a list of event types, with properties for their description and corresponding class
 public enum TwitchEvent {
 
     UNKNOWN("Uknown Event", GenericEvent.class),

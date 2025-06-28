@@ -1,8 +1,5 @@
 package com.xyrth.twitchy;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import com.xyrth.twitchy.reference.Reference;
 
 import cpw.mods.fml.common.Mod;
@@ -19,7 +16,6 @@ import cpw.mods.fml.common.event.FMLServerStartingEvent;
     acceptedMinecraftVersions = "[1.7.10]")
 public class Twitchy {
 
-    public static final Logger LOG = LogManager.getLogger(Reference.MOD_ID);
     public static Twitchy instance;
 
     @SidedProxy(clientSide = Reference.CLIENTSIDE, serverSide = Reference.SERVERSIDE)

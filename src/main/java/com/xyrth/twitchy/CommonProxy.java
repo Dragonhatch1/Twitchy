@@ -2,6 +2,7 @@ package com.xyrth.twitchy;
 
 import com.xyrth.twitchy.command.EventCommand;
 import com.xyrth.twitchy.util.Config;
+import com.xyrth.twitchy.util.LogUtil;
 
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
@@ -19,7 +20,7 @@ public class CommonProxy {
         // SimpleNetworkWrapper networkRegistry = NetworkRegistry.INSTANCE.newSimpleChannel(Reference.MOD_ID);
         // networkRegistry.registerMessage(TwitchyPacketHandler.class, TwitchyPacket.class, 0, Side.SERVER);
 
-        Twitchy.LOG.info("Twitchy is running at " + Tags.VERSION);
+        LogUtil.info("Twitchy is running at " + Tags.VERSION);
     }
 
     // load "Do your mod setup. Build whatever data structures you care about. Register recipes." (Remove if not needed)
@@ -31,7 +32,7 @@ public class CommonProxy {
     public void postInit(FMLPostInitializationEvent event) {}
 
     public void serverStarting(FMLServerStartingEvent event) {
-        // Register Commands
+        // Register commands
         event.registerServerCommand(new EventCommand());
     }
 }

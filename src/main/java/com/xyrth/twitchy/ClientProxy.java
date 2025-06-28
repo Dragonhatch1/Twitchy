@@ -13,6 +13,7 @@ public class ClientProxy extends CommonProxy {
     public void init(FMLInitializationEvent event) {
         super.init(event);
 
+        // We register the KeyInput event handler only on the client, since can listen to keyboard stuff
         FMLCommonHandler.instance()
             .bus()
             .register(new KeyInputEventHandler());

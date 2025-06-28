@@ -29,14 +29,18 @@ public class EventCommand extends GenericCommand {
         EntityPlayerMP player = getCommandSenderAsPlayer(sender);
         World world = player.worldObj;
 
+        // Args is an array of strings split by the command input on spaces, and sliced after the command name
         if (args.length == 1) {
+            // Check if the provided event type exists
             if (TwitchEvent.isValidEnum(args[0].toUpperCase())) {
+                // Get the enum object of our event type
                 TwitchEvent event = TwitchEvent.valueOf(args[0].toUpperCase());
 
                 try {
                     // Call the constructor of the instance of the generic class of TwitchEvent.genericEventClass
                     // Player is EntityPlayerMP while the constructor wants EntityLivingBase,
                     // but since PlayerMp is an instance of EntityLivingBase, it gets cast implicitly
+                    // Generally, this just starts a new event of the provided type
                     event.genericEventClass
                         .getDeclaredConstructor(
                             World.class,
@@ -61,6 +65,7 @@ public class EventCommand extends GenericCommand {
         }
     }
 
+    // We only want ops to be able to run this command
     @Override
     protected boolean isAdminOnly() {
         return true;

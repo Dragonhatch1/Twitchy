@@ -12,6 +12,8 @@ import com.xyrth.twitchy.util.LogUtil;
 
 public abstract class GenericCommand extends CommandBase {
 
+    // There are a lot of instances where a command could be called,
+    // so this function help us with just giving the player a chat message for each one
     protected static void sendChatToSender(ICommandSender sender, String message) {
         if (sender instanceof EntityPlayerMP) ChatUtil.sendChatToPlayer(getCommandSenderAsPlayer(sender), message);
         else if (sender instanceof EntityPlayer) ChatUtil.sendChatToPlayer((EntityPlayer) sender, message);
@@ -19,6 +21,7 @@ public abstract class GenericCommand extends CommandBase {
         else LogUtil.warn(message);
     }
 
+    // The permission level provided by op is set in server.properties under op-permission-level
     @Override
     public final int getRequiredPermissionLevel() {
         return this.isAdminOnly() ? 4 : 0;
