@@ -6,7 +6,7 @@ import com.xyrth.twitchy.reference.Reference;
 
 import cpw.mods.fml.common.FMLLog;
 
-public class LogHelper {
+public class LogUtil {
 
     public static void log(Level logLevel, Object object) {
         FMLLog.log(Reference.MOD_NAME, logLevel, String.valueOf(object));

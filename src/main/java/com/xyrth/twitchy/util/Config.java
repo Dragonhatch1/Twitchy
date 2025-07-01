@@ -1,4 +1,4 @@
-package com.xyrth.twitchy;
+package com.xyrth.twitchy.util;
 
 import java.io.File;
 

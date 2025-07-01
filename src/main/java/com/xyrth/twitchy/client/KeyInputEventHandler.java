@@ -1,7 +1,7 @@
-package com.xyrth.twitchy.client.handler;
+package com.xyrth.twitchy.client;
 
-import static com.xyrth.twitchy.client.handler.Events.guiclose;
-import static com.xyrth.twitchy.client.handler.Events.randomspawn;
+import static com.xyrth.twitchy.event.Events.guiclose;
+import static com.xyrth.twitchy.event.Events.randomspawn;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityClientPlayerMP;
@@ -9,39 +9,31 @@ import net.minecraft.world.World;
 
 import org.lwjgl.input.Keyboard;
 
-import com.xyrth.twitchy.client.settings.Keybindings;
-import com.xyrth.twitchy.network.TwitchyPacket;
-import com.xyrth.twitchy.reference.Key;
+import com.xyrth.twitchy.event.Events;
+import com.xyrth.twitchy.reference.TwitchEvent;
 
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.InputEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
-import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 
 public class KeyInputEventHandler {
 
-    private final SimpleNetworkWrapper networkWrapper;
-
-    public KeyInputEventHandler(SimpleNetworkWrapper networkWrapper) {
-        this.networkWrapper = networkWrapper;
-    }
-
-    public static Key getPressedKeybinding() {
+    public static TwitchEvent getPressedKeybinding() {
         // close but no cigar. Try looking in the GUIOpenEvent and see if we just need to subscribe to that any time a
         // gui is opened.
         if (Keybindings.randomspawn.isPressed()) {
-            return Key.RANDOMSPAWN;
+            return TwitchEvent.RANDOMSPAWN;
         } else if (Keybindings.randompotion.isPressed()) {
-            return Key.RANDOMPOTION;
+            return TwitchEvent.RANDOMPOTION;
         } else if (Keybindings.mobraid.isPressed()) {
-            return Key.MOBRAID;
+            return TwitchEvent.MOBRAID;
         } else if (Keybindings.substuff.isPressed()) {
-            return Key.SUBSTUFF;
+            return TwitchEvent.SUBSTUFF;
         } else if (Keybindings.spawningtest.isPressed()) {
-            return Key.SPAWNINGTEST;
+            return TwitchEvent.SPAWNINGTEST;
         }
-        return Key.UNKNOWN;
+        return TwitchEvent.UNKNOWN;
     }
 
     @SubscribeEvent
@@ -64,8 +56,6 @@ public class KeyInputEventHandler {
             Events.spawningtest(player, world);
         }
 
-        // send packet to server
-        networkWrapper.sendToAll(new TwitchyPacket());
     }
 
     @SubscribeEvent
