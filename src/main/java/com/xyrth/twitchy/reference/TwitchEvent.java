@@ -3,19 +3,27 @@ package com.xyrth.twitchy.reference;
 import com.xyrth.twitchy.event.EventMobRaid;
 import com.xyrth.twitchy.event.EventRandomPotion;
 import com.xyrth.twitchy.event.EventRandomSpawn;
-import com.xyrth.twitchy.event.EventSpawnTest;
 import com.xyrth.twitchy.event.EventSubscribe;
 import com.xyrth.twitchy.event.GenericEvent;
+import com.xyrth.twitchy.event.spawn.entity.*;
 
 // This class provides a list of event types, with properties for their description and corresponding class
 public enum TwitchEvent {
 
-    UNKNOWN("Uknown Event", GenericEvent.class),
+    UNKNOWN("Unknown Event", GenericEvent.class),
     RANDOMSPAWN("Spawn Random Mob", EventRandomSpawn.class),
     RANDOMPOTION("Spawn Random Potion", EventRandomPotion.class),
     MOBRAID("Spawn Raid Mobs", EventMobRaid.class),
     SUBSTUFF("Sub Stuff", EventSubscribe.class),
-    SPAWNINGTEST("Test Entity Spawn", EventSpawnTest.class);
+    COW("Spawn Cow", SpawnCow.class),
+    CHICKEN("Spawn Chicken", SpawnChicken.class),
+    GOLEM("Spawn Golem", SpawnGolem.class),
+    PIG("Spawn Pig", SpawnPig.class),
+    SHEEP("Spawn Sheep", SpawnSheep.class),
+    SKELETON("Spawn Skeleton", SpawnSkeleton.class),
+    SLIME("Spawn Slime", SpawnSlime.class),
+    ZOMBIE("Spawn Zombie", SpawnZombie.class),
+    TFFIREBEETLE("Spawn TF Fire Beetle", SpawnTFFireBeetle.class);
 
     public final String eventAction;
     public final Class<? extends GenericEvent> genericEventClass;
@@ -23,7 +31,7 @@ public enum TwitchEvent {
     TwitchEvent(String eventAction, Class<? extends GenericEvent> genericEventClass) {
         this.eventAction = eventAction;
         this.genericEventClass = genericEventClass;
-    };
+    }
 
     /**
      * Checks if the specified name is a valid enum for the class.

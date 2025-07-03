@@ -1,7 +1,6 @@
 package com.xyrth.twitchy.client;
 
 import static com.xyrth.twitchy.event.Events.guiclose;
-import static com.xyrth.twitchy.event.Events.randomspawn;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityClientPlayerMP;
@@ -20,8 +19,6 @@ import cpw.mods.fml.common.gameevent.TickEvent;
 public class KeyInputEventHandler {
 
     public static TwitchEvent getPressedKeybinding() {
-        // close but no cigar. Try looking in the GUIOpenEvent and see if we just need to subscribe to that any time a
-        // gui is opened.
         if (Keybindings.randomspawn.isPressed()) {
             return TwitchEvent.RANDOMSPAWN;
         } else if (Keybindings.randompotion.isPressed()) {
@@ -30,8 +27,6 @@ public class KeyInputEventHandler {
             return TwitchEvent.MOBRAID;
         } else if (Keybindings.substuff.isPressed()) {
             return TwitchEvent.SUBSTUFF;
-        } else if (Keybindings.spawningtest.isPressed()) {
-            return TwitchEvent.SPAWNINGTEST;
         }
         return TwitchEvent.UNKNOWN;
     }
@@ -53,7 +48,7 @@ public class KeyInputEventHandler {
         } else if (Keybindings.substuff.isPressed()) {
             Events.substuff(player);
         } else if (Keybindings.spawningtest.isPressed()) {
-            Events.spawningtest(player, world);
+            Events.spawningtest(player);
         }
 
     }
@@ -70,7 +65,7 @@ public class KeyInputEventHandler {
                 if (mc.currentScreen != null) {
                     if (Keyboard.isKeyDown(Keyboard.KEY_LCONTROL) && Keyboard.isKeyDown(Keyboard.KEY_NUMPAD2)) {
                         guiclose();
-                        randomspawn(player);
+                        Events.randomspawn(player);
                     } else if (Keyboard.isKeyDown(Keyboard.KEY_LCONTROL) && Keyboard.isKeyDown(Keyboard.KEY_NUMPAD1)) {
                         guiclose();
                         Events.randompotion(player);
@@ -82,7 +77,7 @@ public class KeyInputEventHandler {
                         Events.substuff(player);
                     } else if (Keyboard.isKeyDown(Keyboard.KEY_LCONTROL) && Keyboard.isKeyDown(Keyboard.KEY_NUMPAD5)) {
                         guiclose();
-                        Events.spawningtest(player, world);
+                        Events.spawningtest(player);
                     }
                 } else {
                     return;
