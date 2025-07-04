@@ -1,14 +1,11 @@
 package com.xyrth.twitchy.event.spawn.entity;
 
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.world.World;
 
 import com.xyrth.twitchy.event.GenericEvent;
-
-import twilightforest.entity.TFCreatures;
 
 /**
  * Basic Spawn Template for TF/Regular Mobs on server-side.

@@ -9,6 +9,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
 
+import com.xyrth.twitchy.reference.PotionEvent;
 import com.xyrth.twitchy.reference.TwitchEvent;
 import com.xyrth.twitchy.util.LogUtil;
 
@@ -32,7 +33,7 @@ public class EventCommand extends GenericCommand {
         // Args is an array of strings split by the command input on spaces, and sliced after the command name
         if (args.length == 1) {
             // Check if the provided event type exists
-            if (TwitchEvent.isValidEnum(args[0].toUpperCase())) {
+            if (TwitchEvent.isValidEnum(args[0].toUpperCase()) || PotionEvent.isValidEnum(args[0].toUpperCase())) {
                 // Get the enum object of our event type
                 TwitchEvent event = TwitchEvent.valueOf(args[0].toUpperCase());
 
@@ -49,6 +50,36 @@ public class EventCommand extends GenericCommand {
                             double.class,
                             EntityLivingBase.class)
                         .newInstance(world, player.posX, player.posY, player.posZ, player);
+                } catch (InstantiationException | IllegalAccessException | NoSuchMethodException
+                    | InvocationTargetException e) {
+                    sendChatToSender(sender, EnumChatFormatting.RED + "Failed to trigger event.");
+                    LogUtil.error(e);
+                    LogUtil.error(e.getMessage());
+                }
+            } else {
+                sendChatToSender(
+                    sender,
+                    String.format(EnumChatFormatting.YELLOW + "Event '%s' does not exist.", args[0]));
+            }
+        } else if (args.length == 4) {
+            // Check if the provided event type exists
+            if (TwitchEvent.isValidEnum(args[0].toUpperCase()) || PotionEvent.isValidEnum(args[0].toUpperCase())) {
+                // Get the enum object of our event type
+                PotionEvent event = PotionEvent.valueOf(args[0].toUpperCase());
+
+                try {
+                    // Call the constructor of the instance of the generic class of TwitchEvent.genericEventClass
+                    // Player is EntityPlayerMP while the constructor wants EntityLivingBase,
+                    // but since PlayerMp is an instance of EntityLivingBase, it gets cast implicitly
+                    // Generally, this just starts a new event of the provided type
+                    event.genericEventClass
+                        .getDeclaredConstructor(World.class, int.class, int.class, int.class, EntityLivingBase.class)
+                        .newInstance(
+                            world,
+                            Integer.parseInt(args[1]),
+                            Integer.parseInt(args[2]),
+                            Integer.parseInt(args[3]),
+                            player);
                 } catch (InstantiationException | IllegalAccessException | NoSuchMethodException
                     | InvocationTargetException e) {
                     sendChatToSender(sender, EnumChatFormatting.RED + "Failed to trigger event.");

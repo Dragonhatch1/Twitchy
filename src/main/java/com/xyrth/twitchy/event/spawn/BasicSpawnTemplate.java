@@ -4,6 +4,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.world.World;
 
 import com.xyrth.twitchy.event.GenericEvent;
@@ -42,6 +43,9 @@ public class BasicSpawnTemplate extends GenericEvent {
 
         // Sets the custom name for the entity
         entityliving.setCustomNameTag(customName);
+
+        // adds potion effects to the mob. id, duration (in ticks), Amplification (0 = level 1) (level n = n-1)
+        vanillaMob.addPotionEffect(new PotionEffect(20, 9600, 0));
 
         // spawns mob in the world.
         world.spawnEntityInWorld(mob);

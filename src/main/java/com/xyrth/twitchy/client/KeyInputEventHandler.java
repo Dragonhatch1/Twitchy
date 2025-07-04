@@ -9,7 +9,6 @@ import net.minecraft.world.World;
 import org.lwjgl.input.Keyboard;
 
 import com.xyrth.twitchy.event.Events;
-import com.xyrth.twitchy.reference.TwitchEvent;
 
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
@@ -18,26 +17,12 @@ import cpw.mods.fml.common.gameevent.TickEvent;
 
 public class KeyInputEventHandler {
 
-    public static TwitchEvent getPressedKeybinding() {
-        if (Keybindings.randomspawn.isPressed()) {
-            return TwitchEvent.RANDOMSPAWN;
-        } else if (Keybindings.randompotion.isPressed()) {
-            return TwitchEvent.RANDOMPOTION;
-        } else if (Keybindings.mobraid.isPressed()) {
-            return TwitchEvent.MOBRAID;
-        } else if (Keybindings.substuff.isPressed()) {
-            return TwitchEvent.SUBSTUFF;
-        }
-        return TwitchEvent.UNKNOWN;
-    }
-
     @SubscribeEvent
     public void handleKeyInputEvent(InputEvent.KeyInputEvent event) {
         // LogHelper.info(getPressedKeybinding());
         Minecraft mc = FMLClientHandler.instance()
             .getClient();
         EntityClientPlayerMP player = Minecraft.getMinecraft().thePlayer;
-        World world = mc.theWorld;
 
         if (Keybindings.randomspawn.isPressed()) {
             Events.randomspawn(player);
@@ -61,7 +46,7 @@ public class KeyInputEventHandler {
         World world = mc.theWorld;
 
         if (tick.phase == TickEvent.Phase.START) {
-            if (mc.theWorld != null && mc.thePlayer != null) {
+            if (world != null && player != null) {
                 if (mc.currentScreen != null) {
                     if (Keyboard.isKeyDown(Keyboard.KEY_LCONTROL) && Keyboard.isKeyDown(Keyboard.KEY_NUMPAD2)) {
                         guiclose();

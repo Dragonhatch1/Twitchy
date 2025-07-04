@@ -1,20 +1,24 @@
 package com.xyrth.twitchy.reference;
 
-import com.xyrth.twitchy.event.EventMobRaid;
-import com.xyrth.twitchy.event.EventRandomPotion;
-import com.xyrth.twitchy.event.EventRandomSpawn;
-import com.xyrth.twitchy.event.EventSubscribe;
 import com.xyrth.twitchy.event.GenericEvent;
-import com.xyrth.twitchy.event.spawn.entity.*;
+import com.xyrth.twitchy.event.potions.PotionPrinter;
+import com.xyrth.twitchy.event.spawn.entity.SpawnARSentry;
+import com.xyrth.twitchy.event.spawn.entity.SpawnChicken;
+import com.xyrth.twitchy.event.spawn.entity.SpawnCow;
+import com.xyrth.twitchy.event.spawn.entity.SpawnEZDireWolf;
+import com.xyrth.twitchy.event.spawn.entity.SpawnEZFallenKnight;
+import com.xyrth.twitchy.event.spawn.entity.SpawnGolem;
+import com.xyrth.twitchy.event.spawn.entity.SpawnPig;
+import com.xyrth.twitchy.event.spawn.entity.SpawnSheep;
+import com.xyrth.twitchy.event.spawn.entity.SpawnSkeleton;
+import com.xyrth.twitchy.event.spawn.entity.SpawnSlime;
+import com.xyrth.twitchy.event.spawn.entity.SpawnTFFireBeetle;
+import com.xyrth.twitchy.event.spawn.entity.SpawnZombie;
 
 // This class provides a list of event types, with properties for their description and corresponding class
 public enum TwitchEvent {
 
     UNKNOWN("Unknown Event", GenericEvent.class),
-    RANDOMSPAWN("Spawn Random Mob", EventRandomSpawn.class),
-    RANDOMPOTION("Spawn Random Potion", EventRandomPotion.class),
-    MOBRAID("Spawn Raid Mobs", EventMobRaid.class),
-    SUBSTUFF("Sub Stuff", EventSubscribe.class),
     COW("Spawn Cow", SpawnCow.class),
     CHICKEN("Spawn Chicken", SpawnChicken.class),
     GOLEM("Spawn Golem", SpawnGolem.class),
@@ -23,6 +27,10 @@ public enum TwitchEvent {
     SKELETON("Spawn Skeleton", SpawnSkeleton.class),
     SLIME("Spawn Slime", SpawnSlime.class),
     ZOMBIE("Spawn Zombie", SpawnZombie.class),
+    SENTRY("Spawn AR Sentry", SpawnARSentry.class),
+    DIREWOLF("Spawn EZ Dire Wolf", SpawnEZDireWolf.class),
+    FALLENKNIGHT("Spawn EZ Fallen Knight", SpawnEZFallenKnight.class),
+    POTIONPRINTER("Prints the Potions in the game", PotionPrinter.class),
     TFFIREBEETLE("Spawn TF Fire Beetle", SpawnTFFireBeetle.class);
 
     public final String eventAction;
