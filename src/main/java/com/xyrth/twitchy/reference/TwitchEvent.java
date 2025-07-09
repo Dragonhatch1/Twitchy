@@ -1,8 +1,6 @@
 package com.xyrth.twitchy.reference;
 
-import com.xyrth.twitchy.event.GenericEvent;
-import com.xyrth.twitchy.event.potions.PotionPrinter;
-import com.xyrth.twitchy.event.spawn.entity.SpawnARSentry;
+import com.xyrth.twitchy.event.GenericSpawnEvent;
 import com.xyrth.twitchy.event.spawn.entity.SpawnChicken;
 import com.xyrth.twitchy.event.spawn.entity.SpawnCow;
 import com.xyrth.twitchy.event.spawn.entity.SpawnEZDireWolf;
@@ -18,7 +16,7 @@ import com.xyrth.twitchy.event.spawn.entity.SpawnZombie;
 // This class provides a list of event types, with properties for their description and corresponding class
 public enum TwitchEvent {
 
-    UNKNOWN("Unknown Event", GenericEvent.class),
+    UNKNOWN("Unknown Event", GenericSpawnEvent.class),
     COW("Spawn Cow", SpawnCow.class),
     CHICKEN("Spawn Chicken", SpawnChicken.class),
     GOLEM("Spawn Golem", SpawnGolem.class),
@@ -27,16 +25,14 @@ public enum TwitchEvent {
     SKELETON("Spawn Skeleton", SpawnSkeleton.class),
     SLIME("Spawn Slime", SpawnSlime.class),
     ZOMBIE("Spawn Zombie", SpawnZombie.class),
-    SENTRY("Spawn AR Sentry", SpawnARSentry.class),
     DIREWOLF("Spawn EZ Dire Wolf", SpawnEZDireWolf.class),
     FALLENKNIGHT("Spawn EZ Fallen Knight", SpawnEZFallenKnight.class),
-    POTIONPRINTER("Prints the Potions in the game", PotionPrinter.class),
     TFFIREBEETLE("Spawn TF Fire Beetle", SpawnTFFireBeetle.class);
 
     public final String eventAction;
-    public final Class<? extends GenericEvent> genericEventClass;
+    public final Class<? extends GenericSpawnEvent> genericEventClass;
 
-    TwitchEvent(String eventAction, Class<? extends GenericEvent> genericEventClass) {
+    TwitchEvent(String eventAction, Class<? extends GenericSpawnEvent> genericEventClass) {
         this.eventAction = eventAction;
         this.genericEventClass = genericEventClass;
     }

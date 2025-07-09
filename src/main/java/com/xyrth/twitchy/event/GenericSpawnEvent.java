@@ -24,18 +24,29 @@ import net.minecraftforge.event.world.WorldEvent;
  * it just has to be started in the constructor.
  * </p>
  */
-public abstract class GenericEvent extends WorldEvent {
+public abstract class GenericSpawnEvent extends WorldEvent {
 
     public double x;
     public double y;
     public double z;
     public EntityLivingBase targetEntity;
+    public int hp;
+    public int att;
+    public double spd;
+    public String username;
 
-    public GenericEvent(World world, double x, double y, double z, EntityLivingBase targetEntity) {
+    public GenericSpawnEvent(World world, double x, double y, double z, EntityLivingBase targetEntity, int hp, int att,
+        double spd, String username) {
         super(world);
         this.targetEntity = targetEntity;
         this.x = x;
         this.y = y;
         this.z = z;
+        this.hp = hp;
+        this.att = att;
+        this.spd = spd;
+        this.username = username;
     }
+    // !spawn FireBeetle hp:4 att:11 speed:3 <- user requests spawn in chat
+    // /twitchy FireBeetle 4 11 3 requester:username <- sent from GTNHBot through Rcon
 }

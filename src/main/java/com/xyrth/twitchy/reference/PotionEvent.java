@@ -2,11 +2,13 @@ package com.xyrth.twitchy.reference;
 
 import com.xyrth.twitchy.event.GenericPotionEvent;
 import com.xyrth.twitchy.event.potions.PlayerPotion;
+import com.xyrth.twitchy.event.potions.PotionPrinter;
 
 // This class provides a list of event types, with properties for their description and corresponding class
 public enum PotionEvent {
 
     UNKNOWN("Unknown Event", GenericPotionEvent.class),
+    POTIONPRINTER("Prints the Potions in the game", PotionPrinter.class),
     POTION("Applies Potion Effect to Player", PlayerPotion.class);
 
     public final String eventAction;
