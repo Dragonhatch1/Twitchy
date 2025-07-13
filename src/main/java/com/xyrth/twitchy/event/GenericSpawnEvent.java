@@ -34,9 +34,10 @@ public abstract class GenericSpawnEvent extends WorldEvent {
     public int att;
     public double spd;
     public String username;
+    public int amount;
 
     public GenericSpawnEvent(World world, double x, double y, double z, EntityLivingBase targetEntity, int hp, int att,
-        double spd, String username) {
+        double spd, String username, int amount) {
         super(world);
         this.targetEntity = targetEntity;
         this.x = x;
@@ -46,7 +47,8 @@ public abstract class GenericSpawnEvent extends WorldEvent {
         this.att = att;
         this.spd = spd;
         this.username = username;
+        this.amount = amount;
     }
-    // !spawn FireBeetle hp:4 att:11 speed:3 <- user requests spawn in chat
-    // /twitchy FireBeetle 4 11 3 requester:username <- sent from GTNHBot through Rcon
+    // !spawn FireBeetle hp:4 att:11 speed:3 amount:10 <- user requests spawn in chat
+    // /twitchy FireBeetle 4 11 3 requester:username amount <- sent from GTNHBot through Rcon
 }

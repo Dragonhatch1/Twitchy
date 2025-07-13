@@ -13,37 +13,41 @@ import twilightforest.entity.TFCreatures;
 public class SpawnTFFireBeetle extends GenericSpawnEvent {
 
     public SpawnTFFireBeetle(World world, double x, double y, double z, EntityLivingBase targetEntity, int hp, int att,
-        double spd, String username) {
-        super(world, x, y, z, targetEntity, hp, att, spd, username);
+        double spd, String username, int amount) {
+        super(world, x, y, z, targetEntity, hp, att, spd, username, amount);
 
-        int id = 206;
+        int l = 0;
+        while (l < amount) {
+            int id = 206;
 
-        Entity mob = TFCreatures.createEntityByID(id, world);
-        mob.setLocationAndAngles(x, y, z, mob.rotationYaw, mob.rotationPitch);
+            Entity mob = TFCreatures.createEntityByID(id, world);
+            mob.setLocationAndAngles(x, y, z, mob.rotationYaw, mob.rotationPitch);
 
-        // Changing Hp by getting base Hp, adding new HP Value to base, then setting HP to newHP value (aka Heal)
-        double regHp = ((EntityLiving) mob).getEntityAttribute(SharedMonsterAttributes.maxHealth)
-            .getBaseValue();
-        ((EntityLiving) mob).getEntityAttribute(SharedMonsterAttributes.maxHealth)
-            .setBaseValue(regHp + hp);
-        float newHp = (float) ((EntityLiving) mob).getEntityAttribute(SharedMonsterAttributes.maxHealth)
-            .getBaseValue();
-        ((EntityLiving) mob).setHealth(newHp);
+            // Changing Hp by getting base Hp, adding new HP Value to base, then setting HP to newHP value (aka Heal)
+            double regHp = ((EntityLiving) mob).getEntityAttribute(SharedMonsterAttributes.maxHealth)
+                .getBaseValue();
+            ((EntityLiving) mob).getEntityAttribute(SharedMonsterAttributes.maxHealth)
+                .setBaseValue(regHp + hp);
+            float newHp = (float) ((EntityLiving) mob).getEntityAttribute(SharedMonsterAttributes.maxHealth)
+                .getBaseValue();
+            ((EntityLiving) mob).setHealth(newHp);
 
-        // Changing att by getting base att, and adding new att Value to base
-        double regAtt = ((EntityLiving) mob).getEntityAttribute(SharedMonsterAttributes.attackDamage)
-            .getBaseValue();
-        ((EntityLiving) mob).getEntityAttribute(SharedMonsterAttributes.attackDamage)
-            .setBaseValue(regAtt + att);
+            // Changing att by getting base att, and adding new att Value to base
+            double regAtt = ((EntityLiving) mob).getEntityAttribute(SharedMonsterAttributes.attackDamage)
+                .getBaseValue();
+            ((EntityLiving) mob).getEntityAttribute(SharedMonsterAttributes.attackDamage)
+                .setBaseValue(regAtt + att);
 
-        // Changing spd by getting base spd, and adding new spd Value to base
-        double regSpd = ((EntityLiving) mob).getEntityAttribute(SharedMonsterAttributes.movementSpeed)
-            .getBaseValue();
-        ((EntityLiving) mob).getEntityAttribute(SharedMonsterAttributes.movementSpeed)
-            .setBaseValue(regSpd + spd);
+            // Set Speed
+            ((EntityLiving) mob).getEntityAttribute(SharedMonsterAttributes.movementSpeed)
+                .setBaseValue(spd);
 
-        ((EntityLiving) mob).setCustomNameTag(username);
+            // set Name
+            ((EntityLiving) mob).setCustomNameTag(username);
 
-        world.spawnEntityInWorld(mob);
+            // spawns mob in the world.
+            world.spawnEntityInWorld(mob);
+            l++;
+        }
     }
 }

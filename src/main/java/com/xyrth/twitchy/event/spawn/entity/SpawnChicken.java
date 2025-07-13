@@ -15,28 +15,35 @@ import com.xyrth.twitchy.event.GenericSpawnEvent;
 public class SpawnChicken extends GenericSpawnEvent {
 
     public SpawnChicken(World world, double x, double y, double z, EntityLivingBase targetEntity, int hp, int att,
-        double spd, String username) {
-        super(world, x, y, z, targetEntity, hp, att, spd, username);
+        double spd, String username, int amount) {
+        super(world, x, y, z, targetEntity, hp, att, spd, username, amount);
 
-        String mobName = "Chicken";
+        int l = 0;
+        while (l < amount) {
+            String mobName = "Chicken";
 
-        EntityLiving mob = (EntityLiving) EntityList.createEntityByName(mobName, world);
-        mob.setLocationAndAngles(x, y, z, mob.rotationYaw, mob.rotationPitch);
+            EntityLiving mob = (EntityLiving) EntityList.createEntityByName(mobName, world);
+            mob.setLocationAndAngles(x, y, z, mob.rotationYaw, mob.rotationPitch);
 
-        // Changing Hp by getting base Hp, adding new HP Value to base, then setting HP to newHP value (aka Heal)
-        double regHp = mob.getEntityAttribute(SharedMonsterAttributes.maxHealth)
-            .getBaseValue();
-        mob.getEntityAttribute(SharedMonsterAttributes.maxHealth)
-            .setBaseValue(regHp + hp);
-        float newHp = (float) mob.getEntityAttribute(SharedMonsterAttributes.maxHealth)
-            .getBaseValue();
-        mob.setHealth(newHp);
+            // Changing Hp by getting base Hp, adding new HP Value to base, then setting HP to newHP value (aka Heal)
+            double regHp = mob.getEntityAttribute(SharedMonsterAttributes.maxHealth)
+                .getBaseValue();
+            mob.getEntityAttribute(SharedMonsterAttributes.maxHealth)
+                .setBaseValue(regHp + hp);
+            float newHp = (float) mob.getEntityAttribute(SharedMonsterAttributes.maxHealth)
+                .getBaseValue();
+            mob.setHealth(newHp);
 
-        mob.getEntityAttribute(SharedMonsterAttributes.movementSpeed)
-            .setBaseValue(spd);
-        mob.setCustomNameTag(username);
+            // Set Speed
+            mob.getEntityAttribute(SharedMonsterAttributes.movementSpeed)
+                .setBaseValue(spd);
 
-        // spawns mob in the world.
-        world.spawnEntityInWorld(mob);
+            // set Name
+            mob.setCustomNameTag(username);
+
+            // spawns mob in the world.
+            world.spawnEntityInWorld(mob);
+            l++;
+        }
     }
 }

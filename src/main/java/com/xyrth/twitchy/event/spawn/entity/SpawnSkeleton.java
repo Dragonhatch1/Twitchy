@@ -15,38 +15,41 @@ import com.xyrth.twitchy.event.GenericSpawnEvent;
 public class SpawnSkeleton extends GenericSpawnEvent {
 
     public SpawnSkeleton(World world, double x, double y, double z, EntityLivingBase targetEntity, int hp, int att,
-        double spd, String username) {
-        super(world, x, y, z, targetEntity, hp, att, spd, username);
+        double spd, String username, int amount) {
+        super(world, x, y, z, targetEntity, hp, att, spd, username, amount);
 
-        String mobName = "Skeleton";
+        int l = 0;
+        while (l < amount) {
+            String mobName = "Skeleton";
 
-        EntityLiving mob = (EntityLiving) EntityList.createEntityByName(mobName, world);
-        mob.setLocationAndAngles(x, y, z, mob.rotationYaw, mob.rotationPitch);
+            EntityLiving mob = (EntityLiving) EntityList.createEntityByName(mobName, world);
+            mob.setLocationAndAngles(x, y, z, mob.rotationYaw, mob.rotationPitch);
 
-        // Changing Hp by getting base Hp, adding new HP Value to base, then setting HP to newHP value (aka Heal)
-        double regHp = mob.getEntityAttribute(SharedMonsterAttributes.maxHealth)
-            .getBaseValue();
-        mob.getEntityAttribute(SharedMonsterAttributes.maxHealth)
-            .setBaseValue(regHp + hp);
-        float newHp = (float) mob.getEntityAttribute(SharedMonsterAttributes.maxHealth)
-            .getBaseValue();
-        mob.setHealth(newHp);
+            // Changing Hp by getting base Hp, adding new HP Value to base, then setting HP to newHP value (aka Heal)
+            double regHp = mob.getEntityAttribute(SharedMonsterAttributes.maxHealth)
+                .getBaseValue();
+            mob.getEntityAttribute(SharedMonsterAttributes.maxHealth)
+                .setBaseValue(regHp + hp);
+            float newHp = (float) mob.getEntityAttribute(SharedMonsterAttributes.maxHealth)
+                .getBaseValue();
+            mob.setHealth(newHp);
 
-        // Changing att by getting base att, and adding new att Value to base
-        double regAtt = mob.getEntityAttribute(SharedMonsterAttributes.attackDamage)
-            .getBaseValue();
-        mob.getEntityAttribute(SharedMonsterAttributes.attackDamage)
-            .setBaseValue(regAtt + att);
+            // Changing att by getting base att, and adding new att Value to base
+            double regAtt = mob.getEntityAttribute(SharedMonsterAttributes.attackDamage)
+                .getBaseValue();
+            mob.getEntityAttribute(SharedMonsterAttributes.attackDamage)
+                .setBaseValue(regAtt + att);
 
-        // Changing spd by getting base spd, and adding new spd Value to base
-        double regSpd = mob.getEntityAttribute(SharedMonsterAttributes.movementSpeed)
-            .getBaseValue();
-        mob.getEntityAttribute(SharedMonsterAttributes.movementSpeed)
-            .setBaseValue(regSpd + spd);
+            // Set Speed
+            mob.getEntityAttribute(SharedMonsterAttributes.movementSpeed)
+                .setBaseValue(spd);
 
-        mob.setCustomNameTag(username);
+            // set Name
+            mob.setCustomNameTag(username);
 
-        // spawns mob in the world.
-        world.spawnEntityInWorld(mob);
+            // spawns mob in the world.
+            world.spawnEntityInWorld(mob);
+            l++;
+        }
     }
 }

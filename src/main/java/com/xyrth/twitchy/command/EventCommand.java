@@ -32,11 +32,11 @@ public class EventCommand extends GenericCommand {
         // EntityPlayerMP player = getCommandSenderAsPlayer(sender);
         EntityPlayerMP player = MinecraftServer.getServer()
             .getConfigurationManager()
-            .func_152612_a("Developer");
+            .func_152612_a("Dragonhatch1");
         World world = player.worldObj;
 
         // Args is an array of strings split by the command input on spaces, and sliced after the command name
-        if (args.length == 5) {
+        if (args.length == 6) {
             // Check if the provided event type exists
             if (TwitchEvent.isValidEnum(args[0].toUpperCase())) {
                 // Get the enum object of our event type
@@ -57,7 +57,8 @@ public class EventCommand extends GenericCommand {
                             int.class,
                             int.class,
                             double.class,
-                            String.class)
+                            String.class,
+                            int.class)
                         .newInstance(
                             world,
                             player.posX,
@@ -67,7 +68,8 @@ public class EventCommand extends GenericCommand {
                             Integer.parseInt(args[1]),
                             Integer.parseInt(args[2]),
                             Double.parseDouble(args[3]),
-                            args[4]);
+                            args[4],
+                            Integer.parseInt(args[5]));
                 } catch (InstantiationException | IllegalAccessException | NoSuchMethodException
                     | InvocationTargetException e) {
                     sendChatToSender(sender, EnumChatFormatting.RED + "Failed to trigger event.");

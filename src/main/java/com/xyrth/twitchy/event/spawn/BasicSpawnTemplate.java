@@ -19,8 +19,8 @@ import twilightforest.entity.TFCreatures;
 public class BasicSpawnTemplate extends GenericSpawnEvent {
 
     public BasicSpawnTemplate(World world, double x, double y, double z, EntityLivingBase targetEntity, int hp, int att,
-        double spd, String username) {
-        super(world, x, y, z, targetEntity, hp, att, spd, username);
+        double spd, String username, int amount) {
+        super(world, x, y, z, targetEntity, hp, att, spd, username, amount);
 
         // id of the TF mob
         int id = 206;
@@ -57,7 +57,12 @@ public class BasicSpawnTemplate extends GenericSpawnEvent {
         // adds potion effects to the mob. id, duration (in ticks), Amplification (0 = level 1) (level n = n-1)
         vanillaMob.addPotionEffect(new PotionEffect(20, 9600, 0));
 
-        // spawns mob in the world.
-        world.spawnEntityInWorld(mob);
+        // While loop to spawn specific amount of monsters in world.
+        int l = 0;
+        while (l < amount) {
+            // spawns mob in the world.
+            world.spawnEntityInWorld(mob);
+            l++;
+        }
     }
 }
