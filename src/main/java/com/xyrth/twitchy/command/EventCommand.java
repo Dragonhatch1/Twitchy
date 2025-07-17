@@ -32,7 +32,7 @@ public class EventCommand extends GenericCommand {
         // EntityPlayerMP player = getCommandSenderAsPlayer(sender);
         EntityPlayerMP player = MinecraftServer.getServer()
             .getConfigurationManager()
-            .func_152612_a("Dragonhatch1");
+            .func_152612_a("Developer");
         World world = player.worldObj;
 
         // Args is an array of strings split by the command input on spaces, and sliced after the command name

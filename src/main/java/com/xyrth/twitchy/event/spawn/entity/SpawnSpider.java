@@ -12,15 +12,15 @@ import com.xyrth.twitchy.event.GenericSpawnEvent;
  * Basic Spawn Template for TF/Regular Mobs on server-side.
  */
 
-public class SpawnGolem extends GenericSpawnEvent {
+public class SpawnSpider extends GenericSpawnEvent {
 
-    public SpawnGolem(World world, double x, double y, double z, EntityLivingBase targetEntity, int hp, int att,
+    public SpawnSpider(World world, double x, double y, double z, EntityLivingBase targetEntity, int hp, int att,
         double spd, String username, int amount) {
         super(world, x, y, z, targetEntity, hp, att, spd, username, amount);
 
         int l = 0;
         while (l < amount) {
-            String mobName = "VillagerGolem";
+            String mobName = "Spider";
 
             EntityLiving mob = (EntityLiving) EntityList.createEntityByName(mobName, world);
             mob.setLocationAndAngles(x, y, z, mob.rotationYaw, mob.rotationPitch);
@@ -35,10 +35,6 @@ public class SpawnGolem extends GenericSpawnEvent {
             mob.setHealth(newHp);
 
             // Changing att by getting base att, and adding new att Value to base
-            mob.getAttributeMap()
-                .registerAttribute(SharedMonsterAttributes.attackDamage);
-            mob.getEntityAttribute(SharedMonsterAttributes.attackDamage)
-                .setBaseValue(4.0D);
             double regAtt = mob.getEntityAttribute(SharedMonsterAttributes.attackDamage)
                 .getBaseValue();
             mob.getEntityAttribute(SharedMonsterAttributes.attackDamage)

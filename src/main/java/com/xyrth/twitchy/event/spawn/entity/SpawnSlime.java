@@ -35,6 +35,10 @@ public class SpawnSlime extends GenericSpawnEvent {
             mob.setHealth(newHp);
 
             // Changing att by getting base att, and adding new att Value to base
+            mob.getAttributeMap()
+                .registerAttribute(SharedMonsterAttributes.attackDamage);
+            mob.getEntityAttribute(SharedMonsterAttributes.attackDamage)
+                .setBaseValue(4.0D);
             double regAtt = mob.getEntityAttribute(SharedMonsterAttributes.attackDamage)
                 .getBaseValue();
             mob.getEntityAttribute(SharedMonsterAttributes.attackDamage)
