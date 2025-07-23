@@ -1,17 +1,19 @@
 package com.xyrth.twitchy.event.spawn.entity;
 
-import com.xyrth.twitchy.event.GenericSpawnEvent;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.world.World;
+
+import com.xyrth.twitchy.event.GenericSpawnEvent;
+
 import twilightforest.entity.TFCreatures;
 
 public class SpawnTFForestSquirrel extends GenericSpawnEvent {
 
-    public SpawnTFForestSquirrel(World world, double x, double y, double z, EntityLivingBase targetEntity, int hp, int att,
-                                 double spd, String username, int amount) {
+    public SpawnTFForestSquirrel(World world, double x, double y, double z, EntityLivingBase targetEntity, int hp,
+        int att, double spd, String username, int amount) {
         super(world, x, y, z, targetEntity, hp, att, spd, username, amount);
 
         int l = 0;

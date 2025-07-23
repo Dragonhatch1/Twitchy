@@ -10,6 +10,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
 
+import com.xyrth.twitchy.reference.CNpcEvent;
 import com.xyrth.twitchy.reference.PotionEvent;
 import com.xyrth.twitchy.reference.TwitchEvent;
 import com.xyrth.twitchy.util.LogUtil;
@@ -32,7 +33,7 @@ public class EventCommand extends GenericCommand {
         // EntityPlayerMP player = getCommandSenderAsPlayer(sender);
         EntityPlayerMP player = MinecraftServer.getServer()
             .getConfigurationManager()
-            .func_152612_a("Developer");
+            .func_152612_a("Dragonhatch1");
         World world = player.worldObj;
 
         // Args is an array of strings split by the command input on spaces, and sliced after the command name
@@ -96,6 +97,45 @@ public class EventCommand extends GenericCommand {
                             Integer.parseInt(args[2]),
                             Integer.parseInt(args[3]),
                             player);
+                } catch (InstantiationException | IllegalAccessException | NoSuchMethodException
+                    | InvocationTargetException e) {
+                    sendChatToSender(sender, EnumChatFormatting.RED + "Failed to trigger event.");
+                    LogUtil.error(e);
+                    LogUtil.error(e.getMessage());
+                }
+            } else {
+                sendChatToSender(
+                    sender,
+                    String.format(EnumChatFormatting.YELLOW + "Event '%s' does not exist.", args[0]));
+            }
+        } else if (args.length == 5) {
+
+            if (CNpcEvent.isValidEnum(args[0].toUpperCase())) {
+
+                CNpcEvent event = CNpcEvent.valueOf(args[0].toUpperCase());
+
+                try {
+                    event.genericEventClass
+                        .getDeclaredConstructor(
+                            World.class,
+                            double.class,
+                            double.class,
+                            double.class,
+                            EntityLivingBase.class,
+                            String.class,
+                            int.class,
+                            int.class,
+                            int.class)
+                        .newInstance(
+                            world,
+                            player.posX,
+                            player.posY,
+                            player.posZ,
+                            player,
+                            args[1],
+                            Integer.parseInt(args[2]),
+                            Integer.parseInt(args[3]),
+                            Integer.parseInt(args[4]));
                 } catch (InstantiationException | IllegalAccessException | NoSuchMethodException
                     | InvocationTargetException e) {
                     sendChatToSender(sender, EnumChatFormatting.RED + "Failed to trigger event.");
