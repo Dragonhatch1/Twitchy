@@ -47,3 +47,5 @@ public class Twitchy {
         proxy.serverStarting(event);
     }
 }
+// TODO BEFORE WE START MAKING REDEEMS
+// TODO Need to make all redeems auto complete as they finish.
