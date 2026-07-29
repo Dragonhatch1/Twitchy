@@ -28,6 +28,7 @@ public class TwitchEventSubClient implements WebSocket.Listener {
     private final Consumer<Throwable> onError;
 
     private WebSocket webSocket;
+    private volatile WebSocket currentSocket;
     private final StringBuilder messageBuffer = new StringBuilder();
     private volatile boolean intentionallyClosed = false;
 
@@ -81,6 +82,9 @@ public class TwitchEventSubClient implements WebSocket.Listener {
     @Override
     public CompletionStage<?> onClose(WebSocket webSocket, int statusCode, String reason) {
         Twitchy.LOG.info("EventSub WebSocket closed: {} {}", statusCode, reason);
+        if (webSocket != currentSocket) {
+            return null;
+        }
         if (!intentionallyClosed && Config.autoReconnect) {
             Twitchy.LOG.info("Attempting to reconnect EventSub session...");
             connect().exceptionally(ex -> {
@@ -130,9 +134,11 @@ public class TwitchEventSubClient implements WebSocket.Listener {
                     ? envelope.payload.session.reconnect_url
                     : null;
                 Twitchy.LOG.info("EventSub requested reconnect to a new session...");
-                intentionallyClosed = true;
-                if (webSocket != null) {
-                    webSocket.abort();
+                WebSocket old = webSocket;
+                currentSocket = null;
+
+                if (old != null) {
+                    old.abort();
                 }
                 connect(newUrl != null ? newUrl : EVENTSUB_WS_URL);
             }
