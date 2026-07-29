@@ -1,0 +1,131 @@
+package com.twitchy.rewards;
+
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
+import com.twitchy.Twitchy;
+
+import cpw.mods.fml.common.Loader;
+
+/**
+ * Reward-to-action mappings, loaded from config/twitchy/rewards.json. Each mapping has a stable
+ * local "key" shared identically across every streamer - Twitchy creates the actual Twitch reward
+ * per-streamer (see RewardIdRegistry) and translates incoming redemptions back to this key before
+ * the server ever sees them.
+ *
+ * IMPORTANT for dedicated servers: this file must exist (and match) on BOTH the client that owns
+ * the Twitch session AND the server that executes the actions, since the server looks up the
+ * action definition itself from its own copy rather than trusting a payload from the client.
+ */
+public class RewardConfig {
+
+    private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
+    private static final Type LIST_TYPE = new TypeToken<ArrayList<RewardMapping>>() {}.getType();
+
+    private static volatile List<RewardMapping> mappings = new ArrayList<>();
+
+    private RewardConfig() {}
+
+    private static File file() {
+        File dir = new File(Loader.instance().getConfigDir(), "twitchy");
+        if (!dir.exists()) {
+            dir.mkdirs();
+        }
+        return new File(dir, "rewards.json");
+    }
+
+    public static synchronized void load() {
+        File f = file();
+        if (!f.exists()) {
+            mappings = defaultMappings();
+            save();
+            return;
+        }
+        try (FileReader reader = new FileReader(f)) {
+            List<RewardMapping> loaded = GSON.fromJson(reader, LIST_TYPE);
+            mappings = loaded != null ? loaded : new ArrayList<>();
+            Twitchy.LOG.info("Loaded {} reward mapping(s) from rewards.json", mappings.size());
+        } catch (IOException e) {
+            Twitchy.LOG.error("Failed to load rewards.json, using empty mapping set.", e);
+            mappings = new ArrayList<>();
+        }
+    }
+
+    public static synchronized void save() {
+        try (FileWriter writer = new FileWriter(file())) {
+            GSON.toJson(mappings, LIST_TYPE, writer);
+        } catch (IOException e) {
+            Twitchy.LOG.error("Failed to save rewards.json", e);
+        }
+    }
+
+    public static synchronized List<RewardMapping> all() {
+        return new ArrayList<>(mappings);
+    }
+
+    public static synchronized Optional<RewardAction> findByKey(String key) {
+        for (RewardMapping mapping : mappings) {
+            if (mapping.key != null && mapping.key.equals(key)) {
+                return Optional.ofNullable(mapping.action);
+            }
+        }
+        return Optional.empty();
+    }
+
+    private static List<RewardMapping> defaultMappings() {
+        List<RewardMapping> defaults = new ArrayList<>();
+
+        RewardMapping give = new RewardMapping();
+        give.key = "give_apple";
+        give.title = "Give Me an Apple";
+        give.cost = 100;
+        give.prompt = "Get a free apple!";
+        give.action = new RewardAction();
+        give.action.type = RewardActionType.GIVE_ITEM;
+        give.action.item = "minecraft:apple";
+        give.action.amount = 1;
+        defaults.add(give);
+
+        RewardMapping zombie = new RewardMapping();
+        zombie.key = "spawn_zombie";
+        zombie.title = "Spawn a Zombie";
+        zombie.cost = 300;
+        zombie.prompt = "Spawn a zombie near the streamer!";
+        zombie.action = new RewardAction();
+        zombie.action.type = RewardActionType.SPAWN_ENTITY;
+        zombie.action.entity = "Zombie";
+        zombie.action.count = 1;
+        defaults.add(zombie);
+
+        RewardMapping weather = new RewardMapping();
+        weather.key = "make_it_rain";
+        weather.title = "Make It Rain";
+        weather.cost = 200;
+        weather.prompt = "Change the weather to rain!";
+        weather.action = new RewardAction();
+        weather.action.type = RewardActionType.RUN_COMMAND;
+        weather.action.command = "weather rain 1200";
+        defaults.add(weather);
+
+        RewardMapping shout = new RewardMapping();
+        shout.key = "shoutout";
+        shout.title = "Shoutout";
+        shout.cost = 50;
+        shout.prompt = "Get a shoutout in-game!";
+        shout.action = new RewardAction();
+        shout.action.type = RewardActionType.SERVER_CHAT_MESSAGE;
+        shout.action.message = "{viewer} says: {input}";
+        defaults.add(shout);
+
+        return defaults;
+    }
+}
