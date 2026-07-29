@@ -5,17 +5,17 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.audio.PositionedSoundRecord;
+import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.ResourceLocation;
+
 import com.twitchy.Twitchy;
 import com.twitchy.api.TwitchApiClient;
 import com.twitchy.api.TwitchModels.RewardRedemptionEvent;
 import com.twitchy.auth.TwitchCredentials;
 import com.twitchy.network.MessageRedeemAction;
 import com.twitchy.network.PacketHandler;
-
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.audio.PositionedSoundRecord;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.ResourceLocation;
 
 /**
  * Client-side only. Handles an incoming redemption event: resolves the configured action and
@@ -35,10 +35,13 @@ public final class RewardManager {
         dispatch(maybeKey.get(), event.user_login, event.user_name, event.user_input == null ? "" : event.user_input);
     }
 
-    /** Simulates a redemption locally for testing (/twitchy testredeem), bypassing Twitch entirely.
-     *  Returns false if no mapping exists for this key. */
+    /**
+     * Simulates a redemption locally for testing (/twitchy testredeem), bypassing Twitch entirely.
+     * Returns false if no mapping exists for this key.
+     */
     public static boolean testAction(String key) {
-        if (RewardConfig.findByKey(key).isEmpty()) return false;
+        if (RewardConfig.findByKey(key)
+            .isEmpty()) return false;
         dispatch(key, "testviewer", "TestViewer", "test input");
         return true;
     }
@@ -84,16 +87,41 @@ public final class RewardManager {
         List<CompletableFuture<Void>> tasks = new ArrayList<>();
 
         for (RewardMapping mapping : RewardConfig.all()) {
-            if (RewardIdRegistry.twitchIdForKey(mapping.key).isPresent()) {
-                continue; // already created for this broadcaster
+            Optional<String> existingId = RewardIdRegistry.twitchIdForKey(mapping.key);
+
+            if (existingId.isEmpty()) {
+
+                if (!mapping.enabled) {
+                    continue;
+                }
+                if (RewardIdRegistry.twitchIdForKey(mapping.key)
+                    .isPresent()) {
+                    continue; // already created for this broadcaster
+                }
+                CompletableFuture<Void> task = TwitchApiClient
+                    .createCustomReward(creds, mapping.title, mapping.cost, mapping.prompt)
+                    .thenAccept(reward -> {
+                        RewardIdRegistry.put(creds.userId, mapping.key, reward.id);
+                        Twitchy.LOG.info(
+                            "Created Twitch reward '{}' (id {}) for key '{}'",
+                            mapping.title,
+                            reward.id,
+                            mapping.key);
+                    });
+                tasks.add(task);
+            } else {
+                // Already created previously - push the config's enabled state to Twitch every sync,
+                // so toggling "enabled" in rewards.json actually pauses/resumes it on Twitch's side too.
+                CompletableFuture<Void> task = TwitchApiClient
+                    .updateCustomReward(creds, existingId.get(), mapping.enabled)
+                    .exceptionally(ex -> {
+                        // Don't let one stale/manually-deleted reward block the whole connect flow.
+                        Twitchy.LOG
+                            .warn("Failed to sync enabled state for reward key '{}': {}", mapping.key, ex.getMessage());
+                        return null;
+                    });
+                tasks.add(task);
             }
-            CompletableFuture<Void> task = TwitchApiClient
-                .createCustomReward(creds, mapping.title, mapping.cost, mapping.prompt)
-                .thenAccept(reward -> {
-                    RewardIdRegistry.put(creds.userId, mapping.key, reward.id);
-                    Twitchy.LOG.info("Created Twitch reward '{}' (id {}) for key '{}'", mapping.title, reward.id, mapping.key);
-                });
-            tasks.add(task);
         }
         return CompletableFuture.allOf(tasks.toArray(new CompletableFuture[0]));
     }

@@ -22,7 +22,8 @@ import cpw.mods.fml.common.Loader;
  */
 public class TwitchCredentials {
 
-    private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
+    private static final Gson GSON = new GsonBuilder().setPrettyPrinting()
+        .create();
 
     public String accessToken;
     public String[] scopes;
@@ -34,7 +35,10 @@ public class TwitchCredentials {
     }
 
     private static File file() {
-        File dir = new File(Loader.instance().getConfigDir(), "twitchy");
+        File dir = new File(
+            Loader.instance()
+                .getConfigDir(),
+            "twitchy");
         if (!dir.exists()) {
             dir.mkdirs();
         }
@@ -64,7 +68,9 @@ public class TwitchCredentials {
         }
         try {
             // Best-effort: restrict permissions since this file contains a live token.
-            Files.setPosixFilePermissions(f.toPath(), java.nio.file.attribute.PosixFilePermissions.fromString("rw-------"));
+            Files.setPosixFilePermissions(
+                f.toPath(),
+                java.nio.file.attribute.PosixFilePermissions.fromString("rw-------"));
         } catch (Exception ignored) {
             // Not all filesystems (e.g. Windows) support POSIX permissions; that's fine.
         }

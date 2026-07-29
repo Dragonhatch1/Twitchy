@@ -1,14 +1,12 @@
 package com.twitchy.command;
 
-import com.twitchy.api.TwitchModels.Reward;
-import com.twitchy.api.TwitchModels.RewardRedemptionEvent;
-import com.twitchy.client.TwitchSessionManager;
-import com.twitchy.rewards.RewardConfig;
-import com.twitchy.rewards.RewardManager;
-
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.ChatComponentText;
+
+import com.twitchy.client.TwitchSessionManager;
+import com.twitchy.rewards.RewardConfig;
+import com.twitchy.rewards.RewardManager;
 
 public class CommandTwitchy extends CommandBase {
 
@@ -67,9 +65,11 @@ public class CommandTwitchy extends CommandBase {
                 boolean listening = TwitchSessionManager.INSTANCE.isEventSubReady();
                 reply(
                     sender,
-                    "Twitchy status: " + (hasToken ? "authorized as " + TwitchSessionManager.INSTANCE.credentials().userLogin
-                        : "not authorized")
-                        + ", redemptions " + (listening ? "LIVE" : "not listening"));
+                    "Twitchy status: "
+                        + (hasToken ? "authorized as " + TwitchSessionManager.INSTANCE.credentials().userLogin
+                            : "not authorized")
+                        + ", redemptions "
+                        + (listening ? "LIVE" : "not listening"));
             }
             case "say" -> {
                 if (args.length < 2) {

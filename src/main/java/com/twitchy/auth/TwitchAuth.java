@@ -30,7 +30,8 @@ import com.twitchy.api.TwitchApiClient;
 public class TwitchAuth {
 
     /** Scopes requested. Adjust here if you add features that need more. */
-    public static final String[] SCOPES = { "channel:read:redemptions", "channel:manage:redemptions", "user:write:chat", "user:bot", "chat:read" };
+    public static final String[] SCOPES = { "channel:read:redemptions", "channel:manage:redemptions", "user:write:chat",
+        "user:bot", "chat:read" };
 
     private static final SecureRandom RANDOM = new SecureRandom();
 
@@ -79,7 +80,8 @@ public class TwitchAuth {
 
         String authorizeUrl = buildAuthorizeUrl(state);
         try {
-            Desktop.getDesktop().browse(URI.create(authorizeUrl));
+            Desktop.getDesktop()
+                .browse(URI.create(authorizeUrl));
             Twitchy.LOG.info("Opened browser for Twitch authorization. Waiting for approval...");
         } catch (Exception e) {
             stopServerIfRunning();
@@ -91,12 +93,13 @@ public class TwitchAuth {
         }
 
         // Timeout so we don't leave a local server open forever if the user never finishes.
-        result.orTimeout(3, TimeUnit.MINUTES).whenComplete((creds, err) -> {
-            stopServerIfRunning();
-            if (err instanceof TimeoutException) {
-                Twitchy.LOG.warn("Twitch authorization timed out waiting for browser approval.");
-            }
-        });
+        result.orTimeout(3, TimeUnit.MINUTES)
+            .whenComplete((creds, err) -> {
+                stopServerIfRunning();
+                if (err instanceof TimeoutException) {
+                    Twitchy.LOG.warn("Twitch authorization timed out waiting for browser approval.");
+                }
+            });
 
         return result;
     }
@@ -120,7 +123,8 @@ public class TwitchAuth {
         }
         String encodedScopes = urlEncode(scopeBuilder.toString());
         String encodedRedirect = urlEncode(redirectUri());
-        return "https://id.twitch.tv/oauth2/authorize" + "?client_id=" + urlEncode(Config.clientId)
+        return "https://id.twitch.tv/oauth2/authorize" + "?client_id="
+            + urlEncode(Config.clientId)
             + "&redirect_uri="
             + encodedRedirect
             + "&response_type=token"
@@ -145,9 +149,11 @@ public class TwitchAuth {
             + "}).catch(function(){"
             + "  document.body.innerHTML = '<h2>Something went wrong. Return to Minecraft and check the log.</h2>';"
             + "});"
-            + "</script>" + "</body></html>";
+            + "</script>"
+            + "</body></html>";
         byte[] bytes = html.getBytes(StandardCharsets.UTF_8);
-        exchange.getResponseHeaders().add("Content-Type", "text/html; charset=utf-8");
+        exchange.getResponseHeaders()
+            .add("Content-Type", "text/html; charset=utf-8");
         exchange.sendResponseHeaders(200, bytes.length);
         try (OutputStream os = exchange.getResponseBody()) {
             os.write(bytes);
@@ -156,7 +162,9 @@ public class TwitchAuth {
 
     private static void handleCapture(HttpExchange exchange, String expectedState,
         CompletableFuture<TwitchCredentials> result) throws IOException {
-        Map<String, String> params = parseQuery(exchange.getRequestURI().getRawQuery());
+        Map<String, String> params = parseQuery(
+            exchange.getRequestURI()
+                .getRawQuery());
 
         byte[] bytes = "ok".getBytes(StandardCharsets.UTF_8);
         exchange.sendResponseHeaders(200, bytes.length);
@@ -166,7 +174,8 @@ public class TwitchAuth {
 
         String error = params.get("error");
         if (error != null) {
-            result.completeExceptionally(new IOException("Twitch authorization denied: " + params.get("error_description")));
+            result.completeExceptionally(
+                new IOException("Twitch authorization denied: " + params.get("error_description")));
             return;
         }
 
@@ -188,15 +197,17 @@ public class TwitchAuth {
         creds.scopes = scopeParam.isBlank() ? new String[0] : scopeParam.split(" ");
 
         // Resolve who this token belongs to, then persist.
-        TwitchApiClient.getSelfUser(creds.accessToken).thenAccept(user -> {
-            creds.userId = user.id;
-            creds.userLogin = user.login;
-            creds.save();
-            result.complete(creds);
-        }).exceptionally(ex -> {
-            result.completeExceptionally(ex);
-            return null;
-        });
+        TwitchApiClient.getSelfUser(creds.accessToken)
+            .thenAccept(user -> {
+                creds.userId = user.id;
+                creds.userLogin = user.login;
+                creds.save();
+                result.complete(creds);
+            })
+            .exceptionally(ex -> {
+                result.completeExceptionally(ex);
+                return null;
+            });
     }
 
     private static Map<String, String> parseQuery(String rawQuery) {

@@ -24,7 +24,8 @@ import cpw.mods.fml.common.Loader;
  */
 public class RewardIdRegistry {
 
-    private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
+    private static final Gson GSON = new GsonBuilder().setPrettyPrinting()
+        .create();
     private static final Type MAP_TYPE = new TypeToken<HashMap<String, String>>() {}.getType();
 
     /** key -> twitch reward id, for whichever broadcaster is currently connected. */
@@ -33,7 +34,10 @@ public class RewardIdRegistry {
     private RewardIdRegistry() {}
 
     private static File file(String broadcasterUserId) {
-        File dir = new File(Loader.instance().getConfigDir(), "twitchy");
+        File dir = new File(
+            Loader.instance()
+                .getConfigDir(),
+            "twitchy");
         if (!dir.exists()) dir.mkdirs();
         return new File(dir, "reward-ids-" + broadcasterUserId + ".json");
     }
@@ -72,8 +76,11 @@ public class RewardIdRegistry {
 
     /** Translates an incoming Twitch reward id back to our stable local key. */
     public static synchronized Optional<String> keyForTwitchId(String twitchRewardId) {
-        return keyToTwitchId.entrySet().stream()
-            .filter(e -> e.getValue().equals(twitchRewardId))
+        return keyToTwitchId.entrySet()
+            .stream()
+            .filter(
+                e -> e.getValue()
+                    .equals(twitchRewardId))
             .map(Map.Entry::getKey)
             .findFirst();
     }

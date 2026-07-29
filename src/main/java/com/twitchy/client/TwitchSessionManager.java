@@ -48,10 +48,11 @@ public final class TwitchSessionManager {
             return failed("A connection attempt is already in progress - please wait.");
         }
         CompletableFuture<Void> result = hasStoredToken() ? syncThenStartEventSub()
-            : TwitchAuth.beginAuthFlow().thenCompose(creds -> {
-            this.credentials = creds;
-            return syncThenStartEventSub();
-        });
+            : TwitchAuth.beginAuthFlow()
+                .thenCompose(creds -> {
+                    this.credentials = creds;
+                    return syncThenStartEventSub();
+                });
         return result.whenComplete((v, err) -> connecting.set(false));
     }
 
@@ -61,23 +62,20 @@ public final class TwitchSessionManager {
             return failed("A connection attempt is already in progress - please wait.");
         }
         disconnect();
-        CompletableFuture<Void> result = TwitchAuth.beginAuthFlow().thenCompose(creds -> {
-            this.credentials = creds;
-            return syncThenStartEventSub();
-        });
+        CompletableFuture<Void> result = TwitchAuth.beginAuthFlow()
+            .thenCompose(creds -> {
+                this.credentials = creds;
+                return syncThenStartEventSub();
+            });
         return result.whenComplete((v, err) -> connecting.set(false));
     }
 
     private CompletableFuture<Void> startEventSub() {
         eventSubReady = false;
-        eventSubClient = new TwitchEventSubClient(
-            credentials,
-            RewardManager::handleRedemption,
-            () -> {
-                eventSubReady = true;
-                Twitchy.LOG.info("Twitchy is now listening for channel point redemptions on {}", credentials.userLogin);
-            },
-            error -> Twitchy.LOG.error("Twitch EventSub error", error));
+        eventSubClient = new TwitchEventSubClient(credentials, RewardManager::handleRedemption, () -> {
+            eventSubReady = true;
+            Twitchy.LOG.info("Twitchy is now listening for channel point redemptions on {}", credentials.userLogin);
+        }, error -> Twitchy.LOG.error("Twitch EventSub error", error));
         return eventSubClient.connect();
     }
 
@@ -100,7 +98,8 @@ public final class TwitchSessionManager {
     public CompletableFuture<Void> sendChatMessage(String message) {
         if (!hasStoredToken()) {
             CompletableFuture<Void> failed = new CompletableFuture<>();
-            failed.completeExceptionally(new IllegalStateException("Not connected to Twitch. Run /twitchy connect first."));
+            failed.completeExceptionally(
+                new IllegalStateException("Not connected to Twitch. Run /twitchy connect first."));
             return failed;
         }
         return TwitchApiClient.sendChatMessage(credentials, message);
@@ -108,7 +107,8 @@ public final class TwitchSessionManager {
 
     /** Creates any rewards on Twitch that don't exist yet for this broadcaster, THEN starts listening. */
     private CompletableFuture<Void> syncThenStartEventSub() {
-        return RewardManager.syncRewardsToTwitch(credentials).thenCompose(v -> startEventSub());
+        return RewardManager.syncRewardsToTwitch(credentials)
+            .thenCompose(v -> startEventSub());
     }
 
     private static CompletableFuture<Void> failed(String message) {

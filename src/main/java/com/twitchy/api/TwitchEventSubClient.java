@@ -31,8 +31,9 @@ public class TwitchEventSubClient implements WebSocket.Listener {
     private final StringBuilder messageBuffer = new StringBuilder();
     private volatile boolean intentionallyClosed = false;
 
-    public TwitchEventSubClient(TwitchCredentials credentials, Consumer<TwitchModels.RewardRedemptionEvent> onRedemption,
-        Runnable onSessionEstablished, Consumer<Throwable> onError) {
+    public TwitchEventSubClient(TwitchCredentials credentials,
+        Consumer<TwitchModels.RewardRedemptionEvent> onRedemption, Runnable onSessionEstablished,
+        Consumer<Throwable> onError) {
         this.credentials = credentials;
         this.onRedemption = onRedemption;
         this.onSessionEstablished = onSessionEstablished;
@@ -116,12 +117,12 @@ public class TwitchEventSubClient implements WebSocket.Listener {
                     : null;
                 if (sessionId != null) {
                     Twitchy.LOG.info("EventSub session established: {}", sessionId);
-                    TwitchApiClient.subscribeToRedemptions(credentials, sessionId).thenRun(() -> {
-                        if (onSessionEstablished != null) onSessionEstablished.run();
-                    }).exceptionally(ex -> {
-                        onError.accept(ex);
-                        return null;
-                    });
+                    TwitchApiClient.subscribeToRedemptions(credentials, sessionId)
+                        .thenRun(() -> { if (onSessionEstablished != null) onSessionEstablished.run(); })
+                        .exceptionally(ex -> {
+                            onError.accept(ex);
+                            return null;
+                        });
                 }
             }
             case "session_reconnect" -> {
@@ -140,15 +141,18 @@ public class TwitchEventSubClient implements WebSocket.Listener {
             }
             case "notification" -> {
                 if (envelope.payload != null && envelope.payload.event != null
-                    && "channel.channel_points_custom_reward_redemption.add".equals(envelope.metadata.subscription_type)) {
+                    && "channel.channel_points_custom_reward_redemption.add"
+                        .equals(envelope.metadata.subscription_type)) {
                     onRedemption.accept(envelope.payload.event);
                 }
             }
             case "revocation" -> Twitchy.LOG.warn(
                 "EventSub subscription revoked: {}",
-                envelope.payload != null && envelope.payload.subscription != null ? envelope.payload.subscription.status : "unknown");
+                envelope.payload != null && envelope.payload.subscription != null ? envelope.payload.subscription.status
+                    : "unknown");
             default -> {
-                if (Config.debugLogging) Twitchy.LOG.info("Unhandled EventSub message type: {}", envelope.metadata.message_type);
+                if (Config.debugLogging)
+                    Twitchy.LOG.info("Unhandled EventSub message type: {}", envelope.metadata.message_type);
             }
         }
     }

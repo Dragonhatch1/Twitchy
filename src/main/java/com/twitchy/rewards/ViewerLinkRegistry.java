@@ -21,7 +21,8 @@ import cpw.mods.fml.common.Loader;
  */
 public class ViewerLinkRegistry {
 
-    private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
+    private static final Gson GSON = new GsonBuilder().setPrettyPrinting()
+        .create();
     private static final Type MAP_TYPE = new TypeToken<HashMap<String, String>>() {}.getType();
 
     private static volatile Map<String, String> links = new HashMap<>();
@@ -29,7 +30,10 @@ public class ViewerLinkRegistry {
     private ViewerLinkRegistry() {}
 
     private static File file() {
-        File dir = new File(Loader.instance().getConfigDir(), "twitchy");
+        File dir = new File(
+            Loader.instance()
+                .getConfigDir(),
+            "twitchy");
         if (!dir.exists()) dir.mkdirs();
         return new File(dir, "viewer-links.json");
     }

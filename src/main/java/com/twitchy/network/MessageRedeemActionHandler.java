@@ -2,14 +2,6 @@ package com.twitchy.network;
 
 import java.util.Optional;
 
-import com.twitchy.Twitchy;
-import com.twitchy.rewards.RewardAction;
-import com.twitchy.rewards.RewardConfig;
-import com.twitchy.rewards.ViewerLinkRegistry;
-
-import cpw.mods.fml.common.network.simpleimpl.IMessage;
-import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
-import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
@@ -19,6 +11,15 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.world.WorldServer;
+
+import com.twitchy.Twitchy;
+import com.twitchy.rewards.RewardAction;
+import com.twitchy.rewards.RewardConfig;
+import com.twitchy.rewards.ViewerLinkRegistry;
+
+import cpw.mods.fml.common.network.simpleimpl.IMessage;
+import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
+import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 
 /** Runs server-side. Looks the reward up from the server's OWN rewards.json and executes it. */
 public class MessageRedeemActionHandler implements IMessageHandler<MessageRedeemAction, IMessage> {
@@ -33,13 +34,15 @@ public class MessageRedeemActionHandler implements IMessageHandler<MessageRedeem
     private void execute(MinecraftServer server, MessageRedeemAction message, EntityPlayerMP sender) {
         Optional<RewardAction> maybeAction = RewardConfig.findByKey(message.rewardKey);
         if (maybeAction.isEmpty()) {
-            Twitchy.LOG.warn(
-                "Received redemption for unconfigured reward key '{}', ignoring.",
-                message.rewardKey);
+            Twitchy.LOG.warn("Received redemption for unconfigured reward key '{}', ignoring.", message.rewardKey);
             return;
         }
         RewardAction action = maybeAction.get();
-        Twitchy.LOG.info("Executing action {} for reward '{}' redeemed by {}", action.type, message.rewardKey, message.viewerDisplayName);
+        Twitchy.LOG.info(
+            "Executing action {} for reward '{}' redeemed by {}",
+            action.type,
+            message.rewardKey,
+            message.viewerDisplayName);
 
         switch (action.type) {
             case GIVE_ITEM -> giveItem(server, action, message, sender);
@@ -52,13 +55,15 @@ public class MessageRedeemActionHandler implements IMessageHandler<MessageRedeem
         }
     }
 
-    private EntityPlayerMP resolveTargetPlayer(MinecraftServer server, RewardAction action, MessageRedeemAction message, EntityPlayerMP sender) {
+    private EntityPlayerMP resolveTargetPlayer(MinecraftServer server, RewardAction action, MessageRedeemAction message,
+        EntityPlayerMP sender) {
         if ("linked".equalsIgnoreCase(action.target)) {
             String linked = ViewerLinkRegistry.resolve(message.viewerLogin);
             if (linked != null && !linked.isBlank()) {
                 for (Object obj : server.getConfigurationManager().playerEntityList) {
                     EntityPlayerMP candidate = (EntityPlayerMP) obj;
-                    if (candidate.getCommandSenderName().equalsIgnoreCase(linked)) {
+                    if (candidate.getCommandSenderName()
+                        .equalsIgnoreCase(linked)) {
                         return candidate;
                     }
                 }
@@ -69,7 +74,8 @@ public class MessageRedeemActionHandler implements IMessageHandler<MessageRedeem
         return sender;
     }
 
-    private void giveItem(MinecraftServer server, RewardAction action, MessageRedeemAction message, EntityPlayerMP sender) {
+    private void giveItem(MinecraftServer server, RewardAction action, MessageRedeemAction message,
+        EntityPlayerMP sender) {
         EntityPlayerMP player = resolveTargetPlayer(server, action, message, sender);
         if (player == null) {
             Twitchy.LOG.warn("GIVE_ITEM: target player not online, skipping.");
@@ -91,10 +97,12 @@ public class MessageRedeemActionHandler implements IMessageHandler<MessageRedeem
         String command = action.command.replace("{viewer}", safe(message.viewerDisplayName))
             .replace("{input}", safe(message.userInput));
         ICommandSender sender = server; // MinecraftServer implements ICommandSender with full permission.
-        server.getCommandManager().executeCommand(sender, command);
+        server.getCommandManager()
+            .executeCommand(sender, command);
     }
 
-    private void spawnEntity(MinecraftServer server, RewardAction action, MessageRedeemAction message, EntityPlayerMP sender) {
+    private void spawnEntity(MinecraftServer server, RewardAction action, MessageRedeemAction message,
+        EntityPlayerMP sender) {
         if (action.entity == null || action.entity.isBlank()) return;
         EntityPlayerMP player = resolveTargetPlayer(server, action, message, sender);
         WorldServer world = player != null ? (WorldServer) player.worldObj : server.worldServerForDimension(0);
@@ -118,7 +126,8 @@ public class MessageRedeemActionHandler implements IMessageHandler<MessageRedeem
         if (action.message == null || action.message.isBlank()) return;
         String text = action.message.replace("{viewer}", safe(message.viewerDisplayName))
             .replace("{input}", safe(message.userInput));
-        server.getConfigurationManager().sendChatMsg(new ChatComponentText(text));
+        server.getConfigurationManager()
+            .sendChatMsg(new ChatComponentText(text));
     }
 
     private static String safe(String s) {

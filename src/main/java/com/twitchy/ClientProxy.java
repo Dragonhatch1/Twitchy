@@ -1,11 +1,12 @@
 package com.twitchy;
 
+import net.minecraftforge.client.ClientCommandHandler;
+
 import com.twitchy.client.ClientEventHandler;
 import com.twitchy.command.CommandTwitchy;
 import com.twitchy.rewards.RewardConfig;
 import com.twitchy.rewards.ViewerLinkRegistry;
 
-import net.minecraftforge.client.ClientCommandHandler;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 
@@ -24,7 +25,9 @@ public class ClientProxy extends CommonProxy {
     public void init(FMLInitializationEvent event) {
         super.init(event);
         ClientCommandHandler.instance.registerCommand(new CommandTwitchy());
-        cpw.mods.fml.common.FMLCommonHandler.instance().bus().register(new ClientEventHandler());
+        cpw.mods.fml.common.FMLCommonHandler.instance()
+            .bus()
+            .register(new ClientEventHandler());
     }
 
     @Override

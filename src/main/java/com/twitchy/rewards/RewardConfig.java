@@ -28,7 +28,8 @@ import cpw.mods.fml.common.Loader;
  */
 public class RewardConfig {
 
-    private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
+    private static final Gson GSON = new GsonBuilder().setPrettyPrinting()
+        .create();
     private static final Type LIST_TYPE = new TypeToken<ArrayList<RewardMapping>>() {}.getType();
 
     private static volatile List<RewardMapping> mappings = new ArrayList<>();
@@ -36,7 +37,10 @@ public class RewardConfig {
     private RewardConfig() {}
 
     private static File file() {
-        File dir = new File(Loader.instance().getConfigDir(), "twitchy");
+        File dir = new File(
+            Loader.instance()
+                .getConfigDir(),
+            "twitchy");
         if (!dir.exists()) {
             dir.mkdirs();
         }
@@ -74,7 +78,7 @@ public class RewardConfig {
 
     public static synchronized Optional<RewardAction> findByKey(String key) {
         for (RewardMapping mapping : mappings) {
-            if (mapping.key != null && mapping.key.equals(key)) {
+            if (mapping.key != null && mapping.key.equals(key) && mapping.enabled) {
                 return Optional.ofNullable(mapping.action);
             }
         }
@@ -89,6 +93,7 @@ public class RewardConfig {
         give.title = "Give Me an Apple";
         give.cost = 100;
         give.prompt = "Get a free apple!";
+        give.enabled = true;
         give.action = new RewardAction();
         give.action.type = RewardActionType.GIVE_ITEM;
         give.action.item = "minecraft:apple";
@@ -100,6 +105,7 @@ public class RewardConfig {
         zombie.title = "Spawn a Zombie";
         zombie.cost = 300;
         zombie.prompt = "Spawn a zombie near the streamer!";
+        zombie.enabled = true;
         zombie.action = new RewardAction();
         zombie.action.type = RewardActionType.SPAWN_ENTITY;
         zombie.action.entity = "Zombie";
@@ -111,6 +117,7 @@ public class RewardConfig {
         weather.title = "Make It Rain";
         weather.cost = 200;
         weather.prompt = "Change the weather to rain!";
+        weather.enabled = true;
         weather.action = new RewardAction();
         weather.action.type = RewardActionType.RUN_COMMAND;
         weather.action.command = "weather rain 1200";
@@ -121,6 +128,7 @@ public class RewardConfig {
         shout.title = "Shoutout";
         shout.cost = 50;
         shout.prompt = "Get a shoutout in-game!";
+        shout.enabled = true;
         shout.action = new RewardAction();
         shout.action.type = RewardActionType.SERVER_CHAT_MESSAGE;
         shout.action.message = "{viewer} says: {input}";

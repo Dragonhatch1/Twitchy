@@ -105,6 +105,7 @@ public final class TwitchModels {
     }
 
     public static class CustomRewards {
+
         public String id;
         public String broadcaster_id;
         public String title;
@@ -114,13 +115,20 @@ public final class TwitchModels {
     }
 
     public static class CustomRewardsResponse {
+
         public List<CustomRewards> data;
     }
 
     public static class CreateCustomRewardRequest {
+
         public String title;
         public int cost;
         public String prompt;
         public boolean is_enabled = true;
+    }
+
+    public static class UpdateCustomRewardRequest {
+
+        public Boolean is_enabled;
     }
 }

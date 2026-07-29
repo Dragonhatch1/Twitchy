@@ -19,8 +19,7 @@ public class MessageRedeemAction implements IMessage {
 
     public MessageRedeemAction() {}
 
-    public MessageRedeemAction(String rewardKey, String viewerLogin, String viewerDisplayName,
-        String userInput) {
+    public MessageRedeemAction(String rewardKey, String viewerLogin, String viewerDisplayName, String userInput) {
         this.rewardKey = rewardKey;
         this.viewerLogin = viewerLogin;
         this.viewerDisplayName = viewerDisplayName;
