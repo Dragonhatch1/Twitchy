@@ -50,7 +50,10 @@ public class TwitchEventSubClient implements WebSocket.Listener {
         HttpClient client = HttpClient.newHttpClient();
         return client.newWebSocketBuilder()
             .buildAsync(URI.create(url), this)
-            .thenAccept(ws -> this.webSocket = ws);
+            .thenAccept(ws -> {
+                this.webSocket = ws;
+                this.currentSocket = ws;
+            });
     }
 
     public void disconnect() {
@@ -63,6 +66,7 @@ public class TwitchEventSubClient implements WebSocket.Listener {
     @Override
     public void onOpen(WebSocket webSocket) {
         this.webSocket = webSocket;
+        this.currentSocket = webSocket;
         Twitchy.LOG.info("EventSub WebSocket connected, awaiting welcome message...");
         WebSocket.Listener.super.onOpen(webSocket);
     }
