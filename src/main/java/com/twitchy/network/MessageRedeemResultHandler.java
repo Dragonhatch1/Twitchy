@@ -22,7 +22,10 @@ public class MessageRedeemResultHandler implements IMessageHandler<MessageRedeem
                 message.redemptionId,
                 message.success)
             .exceptionally(ex -> {
-                Twitchy.LOG.warn("Failed to mark redemption {} as fulfilled/canceled: {}", message.redemptionId, ex.getMessage());
+                Twitchy.LOG.warn(
+                    "Failed to mark redemption {} as fulfilled/canceled: {}",
+                    message.redemptionId,
+                    ex.getMessage());
                 return null;
             });
         return null;

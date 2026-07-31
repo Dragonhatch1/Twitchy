@@ -50,7 +50,8 @@ public class MessageRedeemActionHandler implements IMessageHandler<MessageRedeem
             case RUN_COMMAND -> runCommand(server, action, message);
             case SPAWN_ENTITY -> spawnEntity(server, action, message, sender);
             case SERVER_CHAT_MESSAGE -> broadcastChat(server, action, message);
-            case CLIENT_EFFECT -> true; // Should not normally arrive here - CLIENT_EFFECT is handled client-side without a packet.
+            case CLIENT_EFFECT -> true; // Should not normally arrive here - CLIENT_EFFECT is handled client-side
+                                        // without a packet.
         };
         reportResult(sender, message, success);
     }

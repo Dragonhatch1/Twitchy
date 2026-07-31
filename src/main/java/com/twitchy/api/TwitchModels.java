@@ -132,7 +132,8 @@ public final class TwitchModels {
         public Boolean is_enabled;
     }
 
-    public static class UpdateRedemptionStatusRequest{
+    public static class UpdateRedemptionStatusRequest {
+
         public String status;
     }
 }

@@ -32,7 +32,13 @@ public final class RewardManager {
             Twitchy.LOG.info("Redemption for '{}' isn't one Twitchy created, ignoring.", event.reward.title);
             return;
         }
-        dispatch(maybeKey.get(), event.user_login, event.user_name, event.user_input == null ? "" : event.user_input, event.id, event.reward.id);
+        dispatch(
+            maybeKey.get(),
+            event.user_login,
+            event.user_name,
+            event.user_input == null ? "" : event.user_input,
+            event.id,
+            event.reward.id);
     }
 
     /**
@@ -46,7 +52,8 @@ public final class RewardManager {
         return true;
     }
 
-    private static void dispatch(String key, String viewerLogin, String viewerDisplayName, String userInput, String redemptionId, String twitchRewards) {
+    private static void dispatch(String key, String viewerLogin, String viewerDisplayName, String userInput,
+        String redemptionId, String twitchRewards) {
         Optional<RewardAction> maybeAction = RewardConfig.findByKey(key);
         if (maybeAction.isEmpty()) return;
         RewardAction action = maybeAction.get();
@@ -55,7 +62,8 @@ public final class RewardManager {
             applyClientEffect(action, viewerDisplayName, userInput);
             return;
         }
-        PacketHandler.sendToServer(new MessageRedeemAction(key, viewerLogin, viewerDisplayName, userInput, redemptionId, twitchRewards));
+        PacketHandler.sendToServer(
+            new MessageRedeemAction(key, viewerLogin, viewerDisplayName, userInput, redemptionId, twitchRewards));
     }
 
     private static void applyClientEffect(RewardAction action, String viewerDisplayName, String userInput) {

@@ -1,11 +1,12 @@
 package com.twitchy.network;
 
+import net.minecraft.entity.player.EntityPlayerMP;
+
 import com.twitchy.Twitchy;
 
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
-import net.minecraft.entity.player.EntityPlayerMP;
 
 public final class PacketHandler {
 
@@ -42,5 +43,3 @@ public final class PacketHandler {
         WRAPPER.sendTo(message, player);
     }
 }
-
-

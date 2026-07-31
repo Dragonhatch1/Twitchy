@@ -179,16 +179,19 @@ public final class TwitchApiClient {
     }
 
     public static CompletableFuture<Void> updateRedemptionStatus(TwitchCredentials creds, String twitchRewardId,
-                                                                 String redemptionId, boolean fulfilled) {
+        String redemptionId, boolean fulfilled) {
         TwitchModels.UpdateRedemptionStatusRequest body = new UpdateRedemptionStatusRequest();
         body.status = fulfilled ? "FULFILLED" : "CANCELED";
 
         HttpRequest request = HttpRequest.newBuilder()
             .uri(
                 URI.create(
-                    HELIX_BASE + "/channel_points/custom_rewards/redemptions?broadcaster_id=" + creds.userId
-                        + "&reward_id=" + twitchRewardId
-                        + "&id=" + redemptionId))
+                    HELIX_BASE + "/channel_points/custom_rewards/redemptions?broadcaster_id="
+                        + creds.userId
+                        + "&reward_id="
+                        + twitchRewardId
+                        + "&id="
+                        + redemptionId))
             .timeout(Duration.ofSeconds(15))
             .header("Authorization", "Bearer " + creds.accessToken)
             .header("Client-Id", Config.clientId)
@@ -196,14 +199,15 @@ public final class TwitchApiClient {
             .method("PATCH", HttpRequest.BodyPublishers.ofString(GSON.toJson(body)))
             .build();
 
-        return HTTP.sendAsync(request, HttpResponse.BodyHandlers.ofString()).thenAccept(resp -> {
-            if (resp.statusCode() != 200) {
-                throw new RuntimeException(
-                    "Failed to update redemption status (HTTP " + resp.statusCode() + "): " + resp.body());
-            }
-            if (Config.debugLogging) {
-                Twitchy.LOG.info("Redemption {} marked {}", redemptionId, body.status);
-            }
-        });
+        return HTTP.sendAsync(request, HttpResponse.BodyHandlers.ofString())
+            .thenAccept(resp -> {
+                if (resp.statusCode() != 200) {
+                    throw new RuntimeException(
+                        "Failed to update redemption status (HTTP " + resp.statusCode() + "): " + resp.body());
+                }
+                if (Config.debugLogging) {
+                    Twitchy.LOG.info("Redemption {} marked {}", redemptionId, body.status);
+                }
+            });
     }
 }
