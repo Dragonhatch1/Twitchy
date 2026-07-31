@@ -16,14 +16,18 @@ public class MessageRedeemAction implements IMessage {
     public String viewerLogin;
     public String viewerDisplayName;
     public String userInput;
+    public String redemptionId;
+    public String twitchRewards;
 
     public MessageRedeemAction() {}
 
-    public MessageRedeemAction(String rewardKey, String viewerLogin, String viewerDisplayName, String userInput) {
+    public MessageRedeemAction(String rewardKey, String viewerLogin, String viewerDisplayName, String userInput, String redemptionId, String twitchRewards) {
         this.rewardKey = rewardKey;
         this.viewerLogin = viewerLogin;
         this.viewerDisplayName = viewerDisplayName;
         this.userInput = userInput;
+        this.redemptionId = redemptionId;
+        this.twitchRewards = twitchRewards;
     }
 
     @Override
@@ -32,6 +36,8 @@ public class MessageRedeemAction implements IMessage {
         ByteBufUtils.writeUTF8String(buf, nullToEmpty(viewerLogin));
         ByteBufUtils.writeUTF8String(buf, nullToEmpty(viewerDisplayName));
         ByteBufUtils.writeUTF8String(buf, nullToEmpty(userInput));
+        ByteBufUtils.writeUTF8String(buf, nullToEmpty(redemptionId));
+        ByteBufUtils.writeUTF8String(buf, nullToEmpty(twitchRewards));
     }
 
     @Override
@@ -40,6 +46,8 @@ public class MessageRedeemAction implements IMessage {
         viewerLogin = ByteBufUtils.readUTF8String(buf);
         viewerDisplayName = ByteBufUtils.readUTF8String(buf);
         userInput = ByteBufUtils.readUTF8String(buf);
+        redemptionId = ByteBufUtils.readUTF8String(buf);
+        twitchRewards = ByteBufUtils.readUTF8String(buf);
     }
 
     private static String nullToEmpty(String s) {

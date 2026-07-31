@@ -11,14 +11,7 @@ import java.util.concurrent.CompletableFuture;
 import com.google.gson.Gson;
 import com.twitchy.Config;
 import com.twitchy.Twitchy;
-import com.twitchy.api.TwitchModels.CreateCustomRewardRequest;
-import com.twitchy.api.TwitchModels.CreateSubscriptionRequest;
-import com.twitchy.api.TwitchModels.CustomRewards;
-import com.twitchy.api.TwitchModels.CustomRewardsResponse;
-import com.twitchy.api.TwitchModels.HelixUser;
-import com.twitchy.api.TwitchModels.HelixUsersResponse;
-import com.twitchy.api.TwitchModels.SendChatMessageRequest;
-import com.twitchy.api.TwitchModels.UpdateCustomRewardRequest;
+import com.twitchy.api.TwitchModels.*;
 import com.twitchy.auth.TwitchCredentials;
 
 /** Thin wrapper around the bits of Twitch's Helix REST API this mod needs. Client-side only. */
@@ -183,5 +176,34 @@ public final class TwitchApiClient {
                             + resp.body());
                 }
             });
+    }
+
+    public static CompletableFuture<Void> updateRedemptionStatus(TwitchCredentials creds, String twitchRewardId,
+                                                                 String redemptionId, boolean fulfilled) {
+        TwitchModels.UpdateRedemptionStatusRequest body = new UpdateRedemptionStatusRequest();
+        body.status = fulfilled ? "FULFILLED" : "CANCELED";
+
+        HttpRequest request = HttpRequest.newBuilder()
+            .uri(
+                URI.create(
+                    HELIX_BASE + "/channel_points/custom_rewards/redemptions?broadcaster_id=" + creds.userId
+                        + "&reward_id=" + twitchRewardId
+                        + "&id=" + redemptionId))
+            .timeout(Duration.ofSeconds(15))
+            .header("Authorization", "Bearer " + creds.accessToken)
+            .header("Client-Id", Config.clientId)
+            .header("Content-Type", "application/json")
+            .method("PATCH", HttpRequest.BodyPublishers.ofString(GSON.toJson(body)))
+            .build();
+
+        return HTTP.sendAsync(request, HttpResponse.BodyHandlers.ofString()).thenAccept(resp -> {
+            if (resp.statusCode() != 200) {
+                throw new RuntimeException(
+                    "Failed to update redemption status (HTTP " + resp.statusCode() + "): " + resp.body());
+            }
+            if (Config.debugLogging) {
+                Twitchy.LOG.info("Redemption {} marked {}", redemptionId, body.status);
+            }
+        });
     }
 }

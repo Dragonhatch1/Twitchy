@@ -32,7 +32,7 @@ public final class RewardManager {
             Twitchy.LOG.info("Redemption for '{}' isn't one Twitchy created, ignoring.", event.reward.title);
             return;
         }
-        dispatch(maybeKey.get(), event.user_login, event.user_name, event.user_input == null ? "" : event.user_input);
+        dispatch(maybeKey.get(), event.user_login, event.user_name, event.user_input == null ? "" : event.user_input, event.id, event.reward.id);
     }
 
     /**
@@ -42,11 +42,11 @@ public final class RewardManager {
     public static boolean testAction(String key) {
         if (RewardConfig.findByKey(key)
             .isEmpty()) return false;
-        dispatch(key, "testviewer", "TestViewer", "test input");
+        dispatch(key, "testviewer", "TestViewer", "test input", null, null);
         return true;
     }
 
-    private static void dispatch(String key, String viewerLogin, String viewerDisplayName, String userInput) {
+    private static void dispatch(String key, String viewerLogin, String viewerDisplayName, String userInput, String redemptionId, String twitchRewards) {
         Optional<RewardAction> maybeAction = RewardConfig.findByKey(key);
         if (maybeAction.isEmpty()) return;
         RewardAction action = maybeAction.get();
@@ -55,7 +55,7 @@ public final class RewardManager {
             applyClientEffect(action, viewerDisplayName, userInput);
             return;
         }
-        PacketHandler.sendToServer(new MessageRedeemAction(key, viewerLogin, viewerDisplayName, userInput));
+        PacketHandler.sendToServer(new MessageRedeemAction(key, viewerLogin, viewerDisplayName, userInput, redemptionId, twitchRewards));
     }
 
     private static void applyClientEffect(RewardAction action, String viewerDisplayName, String userInput) {
@@ -90,14 +90,10 @@ public final class RewardManager {
             Optional<String> existingId = RewardIdRegistry.twitchIdForKey(mapping.key);
 
             if (existingId.isEmpty()) {
-
                 if (!mapping.enabled) {
                     continue;
                 }
-                if (RewardIdRegistry.twitchIdForKey(mapping.key)
-                    .isPresent()) {
-                    continue; // already created for this broadcaster
-                }
+
                 CompletableFuture<Void> task = TwitchApiClient
                     .createCustomReward(creds, mapping.title, mapping.cost, mapping.prompt)
                     .thenAccept(reward -> {

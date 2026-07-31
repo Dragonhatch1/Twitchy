@@ -5,6 +5,7 @@ import com.twitchy.Twitchy;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
+import net.minecraft.entity.player.EntityPlayerMP;
 
 public final class PacketHandler {
 
@@ -26,9 +27,20 @@ public final class PacketHandler {
             MessageChatRelay.class,
             nextId++,
             cpw.mods.fml.relauncher.Side.CLIENT);
+        WRAPPER.registerMessage(
+            MessageRedeemResultHandler.class,
+            MessageRedeemResult.class,
+            nextId++,
+            cpw.mods.fml.relauncher.Side.CLIENT);
     }
 
     public static void sendToServer(IMessage message) {
         WRAPPER.sendToServer(message);
     }
+
+    public static void sendTo(IMessage message, EntityPlayerMP player) {
+        WRAPPER.sendTo(message, player);
+    }
 }
+
+

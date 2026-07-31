@@ -35,6 +35,7 @@ public class MessageRedeemActionHandler implements IMessageHandler<MessageRedeem
         Optional<RewardAction> maybeAction = RewardConfig.findByKey(message.rewardKey);
         if (maybeAction.isEmpty()) {
             Twitchy.LOG.warn("Received redemption for unconfigured reward key '{}', ignoring.", message.rewardKey);
+            reportResult(sender, message, false);
             return;
         }
         RewardAction action = maybeAction.get();
@@ -44,15 +45,19 @@ public class MessageRedeemActionHandler implements IMessageHandler<MessageRedeem
             message.rewardKey,
             message.viewerDisplayName);
 
-        switch (action.type) {
+        boolean success = switch (action.type) {
             case GIVE_ITEM -> giveItem(server, action, message, sender);
             case RUN_COMMAND -> runCommand(server, action, message);
             case SPAWN_ENTITY -> spawnEntity(server, action, message, sender);
             case SERVER_CHAT_MESSAGE -> broadcastChat(server, action, message);
-            case CLIENT_EFFECT -> {
-                // Should not normally arrive here - CLIENT_EFFECT is handled client-side without a packet.
-            }
-        }
+            case CLIENT_EFFECT -> true; // Should not normally arrive here - CLIENT_EFFECT is handled client-side without a packet.
+        };
+        reportResult(sender, message, success);
+    }
+
+    private void reportResult(EntityPlayerMP sender, MessageRedeemAction message, boolean success) {
+        if (sender == null || message.redemptionId == null || message.redemptionId.isBlank()) return;
+        PacketHandler.sendTo(new MessageRedeemResult(message.redemptionId, message.twitchRewards, success), sender);
     }
 
     private EntityPlayerMP resolveTargetPlayer(MinecraftServer server, RewardAction action, MessageRedeemAction message,
@@ -74,36 +79,38 @@ public class MessageRedeemActionHandler implements IMessageHandler<MessageRedeem
         return sender;
     }
 
-    private void giveItem(MinecraftServer server, RewardAction action, MessageRedeemAction message,
+    private boolean giveItem(MinecraftServer server, RewardAction action, MessageRedeemAction message,
         EntityPlayerMP sender) {
         EntityPlayerMP player = resolveTargetPlayer(server, action, message, sender);
         if (player == null) {
             Twitchy.LOG.warn("GIVE_ITEM: target player not online, skipping.");
-            return;
+            return false;
         }
         Item item = (Item) Item.itemRegistry.getObject(action.item);
         if (item == null) {
             Twitchy.LOG.warn("GIVE_ITEM: unknown item id '{}'", action.item);
-            return;
+            return false;
         }
         ItemStack stack = new ItemStack(item, Math.max(1, action.amount), action.metadata);
         if (!player.inventory.addItemStackToInventory(stack)) {
             player.dropPlayerItemWithRandomChoice(stack, false);
         }
+        return true;
     }
 
-    private void runCommand(MinecraftServer server, RewardAction action, MessageRedeemAction message) {
-        if (action.command == null || action.command.isBlank()) return;
+    private boolean runCommand(MinecraftServer server, RewardAction action, MessageRedeemAction message) {
+        if (action.command == null || action.command.isBlank()) return false;
         String command = action.command.replace("{viewer}", safe(message.viewerDisplayName))
             .replace("{input}", safe(message.userInput));
         ICommandSender sender = server; // MinecraftServer implements ICommandSender with full permission.
         server.getCommandManager()
             .executeCommand(sender, command);
+        return true;
     }
 
-    private void spawnEntity(MinecraftServer server, RewardAction action, MessageRedeemAction message,
+    private boolean spawnEntity(MinecraftServer server, RewardAction action, MessageRedeemAction message,
         EntityPlayerMP sender) {
-        if (action.entity == null || action.entity.isBlank()) return;
+        if (action.entity == null || action.entity.isBlank()) return false;
         EntityPlayerMP player = resolveTargetPlayer(server, action, message, sender);
         WorldServer world = player != null ? (WorldServer) player.worldObj : server.worldServerForDimension(0);
         double x = player != null ? player.posX : world.getSpawnPoint().posX;
@@ -115,19 +122,21 @@ public class MessageRedeemActionHandler implements IMessageHandler<MessageRedeem
             Entity entity = EntityList.createEntityByName(action.entity, world);
             if (entity == null) {
                 Twitchy.LOG.warn("SPAWN_ENTITY: unknown entity name '{}'", action.entity);
-                return;
+                return false;
             }
             entity.setLocationAndAngles(x, y, z, entity.rotationYaw, entity.rotationPitch);
             world.spawnEntityInWorld(entity);
         }
+        return true;
     }
 
-    private void broadcastChat(MinecraftServer server, RewardAction action, MessageRedeemAction message) {
-        if (action.message == null || action.message.isBlank()) return;
+    private boolean broadcastChat(MinecraftServer server, RewardAction action, MessageRedeemAction message) {
+        if (action.message == null || action.message.isBlank()) return false;
         String text = action.message.replace("{viewer}", safe(message.viewerDisplayName))
             .replace("{input}", safe(message.userInput));
         server.getConfigurationManager()
             .sendChatMsg(new ChatComponentText(text));
+        return true;
     }
 
     private static String safe(String s) {
