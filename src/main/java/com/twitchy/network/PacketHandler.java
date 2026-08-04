@@ -7,6 +7,7 @@ import com.twitchy.Twitchy;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
+import cpw.mods.fml.relauncher.Side;
 
 public final class PacketHandler {
 
@@ -33,6 +34,11 @@ public final class PacketHandler {
             MessageRedeemResult.class,
             nextId++,
             cpw.mods.fml.relauncher.Side.CLIENT);
+        WRAPPER.registerMessage(
+            MessageSetStorageTargetHandler.class,
+            MessageSetStorageTarget.class,
+            nextId++,
+            Side.SERVER);
     }
 
     public static void sendToServer(IMessage message) {

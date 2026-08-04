@@ -41,9 +41,10 @@ public final class ChatCommandManager {
 
     private static void respond(ChatCommand command, String viewerName) {
         String response = command.response.replace("{viewer}", viewerName == null ? "" : viewerName);
-        TwitchSessionManager.INSTANCE.sendChatMessage(response).exceptionally(ex -> {
-            Twitchy.LOG.warn("Failed to respond to chat command '{}': {}", command.trigger, ex.getMessage());
-            return null;
-        });
+        TwitchSessionManager.INSTANCE.sendChatMessage(response)
+            .exceptionally(ex -> {
+                Twitchy.LOG.warn("Failed to respond to chat command '{}': {}", command.trigger, ex.getMessage());
+                return null;
+            });
     }
 }

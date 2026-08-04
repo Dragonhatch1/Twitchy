@@ -5,13 +5,17 @@ import java.util.Optional;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.world.WorldServer;
 
+import com.twitchy.Config;
 import com.twitchy.Twitchy;
 import com.twitchy.rewards.RewardAction;
 import com.twitchy.rewards.RewardConfig;
@@ -50,6 +54,7 @@ public class MessageRedeemActionHandler implements IMessageHandler<MessageRedeem
             case RUN_COMMAND -> runCommand(server, action, message);
             case SPAWN_ENTITY -> spawnEntity(server, action, message, sender);
             case SERVER_CHAT_MESSAGE -> broadcastChat(server, action, message);
+            case DEPOSIT_ITEM -> depositItem(server, action);
             case CLIENT_EFFECT -> true; // Should not normally arrive here - CLIENT_EFFECT is handled client-side
                                         // without a packet.
         };
@@ -87,7 +92,7 @@ public class MessageRedeemActionHandler implements IMessageHandler<MessageRedeem
             Twitchy.LOG.warn("GIVE_ITEM: target player not online, skipping.");
             return false;
         }
-        Item item = (Item) Item.itemRegistry.getObject(action.item);
+        Item item = resolveItem(action.item);
         if (item == null) {
             Twitchy.LOG.warn("GIVE_ITEM: unknown item id '{}'", action.item);
             return false;
@@ -142,5 +147,86 @@ public class MessageRedeemActionHandler implements IMessageHandler<MessageRedeem
 
     private static String safe(String s) {
         return s == null ? "" : s;
+    }
+
+    private boolean depositItem(MinecraftServer server, RewardAction action) {
+        if (!Config.storageTargetSet) {
+            Twitchy.LOG.warn("DEPOSIT_ITEM: no storage target configured. Use /twitchy setstorage <x> <y> <z>.");
+            return false;
+        }
+        WorldServer world = server.worldServerForDimension(Config.storageDimension);
+        TileEntity te = world.getTileEntity(Config.storageX, Config.storageY, Config.storageZ);
+        if (!(te instanceof IInventory inventory)) {
+            Twitchy.LOG.warn(
+                "DEPOSIT_ITEM: no container found at ({}, {}, {}) in dimension {}",
+                Config.storageX,
+                Config.storageY,
+                Config.storageZ,
+                Config.storageDimension);
+            return false;
+        }
+        Item item = resolveItem(action.item);
+        if (item == null) {
+            Twitchy.LOG.warn("DEPOSIT_ITEM: unknown item id '{}'", action.item);
+            return false;
+        }
+
+        int leftover = insertIntoInventory(inventory, item, action.metadata, Math.max(1, action.amount));
+        if (leftover > 0) {
+            dropItemsNear(world, Config.storageX, Config.storageY, Config.storageZ, item, action.metadata, leftover);
+        }
+        inventory.markDirty();
+        return true;
+    }
+
+    private int insertIntoInventory(IInventory inventory, Item item, int metadata, int amount) {
+        // First pass: top up any existing matching stacks.
+        for (int slot = 0; slot < inventory.getSizeInventory() && amount > 0; slot++) {
+            ItemStack existing = inventory.getStackInSlot(slot);
+            if (existing != null && existing.getItem() == item && existing.getItemDamage() == metadata) {
+                int max = Math.min(existing.getMaxStackSize(), inventory.getInventoryStackLimit());
+                int space = max - existing.stackSize;
+                if (space > 0) {
+                    int toAdd = Math.min(space, amount);
+                    existing.stackSize += toAdd;
+                    amount -= toAdd;
+                }
+            }
+        }
+        // Second pass: place any remainder into empty slots.
+        for (int slot = 0; slot < inventory.getSizeInventory() && amount > 0; slot++) {
+            if (inventory.getStackInSlot(slot) == null) {
+                int max = Math.min(new ItemStack(item).getMaxStackSize(), inventory.getInventoryStackLimit());
+                int toAdd = Math.min(max, amount);
+                inventory.setInventorySlotContents(slot, new ItemStack(item, toAdd, metadata));
+                amount -= toAdd;
+            }
+        }
+        return amount; // whatever's left didn't fit
+    }
+
+    private void dropItemsNear(WorldServer world, int x, int y, int z, Item item, int metadata, int amount) {
+        while (amount > 0) {
+            int stackSize = Math.min(amount, new ItemStack(item).getMaxStackSize());
+            EntityItem entityItem = new EntityItem(
+                world,
+                x + 0.5,
+                y + 1.1,
+                z + 0.5,
+                new ItemStack(item, stackSize, metadata));
+            world.spawnEntityInWorld(entityItem);
+            amount -= stackSize;
+        }
+    }
+
+    private Item resolveItem(String itemIdentifier) {
+        if (itemIdentifier == null || itemIdentifier.isBlank()) return null;
+        try {
+            int numericId = Integer.parseInt(itemIdentifier.trim());
+            return Item.getItemById(numericId);
+        } catch (NumberFormatException notNumeric) {
+            // Not a plain number - treat it as a registry name instead, e.g. "minecraft:apple".
+            return (Item) Item.itemRegistry.getObject(itemIdentifier);
+        }
     }
 }

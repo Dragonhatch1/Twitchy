@@ -1,6 +1,7 @@
 package com.twitchy.api;
 
 import java.util.List;
+
 import com.google.gson.JsonObject;
 
 /** Plain data holders matching Twitch's JSON shapes. Field names intentionally match Twitch's API (snake_case). */

@@ -47,3 +47,5 @@ public class Twitchy {
         proxy.serverStarting(event);
     }
 }
+
+// TODO Double check all config, see if it can be condensed.

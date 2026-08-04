@@ -11,7 +11,15 @@ import java.util.concurrent.CompletableFuture;
 import com.google.gson.Gson;
 import com.twitchy.Config;
 import com.twitchy.Twitchy;
-import com.twitchy.api.TwitchModels.*;
+import com.twitchy.api.TwitchModels.CreateCustomRewardRequest;
+import com.twitchy.api.TwitchModels.CreateSubscriptionRequest;
+import com.twitchy.api.TwitchModels.CustomRewards;
+import com.twitchy.api.TwitchModels.CustomRewardsResponse;
+import com.twitchy.api.TwitchModels.HelixUser;
+import com.twitchy.api.TwitchModels.HelixUsersResponse;
+import com.twitchy.api.TwitchModels.SendChatMessageRequest;
+import com.twitchy.api.TwitchModels.UpdateCustomRewardRequest;
+import com.twitchy.api.TwitchModels.UpdateRedemptionStatusRequest;
 import com.twitchy.auth.TwitchCredentials;
 
 /** Thin wrapper around the bits of Twitch's Helix REST API this mod needs. Client-side only. */
@@ -226,13 +234,16 @@ public final class TwitchApiClient {
             .header("Content-Type", "application/json")
             .build();
 
-        return HTTP.sendAsync(request, HttpResponse.BodyHandlers.ofString()).thenAccept(resp -> {
-            if (resp.statusCode() != 202 && resp.statusCode() != 200) {
-                throw new RuntimeException(
-                    "Failed to subscribe to chat messages (HTTP " + resp.statusCode() + "): " + resp.body()
-                        + "\nCheck that user:read:chat was granted.");
-            }
-            Twitchy.LOG.info("Subscribed to chat messages for {}", creds.userLogin);
-        });
+        return HTTP.sendAsync(request, HttpResponse.BodyHandlers.ofString())
+            .thenAccept(resp -> {
+                if (resp.statusCode() != 202 && resp.statusCode() != 200) {
+                    throw new RuntimeException(
+                        "Failed to subscribe to chat messages (HTTP " + resp.statusCode()
+                            + "): "
+                            + resp.body()
+                            + "\nCheck that user:read:chat was granted.");
+                }
+                Twitchy.LOG.info("Subscribed to chat messages for {}", creds.userLogin);
+            });
     }
 }

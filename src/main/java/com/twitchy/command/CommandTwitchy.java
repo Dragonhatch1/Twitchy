@@ -1,11 +1,13 @@
 package com.twitchy.command;
 
-import com.twitchy.chat.ChatCommandConfig;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.ChatComponentText;
 
+import com.twitchy.chat.ChatCommandConfig;
 import com.twitchy.client.TwitchSessionManager;
+import com.twitchy.network.MessageSetStorageTarget;
+import com.twitchy.network.PacketHandler;
 import com.twitchy.rewards.RewardConfig;
 import com.twitchy.rewards.RewardManager;
 
@@ -18,7 +20,7 @@ public class CommandTwitchy extends CommandBase {
 
     @Override
     public String getCommandUsage(ICommandSender sender) {
-        return "/twitchy <connect|reauth|disconnect|logout|status|say <msg>|testredeem <key>|testchat <trigger>|reload>";
+        return "/twitchy <connect|reauth|disconnect|logout|status|say <msg>|testredeem <key>|testchat <trigger>|setstorage <x> <y> <z> [dim]|reload>";
     }
 
     @Override
@@ -108,6 +110,24 @@ public class CommandTwitchy extends CommandBase {
                     return;
                 }
                 reply(sender, "Simulated chat trigger '" + trigger + "'.");
+            }
+            case "setstorage" -> {
+                if (args.length < 4) {
+                    reply(sender, "Usage: /twitchy setstorage <x> <y> <z> [dimension]");
+                    return;
+                }
+                try {
+                    int x = Integer.parseInt(args[1]);
+                    int y = Integer.parseInt(args[2]);
+                    int z = Integer.parseInt(args[3]);
+                    int dimension = args.length >= 5 ? Integer.parseInt(args[4])
+                        : (net.minecraft.client.Minecraft.getMinecraft().thePlayer != null
+                            ? net.minecraft.client.Minecraft.getMinecraft().thePlayer.dimension
+                            : 0);
+                    PacketHandler.sendToServer(new MessageSetStorageTarget(x, y, z, dimension));
+                } catch (NumberFormatException e) {
+                    reply(sender, "x/y/z/dimension must be whole numbers.");
+                }
             }
             case "reload" -> {
                 RewardConfig.load();

@@ -1,8 +1,8 @@
 package com.twitchy;
 
-import com.twitchy.chat.ChatCommandConfig;
 import net.minecraftforge.client.ClientCommandHandler;
 
+import com.twitchy.chat.ChatCommandConfig;
 import com.twitchy.client.ClientEventHandler;
 import com.twitchy.command.CommandTwitchy;
 import com.twitchy.rewards.RewardConfig;

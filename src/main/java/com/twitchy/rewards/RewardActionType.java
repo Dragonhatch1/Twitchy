@@ -10,5 +10,7 @@ public enum RewardActionType {
     /** Broadcasts a message in the Minecraft chat to all players. Runs on the server. */
     SERVER_CHAT_MESSAGE,
     /** Pure client-side cosmetic effect (local chat message, sound). No server round-trip needed. */
-    CLIENT_EFFECT
+    CLIENT_EFFECT,
+    /** Deposits an item into the configured storage container (see /twitchy setstorage). Runs on the server. */
+    DEPOSIT_ITEM
 }

@@ -11,6 +11,8 @@ import net.minecraftforge.common.config.Configuration;
  */
 public class Config {
 
+    private static Configuration configuration;
+
     /** Your Twitch application's Client ID (from the Twitch Developer Console). Not secret, safe in this file. */
     public static String clientId = "cb4l2upufqqckuf2um852gc5rr5spg";
 
@@ -32,8 +34,15 @@ public class Config {
     /** In-game username of the broadcaster; the default target for player-affecting reward actions. */
     public static String broadcasterMinecraftUsername = "";
 
+    // Channel-point deposit container location, set/moved via /twitchy setstorage.
+    public static int storageX = 0;
+    public static int storageY = 0;
+    public static int storageZ = 0;
+    public static int storageDimension = 0;
+    public static boolean storageTargetSet = false;
+
     public static void synchronizeConfiguration(File configFile) {
-        Configuration configuration = new Configuration(configFile);
+        configuration = new Configuration(configFile);
 
         clientId = configuration.getString(
             "clientId",
@@ -62,8 +71,65 @@ public class Config {
             Configuration.CATEGORY_GENERAL,
             autoReconnect,
             "Automatically reconnect the EventSub WebSocket session if it drops.");
+        broadcasterMinecraftUsername = configuration.getString(
+            "broadcasterMinecraftUsername",
+            Configuration.CATEGORY_GENERAL,
+            broadcasterMinecraftUsername,
+            "In-game username of the broadcaster.");
+
+        storageX = configuration.getInt(
+            "storageX",
+            "storage",
+            storageX,
+            Integer.MIN_VALUE,
+            Integer.MAX_VALUE,
+            "X coordinate of the DEPOSIT_ITEM target container.");
+        storageY = configuration
+            .getInt("storageY", "storage", storageY, 0, 255, "Y coordinate of the DEPOSIT_ITEM target container.");
+        storageZ = configuration.getInt(
+            "storageZ",
+            "storage",
+            storageZ,
+            Integer.MIN_VALUE,
+            Integer.MAX_VALUE,
+            "Z coordinate of the DEPOSIT_ITEM target container.");
+        storageDimension = configuration.getInt(
+            "storageDimension",
+            "storage",
+            storageDimension,
+            Integer.MIN_VALUE,
+            Integer.MAX_VALUE,
+            "Dimension ID of the DEPOSIT_ITEM target container (0 = Overworld, -1 = Nether, 1 = End).");
+        storageTargetSet = configuration.getBoolean(
+            "storageTargetSet",
+            "storage",
+            storageTargetSet,
+            "Whether a deposit location has actually been set via /twitchy setstorage yet.");
 
         if (configuration.hasChanged()) {
+            configuration.save();
+        }
+    }
+
+    /** Called by /twitchy setstorage (server-side) to move the deposit target and persist it immediately. */
+    public static synchronized void setStorageTarget(int x, int y, int z, int dimension) {
+        storageX = x;
+        storageY = y;
+        storageZ = z;
+        storageDimension = dimension;
+        storageTargetSet = true;
+
+        if (configuration != null) {
+            configuration.get("storage", "storageX", 0)
+                .set(x);
+            configuration.get("storage", "storageY", 0)
+                .set(y);
+            configuration.get("storage", "storageZ", 0)
+                .set(z);
+            configuration.get("storage", "storageDimension", 0)
+                .set(dimension);
+            configuration.get("storage", "storageTargetSet", false)
+                .set(true);
             configuration.save();
         }
     }

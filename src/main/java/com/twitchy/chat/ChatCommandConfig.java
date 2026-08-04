@@ -19,7 +19,8 @@ import cpw.mods.fml.common.Loader;
 /** Chat trigger-phrase -> response mappings, loaded from config/twitchy/chatcommands.json. */
 public class ChatCommandConfig {
 
-    private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
+    private static final Gson GSON = new GsonBuilder().setPrettyPrinting()
+        .create();
     private static final Type LIST_TYPE = new TypeToken<ArrayList<ChatCommand>>() {}.getType();
 
     private static volatile List<ChatCommand> commands = new ArrayList<>();
@@ -27,7 +28,10 @@ public class ChatCommandConfig {
     private ChatCommandConfig() {}
 
     private static File file() {
-        File dir = new File(Loader.instance().getConfigDir(), "twitchy");
+        File dir = new File(
+            Loader.instance()
+                .getConfigDir(),
+            "twitchy");
         if (!dir.exists()) dir.mkdirs();
         return new File(dir, "chatcommands.json");
     }
@@ -60,7 +64,8 @@ public class ChatCommandConfig {
     /** Matches the first whitespace-delimited word of a chat message, case-insensitively. */
     public static synchronized Optional<ChatCommand> findForMessage(String messageText) {
         if (messageText == null || messageText.isBlank()) return Optional.empty();
-        String firstWord = messageText.trim().split("\\s+", 2)[0];
+        String firstWord = messageText.trim()
+            .split("\\s+", 2)[0];
         for (ChatCommand cmd : commands) {
             if (cmd.enabled && cmd.trigger != null && cmd.trigger.equalsIgnoreCase(firstWord)) {
                 return Optional.of(cmd);
@@ -71,10 +76,18 @@ public class ChatCommandConfig {
 
     private static List<ChatCommand> defaultCommands() {
         List<ChatCommand> defaults = new ArrayList<>();
+
+        ChatCommand commands = new ChatCommand();
+        commands.trigger = "!commands";
+        commands.response = "discord";
+        defaults.add(commands);
+
         ChatCommand discord = new ChatCommand();
         discord.trigger = "!discord";
         discord.response = "Join our Discord: https://discord.gg/your-invite-here";
         defaults.add(discord);
+
         return defaults;
+
     }
 }

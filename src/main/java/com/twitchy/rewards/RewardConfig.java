@@ -88,24 +88,25 @@ public class RewardConfig {
     private static List<RewardMapping> defaultMappings() {
         List<RewardMapping> defaults = new ArrayList<>();
 
-        RewardMapping give = new RewardMapping();
-        give.key = "give_apple";
-        give.title = "Give Me an Apple";
-        give.cost = 100;
-        give.prompt = "Get a free apple!";
-        give.enabled = true;
-        give.action = new RewardAction();
-        give.action.type = RewardActionType.GIVE_ITEM;
-        give.action.item = "minecraft:apple";
-        give.action.amount = 1;
-        defaults.add(give);
+        RewardMapping gamba = new RewardMapping();
+        gamba.key = "Gamba";
+        gamba.title = "Gamba!";
+        gamba.cost = 100;
+        gamba.prompt = "Spawn Gamba Tokens in the Chest!";
+        gamba.enabled = false;
+        gamba.action = new RewardAction();
+        gamba.action.type = RewardActionType.DEPOSIT_ITEM;
+        gamba.action.item = "7440";
+        gamba.action.amount = 64;
+        gamba.action.metadata = 32233;
+        defaults.add(gamba);
 
         RewardMapping zombie = new RewardMapping();
         zombie.key = "spawn_zombie";
         zombie.title = "Spawn a Zombie";
         zombie.cost = 300;
         zombie.prompt = "Spawn a zombie near the streamer!";
-        zombie.enabled = true;
+        zombie.enabled = false;
         zombie.action = new RewardAction();
         zombie.action.type = RewardActionType.SPAWN_ENTITY;
         zombie.action.entity = "Zombie";
@@ -117,7 +118,7 @@ public class RewardConfig {
         weather.title = "Make It Rain";
         weather.cost = 200;
         weather.prompt = "Change the weather to rain!";
-        weather.enabled = true;
+        weather.enabled = false;
         weather.action = new RewardAction();
         weather.action.type = RewardActionType.RUN_COMMAND;
         weather.action.command = "weather rain 1200";
@@ -128,7 +129,7 @@ public class RewardConfig {
         shout.title = "Shoutout";
         shout.cost = 50;
         shout.prompt = "Get a shoutout in-game!";
-        shout.enabled = true;
+        shout.enabled = false;
         shout.action = new RewardAction();
         shout.action.type = RewardActionType.SERVER_CHAT_MESSAGE;
         shout.action.message = "{viewer} says: {input}";

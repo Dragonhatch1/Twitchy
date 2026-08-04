@@ -8,8 +8,8 @@ import com.twitchy.api.TwitchApiClient;
 import com.twitchy.api.TwitchEventSubClient;
 import com.twitchy.auth.TwitchAuth;
 import com.twitchy.auth.TwitchCredentials;
-import com.twitchy.rewards.RewardManager;
 import com.twitchy.chat.ChatCommandManager;
+import com.twitchy.rewards.RewardManager;
 
 /**
  * Client-side only. Owns the live Twitch session: the OAuth token, the EventSub WebSocket, and
@@ -73,10 +73,15 @@ public final class TwitchSessionManager {
 
     private CompletableFuture<Void> startEventSub() {
         eventSubReady = false;
-        eventSubClient = new TwitchEventSubClient(credentials, RewardManager::handleRedemption, ChatCommandManager::handleChatMessage, () -> {
-            eventSubReady = true;
-            Twitchy.LOG.info("Twitchy is now listening for channel point redemptions on {}", credentials.userLogin);
-        }, error -> Twitchy.LOG.error("Twitch EventSub error", error));
+        eventSubClient = new TwitchEventSubClient(
+            credentials,
+            RewardManager::handleRedemption,
+            ChatCommandManager::handleChatMessage,
+            () -> {
+                eventSubReady = true;
+                Twitchy.LOG.info("Twitchy is now listening for channel point redemptions on {}", credentials.userLogin);
+            },
+            error -> Twitchy.LOG.error("Twitch EventSub error", error));
         return eventSubClient.connect();
     }
 
