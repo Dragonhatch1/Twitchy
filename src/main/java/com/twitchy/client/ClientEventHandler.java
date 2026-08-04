@@ -1,5 +1,6 @@
 package com.twitchy.client;
 
+import com.twitchy.Config;
 import com.twitchy.Twitchy;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
@@ -20,5 +21,23 @@ public class ClientEventHandler {
             Twitchy.LOG.info("Left the world - closing the Twitchy EventSub session (token kept).");
         }
         TwitchSessionManager.INSTANCE.disconnect();
+    }
+
+    @SubscribeEvent
+    public void onConnect(FMLNetworkEvent.ClientConnectedToServerEvent event) {
+        if (!Config.autoConnectOnJoin) return;
+        if (!TwitchSessionManager.INSTANCE.hasStoredToken()) return; // never auto-open the browser unprompted
+        if (TwitchSessionManager.INSTANCE.isEventSubReady()) return; // already connected somehow
+
+        Twitchy.LOG.info("Auto-connecting to Twitch (autoConnectOnJoin is enabled)...");
+        TwitchSessionManager.INSTANCE.connect().thenRun(() -> {
+            net.minecraft.client.Minecraft mc = net.minecraft.client.Minecraft.getMinecraft();
+            if (mc.thePlayer != null) {
+                mc.thePlayer.addChatMessage(new net.minecraft.util.ChatComponentText("[Twitchy] Auto-connected to Twitch and listening for redemptions."));
+            }
+        }).exceptionally(ex -> {
+            Twitchy.LOG.warn("Auto-connect to Twitch failed: {}", ex.getMessage());
+            return null;
+        });
     }
 }

@@ -41,6 +41,8 @@ public class Config {
     public static int storageDimension = 0;
     public static boolean storageTargetSet = false;
 
+    public static boolean autoConnectOnJoin = false;
+
     public static void synchronizeConfiguration(File configFile) {
         configuration = new Configuration(configFile);
 
@@ -105,6 +107,9 @@ public class Config {
             "storage",
             storageTargetSet,
             "Whether a deposit location has actually been set via /twitchy setstorage yet.");
+        autoConnectOnJoin = configuration.getBoolean(
+            "autoConnectOnJoin", Configuration.CATEGORY_GENERAL, autoConnectOnJoin,
+            "Automatically reconnect to Twitch when joining a world, if a token is already saved from a previous /twitchy connect.");
 
         if (configuration.hasChanged()) {
             configuration.save();

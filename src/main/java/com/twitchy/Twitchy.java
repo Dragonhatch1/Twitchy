@@ -49,3 +49,4 @@ public class Twitchy {
 }
 
 // TODO Double check all config, see if it can be condensed.
+// TODO Potentially need it to pull current dimension when setStorage is being set. Rather than us supplying a dimension.
