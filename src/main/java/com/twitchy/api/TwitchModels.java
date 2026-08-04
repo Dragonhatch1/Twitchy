@@ -1,6 +1,7 @@
 package com.twitchy.api;
 
 import java.util.List;
+import com.google.gson.JsonObject;
 
 /** Plain data holders matching Twitch's JSON shapes. Field names intentionally match Twitch's API (snake_case). */
 public final class TwitchModels {
@@ -43,7 +44,7 @@ public final class TwitchModels {
     public static class EventSubNotificationPayload {
 
         public EventSubSubscription subscription;
-        public RewardRedemptionEvent event;
+        public JsonObject event;
         public EventSubSession session; // present on session_reconnect
     }
 
@@ -88,6 +89,7 @@ public final class TwitchModels {
 
             public String broadcaster_user_id;
             public String moderator_user_id;
+            public String user_id;
         }
 
         public static class Transport {
@@ -135,5 +137,22 @@ public final class TwitchModels {
     public static class UpdateRedemptionStatusRequest {
 
         public String status;
+    }
+
+    public static class ChatMessageEvent {
+
+        public String broadcaster_user_id;
+        public String broadcaster_user_login;
+        public String chatter_user_id;
+        public String chatter_user_login;
+        public String chatter_user_name;
+        public String message_id;
+        public ChatMessage message;
+        public String message_type;
+    }
+
+    public static class ChatMessage {
+
+        public String text;
     }
 }

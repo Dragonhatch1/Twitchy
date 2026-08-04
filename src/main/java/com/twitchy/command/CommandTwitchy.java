@@ -1,5 +1,6 @@
 package com.twitchy.command;
 
+import com.twitchy.chat.ChatCommandConfig;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.ChatComponentText;
@@ -17,7 +18,7 @@ public class CommandTwitchy extends CommandBase {
 
     @Override
     public String getCommandUsage(ICommandSender sender) {
-        return "/twitchy <connect|reauth|disconnect|logout|status|say <msg>|testredeem <key>|reload>";
+        return "/twitchy <connect|reauth|disconnect|logout|status|say <msg>|testredeem <key>|testchat <trigger>|reload>";
     }
 
     @Override
@@ -96,9 +97,22 @@ public class CommandTwitchy extends CommandBase {
                 }
                 reply(sender, "Simulated redemption of key '" + key + "'.");
             }
+            case "testchat" -> {
+                if (args.length < 2) {
+                    reply(sender, "Usage: /twitchy testchat <trigger, e.g. !discord>");
+                    return;
+                }
+                String trigger = args[1];
+                if (!com.twitchy.chat.ChatCommandManager.testTrigger(trigger)) {
+                    reply(sender, "No chat command found for trigger '" + trigger + "'. Check chatcommands.json.");
+                    return;
+                }
+                reply(sender, "Simulated chat trigger '" + trigger + "'.");
+            }
             case "reload" -> {
                 RewardConfig.load();
-                reply(sender, "Reloaded rewards.json.");
+                ChatCommandConfig.load();
+                reply(sender, "Reloaded rewards.json and chatcommands.json.");
             }
             default -> reply(sender, "Unknown subcommand. " + getCommandUsage(sender));
         }

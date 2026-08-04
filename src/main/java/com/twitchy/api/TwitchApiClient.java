@@ -180,7 +180,7 @@ public final class TwitchApiClient {
 
     public static CompletableFuture<Void> updateRedemptionStatus(TwitchCredentials creds, String twitchRewardId,
         String redemptionId, boolean fulfilled) {
-        TwitchModels.UpdateRedemptionStatusRequest body = new UpdateRedemptionStatusRequest();
+        UpdateRedemptionStatusRequest body = new UpdateRedemptionStatusRequest();
         body.status = fulfilled ? "FULFILLED" : "CANCELED";
 
         HttpRequest request = HttpRequest.newBuilder()
@@ -209,5 +209,30 @@ public final class TwitchApiClient {
                     Twitchy.LOG.info("Redemption {} marked {}", redemptionId, body.status);
                 }
             });
+    }
+
+    public static CompletableFuture<Void> subscribeToChatMessages(TwitchCredentials creds, String sessionId) {
+        CreateSubscriptionRequest req = new CreateSubscriptionRequest();
+        req.type = "channel.chat.message";
+        req.version = "1";
+        req.condition = new CreateSubscriptionRequest.Condition();
+        req.condition.broadcaster_user_id = creds.userId;
+        req.condition.user_id = creds.userId; // reading chat as ourselves, using our own user token
+        req.transport = new CreateSubscriptionRequest.Transport();
+        req.transport.session_id = sessionId;
+
+        HttpRequest request = baseRequest(HELIX_BASE + "/eventsub/subscriptions", creds.accessToken)
+            .POST(HttpRequest.BodyPublishers.ofString(GSON.toJson(req)))
+            .header("Content-Type", "application/json")
+            .build();
+
+        return HTTP.sendAsync(request, HttpResponse.BodyHandlers.ofString()).thenAccept(resp -> {
+            if (resp.statusCode() != 202 && resp.statusCode() != 200) {
+                throw new RuntimeException(
+                    "Failed to subscribe to chat messages (HTTP " + resp.statusCode() + "): " + resp.body()
+                        + "\nCheck that user:read:chat was granted.");
+            }
+            Twitchy.LOG.info("Subscribed to chat messages for {}", creds.userLogin);
+        });
     }
 }

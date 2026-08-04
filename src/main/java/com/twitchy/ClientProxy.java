@@ -1,5 +1,6 @@
 package com.twitchy;
 
+import com.twitchy.chat.ChatCommandConfig;
 import net.minecraftforge.client.ClientCommandHandler;
 
 import com.twitchy.client.ClientEventHandler;
@@ -19,6 +20,7 @@ public class ClientProxy extends CommonProxy {
         // and because a single-player world runs its own integrated server against this same file.
         RewardConfig.load();
         ViewerLinkRegistry.load();
+        ChatCommandConfig.load();
     }
 
     @Override

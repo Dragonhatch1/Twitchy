@@ -11,6 +11,8 @@ import com.google.gson.Gson;
 import com.twitchy.Config;
 import com.twitchy.Twitchy;
 import com.twitchy.api.TwitchModels.EventSubEnvelope;
+import com.twitchy.api.TwitchModels.RewardRedemptionEvent;
+import com.twitchy.api.TwitchModels.ChatMessageEvent;
 import com.twitchy.auth.TwitchCredentials;
 
 /**
@@ -23,7 +25,8 @@ public class TwitchEventSubClient implements WebSocket.Listener {
     private static final Gson GSON = new Gson();
 
     private final TwitchCredentials credentials;
-    private final Consumer<TwitchModels.RewardRedemptionEvent> onRedemption;
+    private final Consumer<RewardRedemptionEvent> onRedemption;
+    private final Consumer<ChatMessageEvent> onChatMessage;
     private final Runnable onSessionEstablished;
     private final Consumer<Throwable> onError;
 
@@ -33,10 +36,13 @@ public class TwitchEventSubClient implements WebSocket.Listener {
     private volatile boolean intentionallyClosed = false;
 
     public TwitchEventSubClient(TwitchCredentials credentials,
-        Consumer<TwitchModels.RewardRedemptionEvent> onRedemption, Runnable onSessionEstablished,
+        Consumer<RewardRedemptionEvent> onRedemption,
+        Consumer<ChatMessageEvent> onChatMessage,
+        Runnable onSessionEstablished,
         Consumer<Throwable> onError) {
         this.credentials = credentials;
         this.onRedemption = onRedemption;
+        this.onChatMessage = onChatMessage;
         this.onSessionEstablished = onSessionEstablished;
         this.onError = onError;
     }
@@ -125,7 +131,14 @@ public class TwitchEventSubClient implements WebSocket.Listener {
                     : null;
                 if (sessionId != null) {
                     Twitchy.LOG.info("EventSub session established: {}", sessionId);
-                    TwitchApiClient.subscribeToRedemptions(credentials, sessionId)
+                    CompletableFuture<Void> redemptionSub = TwitchApiClient.subscribeToRedemptions(credentials, sessionId);
+                    CompletableFuture<Void> chatSub = TwitchApiClient.subscribeToChatMessages(credentials, sessionId)
+                        .exceptionally(ex -> {
+                            // Not fatal - redemptions still work fine without chat commands.
+                            Twitchy.LOG.warn("Failed to subscribe to chat messages, chat commands won't work: {}", ex.getMessage());
+                            return null;
+                        });
+                    java.util.concurrent.CompletableFuture.allOf(redemptionSub, chatSub)
                         .thenRun(() -> { if (onSessionEstablished != null) onSessionEstablished.run(); })
                         .exceptionally(ex -> {
                             onError.accept(ex);
@@ -150,10 +163,13 @@ public class TwitchEventSubClient implements WebSocket.Listener {
                 if (Config.debugLogging) Twitchy.LOG.info("EventSub keepalive received.");
             }
             case "notification" -> {
-                if (envelope.payload != null && envelope.payload.event != null
-                    && "channel.channel_points_custom_reward_redemption.add"
-                        .equals(envelope.metadata.subscription_type)) {
-                    onRedemption.accept(envelope.payload.event);
+                if (envelope.payload != null && envelope.payload.event != null) {
+                    String subType = envelope.metadata.subscription_type;
+                    if ("channel.channel_points_custom_reward_redemption.add".equals(subType)) {
+                        onRedemption.accept(GSON.fromJson(envelope.payload.event, TwitchModels.RewardRedemptionEvent.class));
+                    } else if ("channel.chat.message".equals(subType)) {
+                        onChatMessage.accept(GSON.fromJson(envelope.payload.event, TwitchModels.ChatMessageEvent.class));
+                    }
                 }
             }
             case "revocation" -> Twitchy.LOG.warn(
