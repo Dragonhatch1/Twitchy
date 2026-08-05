@@ -2,7 +2,6 @@ package com.twitchy.network;
 
 import java.util.Optional;
 
-import com.twitchy.rewards.GravityFlipManager;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
@@ -18,6 +17,7 @@ import net.minecraft.world.WorldServer;
 
 import com.twitchy.Config;
 import com.twitchy.Twitchy;
+import com.twitchy.rewards.GravityFlipManager;
 import com.twitchy.rewards.RewardAction;
 import com.twitchy.rewards.RewardConfig;
 import com.twitchy.rewards.ViewerLinkRegistry;

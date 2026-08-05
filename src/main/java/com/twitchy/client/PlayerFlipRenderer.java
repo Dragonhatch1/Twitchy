@@ -1,9 +1,10 @@
 package com.twitchy.client;
 
+import net.minecraftforge.client.event.RenderPlayerEvent;
+
 import org.lwjgl.opengl.GL11;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.client.event.RenderPlayerEvent;
 
 /** Renders a gravity-flipped player upside-down for everyone watching, not just themselves. */
 public class PlayerFlipRenderer {

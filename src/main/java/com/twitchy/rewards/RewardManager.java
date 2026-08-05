@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
-import com.twitchy.client.CameraFlipEffect;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.util.ChatComponentText;
@@ -15,9 +14,10 @@ import com.twitchy.Twitchy;
 import com.twitchy.api.TwitchApiClient;
 import com.twitchy.api.TwitchModels.RewardRedemptionEvent;
 import com.twitchy.auth.TwitchCredentials;
+import com.twitchy.client.CameraFlipEffect;
+import com.twitchy.client.TwitchSessionManager;
 import com.twitchy.network.MessageRedeemAction;
 import com.twitchy.network.PacketHandler;
-import com.twitchy.client.TwitchSessionManager;
 
 /**
  * Client-side only. Handles an incoming redemption event: resolves the configured action and
@@ -69,7 +69,7 @@ public final class RewardManager {
             return;
         }
         if (action.type == RewardActionType.GRAVITY_FLIP) {
-            CameraFlipEffect.activate(action.cameraFlipSeconds > 0 ? action.cameraFlipSeconds : 5);
+            CameraFlipEffect.requestActivate(action.cameraFlipSeconds > 0 ? action.cameraFlipSeconds : 5);
         }
         PacketHandler.sendToServer(
             new MessageRedeemAction(key, viewerLogin, viewerDisplayName, userInput, redemptionId, twitchRewards));
@@ -93,7 +93,7 @@ public final class RewardManager {
                         (float) mc.thePlayer.posZ));
         }
         if (action.cameraFlipSeconds > 0) {
-            CameraFlipEffect.activate(action.cameraFlipSeconds);
+            CameraFlipEffect.requestActivate(action.cameraFlipSeconds);
         }
     }
 
@@ -145,9 +145,11 @@ public final class RewardManager {
     private static void fulfill(String redemptionId, String twitchRewardId, boolean success) {
         if (redemptionId == null || redemptionId.isBlank()) return; // test redemption, nothing to fulfill
         if (!TwitchSessionManager.INSTANCE.hasStoredToken()) return;
-        TwitchApiClient.updateRedemptionStatus(TwitchSessionManager.INSTANCE.credentials(), twitchRewardId, redemptionId, success)
+        TwitchApiClient
+            .updateRedemptionStatus(TwitchSessionManager.INSTANCE.credentials(), twitchRewardId, redemptionId, success)
             .exceptionally(ex -> {
-                Twitchy.LOG.warn("Failed to mark redemption {} as fulfilled/canceled: {}", redemptionId, ex.getMessage());
+                Twitchy.LOG
+                    .warn("Failed to mark redemption {} as fulfilled/canceled: {}", redemptionId, ex.getMessage());
                 return null;
             });
     }

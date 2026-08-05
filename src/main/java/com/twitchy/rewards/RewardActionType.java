@@ -13,7 +13,9 @@ public enum RewardActionType {
     CLIENT_EFFECT,
     /** Deposits an item into the configured storage container (see /twitchy setstorage). Runs on the server. */
     DEPOSIT_ITEM,
-    /** Camera flip (local, immediate) + reversed gravity and a flipped model visible to everyone
-     *  else. Runs on both client (camera) and server (gravity + broadcast). */
+    /**
+     * Camera flip (local, immediate) + reversed gravity and a flipped model visible to everyone
+     * else. Runs on both client (camera) and server (gravity + broadcast).
+     */
     GRAVITY_FLIP
 }

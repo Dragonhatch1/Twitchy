@@ -79,7 +79,9 @@ public class Config {
             broadcasterMinecraftUsername,
             "In-game username of the broadcaster.");
         autoConnectOnJoin = configuration.getBoolean(
-            "autoConnectOnJoin", Configuration.CATEGORY_GENERAL, autoConnectOnJoin,
+            "autoConnectOnJoin",
+            Configuration.CATEGORY_GENERAL,
+            autoConnectOnJoin,
             "Automatically reconnect to Twitch when joining a world, if a token is already saved from a previous /twitchy connect.");
 
         storageX = configuration.getInt(

@@ -32,15 +32,19 @@ public class ClientEventHandler {
         if (TwitchSessionManager.INSTANCE.isEventSubReady()) return; // already connected somehow
 
         Twitchy.LOG.info("Auto-connecting to Twitch (autoConnectOnJoin is enabled)...");
-        TwitchSessionManager.INSTANCE.connect().thenRun(() -> {
-            net.minecraft.client.Minecraft mc = net.minecraft.client.Minecraft.getMinecraft();
-            if (mc.thePlayer != null) {
-                mc.thePlayer.addChatMessage(new net.minecraft.util.ChatComponentText("[Twitchy] Auto-connected to Twitch and listening for redemptions."));
-            }
-        }).exceptionally(ex -> {
-            Twitchy.LOG.warn("Auto-connect to Twitch failed: {}", ex.getMessage());
-            return null;
-        });
+        TwitchSessionManager.INSTANCE.connect()
+            .thenRun(() -> {
+                net.minecraft.client.Minecraft mc = net.minecraft.client.Minecraft.getMinecraft();
+                if (mc.thePlayer != null) {
+                    mc.thePlayer.addChatMessage(
+                        new net.minecraft.util.ChatComponentText(
+                            "[Twitchy] Auto-connected to Twitch and listening for redemptions."));
+                }
+            })
+            .exceptionally(ex -> {
+                Twitchy.LOG.warn("Auto-connect to Twitch failed: {}", ex.getMessage());
+                return null;
+            });
     }
 
     @SubscribeEvent

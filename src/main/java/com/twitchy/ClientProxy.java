@@ -1,18 +1,18 @@
 package com.twitchy;
 
-import com.twitchy.client.PlayerFlipRenderer;
-import cpw.mods.fml.common.FMLCommonHandler;
 import net.minecraftforge.client.ClientCommandHandler;
+import net.minecraftforge.common.MinecraftForge;
 
 import com.twitchy.chat.ChatCommandConfig;
 import com.twitchy.client.ClientEventHandler;
+import com.twitchy.client.PlayerFlipRenderer;
 import com.twitchy.command.CommandTwitchy;
 import com.twitchy.rewards.RewardConfig;
 import com.twitchy.rewards.ViewerLinkRegistry;
 
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.common.MinecraftForge;
 
 public class ClientProxy extends CommonProxy {
 

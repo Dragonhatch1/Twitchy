@@ -2,10 +2,10 @@ package com.twitchy.client;
 
 import java.lang.reflect.Field;
 
-import com.twitchy.Twitchy;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.EntityRenderer;
+
+import com.twitchy.Twitchy;
 
 /**
  * Flips the camera upside-down for a set duration using EntityRenderer's own (private) camRoll
@@ -18,18 +18,34 @@ public final class CameraFlipEffect {
     private static Field camRollField;
     private static Field prevCamRollField;
     private static volatile long revertAtMillis = 0;
+    private static volatile int pendingActivateSeconds = 0;
 
     private CameraFlipEffect() {}
 
     static {
-        try {
-            camRollField = EntityRenderer.class.getDeclaredField("camRoll");
-            camRollField.setAccessible(true);
-            prevCamRollField = EntityRenderer.class.getDeclaredField("prevCamRoll");
-            prevCamRollField.setAccessible(true);
-        } catch (Exception e) {
-            Twitchy.LOG.error("Could not access EntityRenderer.camRoll - camera flip effect will be disabled.", e);
+        camRollField = findField("camRoll", "field_78495_O");
+        prevCamRollField = findField("prevCamRoll", "field_78505_P");
+        if (camRollField == null || prevCamRollField == null) {
+            Twitchy.LOG.error(
+                "Could not access EntityRenderer.camRoll (tried both MCP and SRG names) - camera flip effect will be disabled.");
         }
+    }
+
+    private static Field findField(String mcpName, String srgName) {
+        for (String name : new String[] { mcpName, srgName }) {
+            try {
+                Field f = EntityRenderer.class.getDeclaredField(name);
+                f.setAccessible(true);
+                return f;
+            } catch (NoSuchFieldException ignored) {
+                // try the next name
+            }
+        }
+        return null;
+    }
+
+    public static void requestActivate(int durationSeconds) {
+        pendingActivateSeconds = Math.max(1, durationSeconds);
     }
 
     public static void activate(int durationSeconds) {
@@ -39,6 +55,11 @@ public final class CameraFlipEffect {
 
     /** Call once per client tick - cheap no-op when no flip is currently active. */
     public static void tick() {
+        if (pendingActivateSeconds > 0) {
+            int seconds = pendingActivateSeconds;
+            pendingActivateSeconds = 0;
+            activate(seconds);
+        }
         if (revertAtMillis != 0 && System.currentTimeMillis() >= revertAtMillis) {
             setRoll(0.0F);
             revertAtMillis = 0;

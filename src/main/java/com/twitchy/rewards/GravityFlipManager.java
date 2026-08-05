@@ -4,13 +4,14 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.network.play.server.S12PacketEntityVelocity;
+
 import com.twitchy.network.MessageSyncPlayerFlip;
 import com.twitchy.network.PacketHandler;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.network.play.server.S12PacketEntityVelocity;
 
 /**
  * Server-side. Tracks which players currently have reversed gravity active, applies the upward

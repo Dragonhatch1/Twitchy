@@ -1,13 +1,13 @@
 package com.twitchy;
 
-import com.twitchy.rewards.GravityFlipManager;
-import cpw.mods.fml.common.FMLCommonHandler;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.twitchy.network.PacketHandler;
+import com.twitchy.rewards.GravityFlipManager;
 import com.twitchy.rewards.RewardConfig;
 
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
@@ -46,10 +46,14 @@ public class Twitchy {
         // Rewards config is shared: the server needs its own copy to validate/execute actions
         // requested by the client. /twitchy itself is a client-only command - see ClientProxy.
         RewardConfig.load();
-        FMLCommonHandler.instance().bus().register(new GravityFlipManager());
+        FMLCommonHandler.instance()
+            .bus()
+            .register(new GravityFlipManager());
         proxy.serverStarting(event);
     }
 }
 
 // TODO Double check all config, see if it can be condensed.
-// TODO Potentially need it to pull current dimension when setStorage is being set. Rather than us supplying a dimension.
+// TODO Potentially need it to pull current dimension when setStorage is being set. Rather than us supplying a
+// dimension.
+// TODO Redemption to put Unstable ingot in inventory. Have to get it out before it explodes.
