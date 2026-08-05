@@ -57,3 +57,5 @@ public class Twitchy {
 // TODO Potentially need it to pull current dimension when setStorage is being set. Rather than us supplying a
 // dimension.
 // TODO Redemption to put Unstable ingot in inventory. Have to get it out before it explodes.
+// TODO Fix Dedicated Server Falling into ground, instead of up. Maybe -yMotion?
+// TODO Fix no Metadata on server reward.json????
