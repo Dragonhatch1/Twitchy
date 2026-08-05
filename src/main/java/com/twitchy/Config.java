@@ -78,6 +78,9 @@ public class Config {
             Configuration.CATEGORY_GENERAL,
             broadcasterMinecraftUsername,
             "In-game username of the broadcaster.");
+        autoConnectOnJoin = configuration.getBoolean(
+            "autoConnectOnJoin", Configuration.CATEGORY_GENERAL, autoConnectOnJoin,
+            "Automatically reconnect to Twitch when joining a world, if a token is already saved from a previous /twitchy connect.");
 
         storageX = configuration.getInt(
             "storageX",
@@ -107,9 +110,6 @@ public class Config {
             "storage",
             storageTargetSet,
             "Whether a deposit location has actually been set via /twitchy setstorage yet.");
-        autoConnectOnJoin = configuration.getBoolean(
-            "autoConnectOnJoin", Configuration.CATEGORY_GENERAL, autoConnectOnJoin,
-            "Automatically reconnect to Twitch when joining a world, if a token is already saved from a previous /twitchy connect.");
 
         if (configuration.hasChanged()) {
             configuration.save();

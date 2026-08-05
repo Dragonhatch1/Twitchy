@@ -2,6 +2,7 @@ package com.twitchy.network;
 
 import java.util.Optional;
 
+import com.twitchy.rewards.GravityFlipManager;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
@@ -55,6 +56,7 @@ public class MessageRedeemActionHandler implements IMessageHandler<MessageRedeem
             case SPAWN_ENTITY -> spawnEntity(server, action, message, sender);
             case SERVER_CHAT_MESSAGE -> broadcastChat(server, action, message);
             case DEPOSIT_ITEM -> depositItem(server, action);
+            case GRAVITY_FLIP -> gravityFlip(action, sender);
             case CLIENT_EFFECT -> true; // Should not normally arrive here - CLIENT_EFFECT is handled client-side
                                         // without a packet.
         };
@@ -228,5 +230,11 @@ public class MessageRedeemActionHandler implements IMessageHandler<MessageRedeem
             // Not a plain number - treat it as a registry name instead, e.g. "minecraft:apple".
             return (Item) Item.itemRegistry.getObject(itemIdentifier);
         }
+    }
+
+    private boolean gravityFlip(RewardAction action, EntityPlayerMP sender) {
+        if (sender == null) return false;
+        GravityFlipManager.activate(sender, action.cameraFlipSeconds > 0 ? action.cameraFlipSeconds : 5);
+        return true;
     }
 }

@@ -39,6 +39,11 @@ public final class PacketHandler {
             MessageSetStorageTarget.class,
             nextId++,
             Side.SERVER);
+        WRAPPER.registerMessage(
+            MessageSyncPlayerFlipHandler.class,
+            MessageSyncPlayerFlip.class,
+            nextId++,
+            Side.CLIENT);
     }
 
     public static void sendToServer(IMessage message) {
@@ -47,5 +52,9 @@ public final class PacketHandler {
 
     public static void sendTo(IMessage message, EntityPlayerMP player) {
         WRAPPER.sendTo(message, player);
+    }
+
+    public static void sendToAll(IMessage message) {
+        WRAPPER.sendToAll(message);
     }
 }

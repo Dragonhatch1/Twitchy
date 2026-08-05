@@ -101,6 +101,29 @@ public class RewardConfig {
         gamba.action.metadata = 32233;
         defaults.add(gamba);
 
+        RewardMapping camera180 = new RewardMapping();
+        camera180.key = "camera_180";
+        camera180.title = "Upside-Down Camera";
+        camera180.cost = 100;
+        camera180.prompt = "180s my camera for 10 seconds!";
+        camera180.enabled = false;
+        camera180.action = new RewardAction();
+        camera180.action.type = RewardActionType.CLIENT_EFFECT;
+        camera180.action.cameraFlipSeconds = 10;
+        camera180.action.message = "{viewer} rotated the camera!";
+        defaults.add(camera180);
+
+        RewardMapping reverseGravity = new RewardMapping();
+        reverseGravity.key = "reverse_gravity";
+        reverseGravity.title = "Reverse Gravity";
+        reverseGravity.cost = 100;
+        reverseGravity.prompt = "Reverse Gravity for 5 seconds";
+        reverseGravity.enabled = false;
+        reverseGravity.action = new RewardAction();
+        reverseGravity.action.type = RewardActionType.GRAVITY_FLIP;
+        reverseGravity.action.cameraFlipSeconds = 5;
+        defaults.add(reverseGravity);
+
         RewardMapping zombie = new RewardMapping();
         zombie.key = "spawn_zombie";
         zombie.title = "Spawn a Zombie";

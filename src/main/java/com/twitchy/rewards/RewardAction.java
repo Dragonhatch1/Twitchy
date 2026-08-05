@@ -39,4 +39,6 @@ public class RewardAction {
      * - "linked": resolved from the viewer's Twitch login via viewer-links.json, falling back to broadcaster
      */
     public String target = "broadcaster";
+
+    public int cameraFlipSeconds = 0;
 }

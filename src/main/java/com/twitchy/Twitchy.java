@@ -1,5 +1,7 @@
 package com.twitchy;
 
+import com.twitchy.rewards.GravityFlipManager;
+import cpw.mods.fml.common.FMLCommonHandler;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -44,6 +46,7 @@ public class Twitchy {
         // Rewards config is shared: the server needs its own copy to validate/execute actions
         // requested by the client. /twitchy itself is a client-only command - see ClientProxy.
         RewardConfig.load();
+        FMLCommonHandler.instance().bus().register(new GravityFlipManager());
         proxy.serverStarting(event);
     }
 }

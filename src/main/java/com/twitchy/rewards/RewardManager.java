@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
+import com.twitchy.client.CameraFlipEffect;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.util.ChatComponentText;
@@ -16,6 +17,7 @@ import com.twitchy.api.TwitchModels.RewardRedemptionEvent;
 import com.twitchy.auth.TwitchCredentials;
 import com.twitchy.network.MessageRedeemAction;
 import com.twitchy.network.PacketHandler;
+import com.twitchy.client.TwitchSessionManager;
 
 /**
  * Client-side only. Handles an incoming redemption event: resolves the configured action and
@@ -55,12 +57,19 @@ public final class RewardManager {
     private static void dispatch(String key, String viewerLogin, String viewerDisplayName, String userInput,
         String redemptionId, String twitchRewards) {
         Optional<RewardAction> maybeAction = RewardConfig.findByKey(key);
-        if (maybeAction.isEmpty()) return;
+        if (maybeAction.isEmpty()) {
+            fulfill(redemptionId, twitchRewards, false);
+            return;
+        }
         RewardAction action = maybeAction.get();
 
         if (action.type == RewardActionType.CLIENT_EFFECT) {
             applyClientEffect(action, viewerDisplayName, userInput);
+            fulfill(redemptionId, twitchRewards, true);
             return;
+        }
+        if (action.type == RewardActionType.GRAVITY_FLIP) {
+            CameraFlipEffect.activate(action.cameraFlipSeconds > 0 ? action.cameraFlipSeconds : 5);
         }
         PacketHandler.sendToServer(
             new MessageRedeemAction(key, viewerLogin, viewerDisplayName, userInput, redemptionId, twitchRewards));
@@ -82,6 +91,9 @@ public final class RewardManager {
                         (float) mc.thePlayer.posX,
                         (float) mc.thePlayer.posY,
                         (float) mc.thePlayer.posZ));
+        }
+        if (action.cameraFlipSeconds > 0) {
+            CameraFlipEffect.activate(action.cameraFlipSeconds);
         }
     }
 
@@ -128,5 +140,15 @@ public final class RewardManager {
             }
         }
         return CompletableFuture.allOf(tasks.toArray(new CompletableFuture[0]));
+    }
+
+    private static void fulfill(String redemptionId, String twitchRewardId, boolean success) {
+        if (redemptionId == null || redemptionId.isBlank()) return; // test redemption, nothing to fulfill
+        if (!TwitchSessionManager.INSTANCE.hasStoredToken()) return;
+        TwitchApiClient.updateRedemptionStatus(TwitchSessionManager.INSTANCE.credentials(), twitchRewardId, redemptionId, success)
+            .exceptionally(ex -> {
+                Twitchy.LOG.warn("Failed to mark redemption {} as fulfilled/canceled: {}", redemptionId, ex.getMessage());
+                return null;
+            });
     }
 }

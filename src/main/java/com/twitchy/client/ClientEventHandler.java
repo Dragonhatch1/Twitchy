@@ -4,6 +4,8 @@ import com.twitchy.Config;
 import com.twitchy.Twitchy;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.TickEvent;
+import cpw.mods.fml.common.gameevent.TickEvent.ClientTickEvent;
 import cpw.mods.fml.common.network.FMLNetworkEvent;
 
 /**
@@ -39,5 +41,12 @@ public class ClientEventHandler {
             Twitchy.LOG.warn("Auto-connect to Twitch failed: {}", ex.getMessage());
             return null;
         });
+    }
+
+    @SubscribeEvent
+    public void onClientTick(ClientTickEvent event) {
+        if (event.phase == TickEvent.Phase.END) {
+            CameraFlipEffect.tick();
+        }
     }
 }

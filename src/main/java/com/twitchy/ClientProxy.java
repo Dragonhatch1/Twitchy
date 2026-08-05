@@ -1,5 +1,7 @@
 package com.twitchy;
 
+import com.twitchy.client.PlayerFlipRenderer;
+import cpw.mods.fml.common.FMLCommonHandler;
 import net.minecraftforge.client.ClientCommandHandler;
 
 import com.twitchy.chat.ChatCommandConfig;
@@ -10,6 +12,7 @@ import com.twitchy.rewards.ViewerLinkRegistry;
 
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.common.MinecraftForge;
 
 public class ClientProxy extends CommonProxy {
 
@@ -27,9 +30,10 @@ public class ClientProxy extends CommonProxy {
     public void init(FMLInitializationEvent event) {
         super.init(event);
         ClientCommandHandler.instance.registerCommand(new CommandTwitchy());
-        cpw.mods.fml.common.FMLCommonHandler.instance()
+        FMLCommonHandler.instance()
             .bus()
             .register(new ClientEventHandler());
+        MinecraftForge.EVENT_BUS.register(new PlayerFlipRenderer());
     }
 
     @Override
