@@ -58,4 +58,6 @@ public class Twitchy {
 // dimension.
 // TODO Redemption to put Unstable ingot in inventory. Have to get it out before it explodes.
 // TODO Fix Dedicated Server Falling into ground, instead of up. Maybe -yMotion?
-// TODO Fix no Metadata on server reward.json????
+// TODO FOV Slider? i dunno how i wanna do it yet
+// TODO Powerfail and Explosion Sound
+// TODO Inventory Scramble
