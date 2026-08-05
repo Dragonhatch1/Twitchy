@@ -15,8 +15,10 @@ import com.twitchy.Twitchy;
  */
 public final class CameraFlipEffect {
 
-    /** Degrees the roll moves per client tick. At 20 ticks/sec, 18F means a full 180-degree spin
-     *  takes 10 ticks (0.5 seconds). Lower = slower/smoother, higher = faster/snappier. */
+    /**
+     * Degrees the roll moves per client tick. At 20 ticks/sec, 18F means a full 180-degree spin
+     * takes 10 ticks (0.5 seconds). Lower = slower/smoother, higher = faster/snappier.
+     */
     private static final float SPIN_SPEED_DEG_PER_TICK = 18.0F;
 
     private static Field camRollField;
@@ -24,7 +26,6 @@ public final class CameraFlipEffect {
     private static volatile long revertAtMillis = 0;
     private static volatile int pendingActivateSeconds = 0;
     private static volatile float targetRoll = 0.0F;
-
 
     private CameraFlipEffect() {}
 
@@ -67,7 +68,7 @@ public final class CameraFlipEffect {
             activate(seconds);
         }
         if (revertAtMillis != 0 && System.currentTimeMillis() >= revertAtMillis) {
-            targetRoll = 0.0F; //going back to normal
+            targetRoll = 0.0F; // going back to normal
             revertAtMillis = 0;
         }
         stepTowardTarget();
