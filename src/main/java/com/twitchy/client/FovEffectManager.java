@@ -8,13 +8,14 @@ import java.lang.reflect.Field;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.EntityRenderer;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.twitchy.Twitchy;
 
 import cpw.mods.fml.common.Loader;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.EntityRenderer;
 
 /**
  * Applies a persistent FOV offset that survives game restarts and resets automatically at a
@@ -30,7 +31,8 @@ public final class FovEffectManager {
     private static Field debugCamFOVField;
     private static Field prevDebugCamFOVField;
 
-    private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
+    private static final Gson GSON = new GsonBuilder().setPrettyPrinting()
+        .create();
     private static volatile State state = new State();
     private static volatile float pendingDelta = 0.0F;
 
@@ -76,7 +78,8 @@ public final class FovEffectManager {
             float delta = pendingDelta;
             pendingDelta = 0.0F;
             state.offset += delta;
-            state.lastResetDate = LocalDate.now().toString();
+            state.lastResetDate = LocalDate.now()
+                .toString();
             save();
             applyToRenderer(state.offset);
         }
@@ -88,7 +91,8 @@ public final class FovEffectManager {
         if (state.offset == 0.0F) return; // nothing active, nothing to reset
 
         LocalDateTime now = LocalDateTime.now();
-        String today = now.toLocalDate().toString();
+        String today = now.toLocalDate()
+            .toString();
         boolean pastResetTimeToday = now.getHour() >= DAILY_RESET_HOUR;
 
         // Reset once we're at/after today's reset hour AND haven't already reset today
@@ -104,7 +108,10 @@ public final class FovEffectManager {
             // A new day started before the reset hour - make sure a stale lastResetDate from
             // yesterday doesn't block today's reset once we do reach the hour.
             if (!state.lastResetDate.isEmpty() && !state.lastResetDate.equals(today)
-                && LocalDate.parse(state.lastResetDate).isBefore(now.toLocalDate().minusDays(1))) {
+                && LocalDate.parse(state.lastResetDate)
+                    .isBefore(
+                        now.toLocalDate()
+                            .minusDays(1))) {
                 // no-op safeguard slot for future use; current logic already re-checks by date string
             }
         }
@@ -123,7 +130,10 @@ public final class FovEffectManager {
     }
 
     private static File file() {
-        File dir = new File(Loader.instance().getConfigDir(), "twitchy");
+        File dir = new File(
+            Loader.instance()
+                .getConfigDir(),
+            "twitchy");
         if (!dir.exists()) dir.mkdirs();
         return new File(dir, "fov-state.json");
     }

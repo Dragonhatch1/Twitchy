@@ -1,12 +1,12 @@
 package com.twitchy;
 
-import com.twitchy.client.ToastEffect;
 import net.minecraftforge.client.ClientCommandHandler;
 import net.minecraftforge.common.MinecraftForge;
 
 import com.twitchy.chat.ChatCommandConfig;
 import com.twitchy.client.ClientEventHandler;
 import com.twitchy.client.PlayerFlipRenderer;
+import com.twitchy.client.ToastEffect;
 import com.twitchy.command.CommandTwitchy;
 import com.twitchy.rewards.RewardConfig;
 import com.twitchy.rewards.ViewerLinkRegistry;

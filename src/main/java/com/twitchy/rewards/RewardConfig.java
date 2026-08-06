@@ -202,7 +202,6 @@ public class RewardConfig {
         inventoryScramble.action = new RewardAction();
         inventoryScramble.action.type = RewardActionType.INVENTORY_SCRAMBLE;
 
-
         return defaults;
     }
 }

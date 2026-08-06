@@ -59,7 +59,7 @@ public class MessageRedeemActionHandler implements IMessageHandler<MessageRedeem
             case GRAVITY_FLIP -> gravityFlip(action, sender);
             case INVENTORY_SCRAMBLE -> scrambleInventory(server, action, message, sender);
             case FOV_CHANGE -> true;
-            case CLIENT_EFFECT -> true; //Client Effects have no packets sent.
+            case CLIENT_EFFECT -> true; // Client Effects have no packets sent.
         };
         reportResult(sender, message, success);
     }
@@ -239,7 +239,8 @@ public class MessageRedeemActionHandler implements IMessageHandler<MessageRedeem
         return true;
     }
 
-    private boolean scrambleInventory(MinecraftServer server, RewardAction action, MessageRedeemAction message, EntityPlayerMP sender) {
+    private boolean scrambleInventory(MinecraftServer server, RewardAction action, MessageRedeemAction message,
+        EntityPlayerMP sender) {
         EntityPlayerMP player = resolveTargetPlayer(server, action, message, sender);
         if (player == null) {
             Twitchy.LOG.warn("INVENTORY_SCRAMBLE: target player not online, skipping.");

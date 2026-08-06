@@ -42,12 +42,16 @@ public class RewardAction {
 
     public int cameraFlipSeconds = 0;
 
-    /** FOV_CHANGE: degrees to add to (positive) or subtract from (negative) the player's FOV,
-     *  persists until the next daily reset (see FovEffectManager.DAILY_RESET_HOUR). */
+    /**
+     * FOV_CHANGE: degrees to add to (positive) or subtract from (negative) the player's FOV,
+     * persists until the next daily reset (see FovEffectManager.DAILY_RESET_HOUR).
+     */
     public float fovOffset = 0.0F;
 
-    /** Optional, works with ANY action type: shows a big center-screen toast when redeemed.
-     *  toastTitle triggers it; toastSubtitle is optional. Both support {viewer}/{input} placeholders. */
+    /**
+     * Optional, works with ANY action type: shows a big center-screen toast when redeemed.
+     * toastTitle triggers it; toastSubtitle is optional. Both support {viewer}/{input} placeholders.
+     */
     public String toastTitle;
     public String toastSubtitle;
 }

@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
-import com.twitchy.client.FovEffectManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.util.ChatComponentText;
@@ -16,6 +15,7 @@ import com.twitchy.api.TwitchApiClient;
 import com.twitchy.api.TwitchModels.RewardRedemptionEvent;
 import com.twitchy.auth.TwitchCredentials;
 import com.twitchy.client.CameraFlipEffect;
+import com.twitchy.client.FovEffectManager;
 import com.twitchy.client.TwitchSessionManager;
 import com.twitchy.network.MessageRedeemAction;
 import com.twitchy.network.PacketHandler;
@@ -66,7 +66,8 @@ public final class RewardManager {
 
         if (action.toastTitle != null && !action.toastTitle.isBlank()) {
             String title = substitute(action.toastTitle, viewerDisplayName, userInput);
-            String subtitle = action.toastSubtitle == null ? "" : substitute(action.toastSubtitle, viewerDisplayName, userInput);
+            String subtitle = action.toastSubtitle == null ? ""
+                : substitute(action.toastSubtitle, viewerDisplayName, userInput);
             com.twitchy.client.ToastEffect.requestShow(title, subtitle);
         }
         if (action.type == RewardActionType.FOV_CHANGE) {
