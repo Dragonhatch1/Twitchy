@@ -41,4 +41,8 @@ public class RewardAction {
     public String target = "broadcaster";
 
     public int cameraFlipSeconds = 0;
+
+    /** FOV_CHANGE: degrees to add to (positive) or subtract from (negative) the player's FOV,
+     *  persists until the next daily reset (see FovEffectManager.DAILY_RESET_HOUR). */
+    public float fovOffset = 0.0F;
 }

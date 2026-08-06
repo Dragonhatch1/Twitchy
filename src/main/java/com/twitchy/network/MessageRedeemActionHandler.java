@@ -57,8 +57,8 @@ public class MessageRedeemActionHandler implements IMessageHandler<MessageRedeem
             case SERVER_CHAT_MESSAGE -> broadcastChat(server, action, message);
             case DEPOSIT_ITEM -> depositItem(server, action);
             case GRAVITY_FLIP -> gravityFlip(action, sender);
-            case CLIENT_EFFECT -> true; // Should not normally arrive here - CLIENT_EFFECT is handled client-side
-                                        // without a packet.
+            case FOV_CHANGE -> true;
+            case CLIENT_EFFECT -> true; //Client Effects have no packets sent.
         };
         reportResult(sender, message, success);
     }

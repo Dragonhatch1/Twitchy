@@ -51,6 +51,7 @@ public class ClientEventHandler {
     public void onClientTick(ClientTickEvent event) {
         if (event.phase == TickEvent.Phase.END) {
             CameraFlipEffect.tick();
+            FovEffectManager.tick();
         }
     }
 }

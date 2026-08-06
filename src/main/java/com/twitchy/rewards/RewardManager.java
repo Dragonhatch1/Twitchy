@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
+import com.twitchy.client.FovEffectManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.util.ChatComponentText;
@@ -63,6 +64,11 @@ public final class RewardManager {
         }
         RewardAction action = maybeAction.get();
 
+        if (action.type == RewardActionType.FOV_CHANGE) {
+            FovEffectManager.requestApply(action.fovOffset);
+            fulfill(redemptionId, twitchRewards, true);
+            return;
+        }
         if (action.type == RewardActionType.CLIENT_EFFECT) {
             applyClientEffect(action, viewerDisplayName, userInput);
             fulfill(redemptionId, twitchRewards, true);

@@ -158,6 +158,28 @@ public class RewardConfig {
         shout.action.message = "{viewer} says: {input}";
         defaults.add(shout);
 
+        RewardMapping fovUp = new RewardMapping();
+        fovUp.key = "fov_up";
+        fovUp.title = "Widen FoV";
+        fovUp.cost = 150;
+        fovUp.prompt = "Widen my FoV!";
+        fovUp.enabled = false;
+        fovUp.action = new RewardAction();
+        fovUp.action.type = RewardActionType.FOV_CHANGE;
+        fovUp.action.fovOffset = 1.0F;
+        defaults.add(fovUp);
+
+        RewardMapping fovDown = new RewardMapping();
+        fovDown.key = "fov_down";
+        fovDown.title = "Shrink FoV";
+        fovDown.cost = 150;
+        fovDown.prompt = "Shrink my FoV!";
+        fovDown.enabled = false;
+        fovDown.action = new RewardAction();
+        fovDown.action.type = RewardActionType.FOV_CHANGE;
+        fovDown.action.fovOffset = -1.0F;
+        defaults.add(fovDown);
+
         return defaults;
     }
 }
