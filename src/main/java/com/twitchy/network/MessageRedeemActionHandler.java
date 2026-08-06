@@ -57,6 +57,7 @@ public class MessageRedeemActionHandler implements IMessageHandler<MessageRedeem
             case SERVER_CHAT_MESSAGE -> broadcastChat(server, action, message);
             case DEPOSIT_ITEM -> depositItem(server, action);
             case GRAVITY_FLIP -> gravityFlip(action, sender);
+            case INVENTORY_SCRAMBLE -> scrambleInventory(server, action, message, sender);
             case FOV_CHANGE -> true;
             case CLIENT_EFFECT -> true; //Client Effects have no packets sent.
         };
@@ -235,6 +236,26 @@ public class MessageRedeemActionHandler implements IMessageHandler<MessageRedeem
     private boolean gravityFlip(RewardAction action, EntityPlayerMP sender) {
         if (sender == null) return false;
         GravityFlipManager.activate(sender, action.cameraFlipSeconds > 0 ? action.cameraFlipSeconds : 5);
+        return true;
+    }
+
+    private boolean scrambleInventory(MinecraftServer server, RewardAction action, MessageRedeemAction message, EntityPlayerMP sender) {
+        EntityPlayerMP player = resolveTargetPlayer(server, action, message, sender);
+        if (player == null) {
+            Twitchy.LOG.warn("INVENTORY_SCRAMBLE: target player not online, skipping.");
+            return false;
+        }
+
+        ItemStack[] slots = player.inventory.mainInventory; // 36 slots: 0-8 hotbar, 9-35 main storage
+        java.util.Random random = new java.util.Random();
+        for (int i = slots.length - 1; i > 0; i--) {
+            int j = random.nextInt(i + 1);
+            ItemStack temp = slots[i];
+            slots[i] = slots[j];
+            slots[j] = temp;
+        }
+
+        player.inventoryContainer.detectAndSendChanges(); // push the shuffled contents to the client's GUI
         return true;
     }
 }

@@ -19,5 +19,7 @@ public enum RewardActionType {
      */
     GRAVITY_FLIP,
     /** Adjusts the player's FOV by a fixed offset until the next daily reset time. Client-only. */
-    FOV_CHANGE
+    FOV_CHANGE,
+    /** Randomly shuffles the target player's hotbar + main inventory slots. Runs on the server. */
+    INVENTORY_SCRAMBLE
 }

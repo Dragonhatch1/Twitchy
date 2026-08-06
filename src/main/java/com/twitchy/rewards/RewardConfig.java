@@ -180,6 +180,29 @@ public class RewardConfig {
         fovDown.action.fovOffset = -1.0F;
         defaults.add(fovDown);
 
+        RewardMapping hotPotato = new RewardMapping();
+        hotPotato.key = "hotPotato";
+        hotPotato.enabled = false;
+        hotPotato.title = "Hot Potato";
+        hotPotato.cost = 500;
+        hotPotato.prompt = "Toss an Unstable Ingot my way!";
+        hotPotato.action = new RewardAction();
+        hotPotato.action.type = RewardActionType.GIVE_ITEM;
+        hotPotato.action.item = "minecraft:apple";
+        hotPotato.action.amount = 1;
+        hotPotato.action.toastTitle = "HOT POTATO";
+        hotPotato.action.toastSubtitle = "{viewer} gave you an Unstable Ingot!";
+
+        RewardMapping inventoryScramble = new RewardMapping();
+        inventoryScramble.key = "inventory_scramble";
+        inventoryScramble.enabled = false;
+        inventoryScramble.title = "Scramble My Inventory";
+        inventoryScramble.cost = 250;
+        inventoryScramble.prompt = "Randomly shuffle my hotbar and inventory!";
+        inventoryScramble.action = new RewardAction();
+        inventoryScramble.action.type = RewardActionType.INVENTORY_SCRAMBLE;
+
+
         return defaults;
     }
 }
