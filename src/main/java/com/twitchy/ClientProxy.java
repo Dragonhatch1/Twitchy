@@ -1,5 +1,6 @@
 package com.twitchy;
 
+import com.twitchy.client.ToastEffect;
 import net.minecraftforge.client.ClientCommandHandler;
 import net.minecraftforge.common.MinecraftForge;
 
@@ -34,6 +35,7 @@ public class ClientProxy extends CommonProxy {
             .bus()
             .register(new ClientEventHandler());
         MinecraftForge.EVENT_BUS.register(new PlayerFlipRenderer());
+        MinecraftForge.EVENT_BUS.register(new ToastEffect());
     }
 
     @Override

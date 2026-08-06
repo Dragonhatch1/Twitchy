@@ -64,6 +64,11 @@ public final class RewardManager {
         }
         RewardAction action = maybeAction.get();
 
+        if (action.toastTitle != null && !action.toastTitle.isBlank()) {
+            String title = substitute(action.toastTitle, viewerDisplayName, userInput);
+            String subtitle = action.toastSubtitle == null ? "" : substitute(action.toastSubtitle, viewerDisplayName, userInput);
+            com.twitchy.client.ToastEffect.requestShow(title, subtitle);
+        }
         if (action.type == RewardActionType.FOV_CHANGE) {
             FovEffectManager.requestApply(action.fovOffset);
             fulfill(redemptionId, twitchRewards, true);
