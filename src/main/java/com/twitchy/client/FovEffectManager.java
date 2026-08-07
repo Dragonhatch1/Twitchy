@@ -36,6 +36,10 @@ public final class FovEffectManager {
     private static volatile State state = new State();
     private static volatile float pendingDelta = 0.0F;
 
+    /** Vanilla's own FOV options-menu slider range (30-110, unchanged since 1.7.10). */
+    private static final float FOV_MIN = 30.0F;
+    private static final float FOV_MAX = 110.0F;
+
     private FovEffectManager() {}
 
     private static class State {
@@ -77,7 +81,7 @@ public final class FovEffectManager {
         if (pendingDelta != 0.0F) {
             float delta = pendingDelta;
             pendingDelta = 0.0F;
-            state.offset += delta;
+            state.offset = clampOffset(state.offset + delta);
             state.lastResetDate = LocalDate.now()
                 .toString();
             save();
@@ -148,6 +152,7 @@ public final class FovEffectManager {
                 // Re-apply whatever offset was active before the last restart, then let
                 // checkForDailyReset() decide on the very next tick whether it should already
                 // have expired while the game was closed.
+                state.offset = clampOffset(state.offset);
                 applyToRenderer(state.offset);
             }
         } catch (IOException e) {
@@ -161,5 +166,13 @@ public final class FovEffectManager {
         } catch (IOException e) {
             Twitchy.LOG.error("Failed to save fov-state.json", e);
         }
+    }
+
+    private static float clampOffset(float offset) {
+        float baseFov = Minecraft.getMinecraft().gameSettings != null ? Minecraft.getMinecraft().gameSettings.fovSetting
+            : 70.0F; // vanilla default, only used if gameSettings somehow isn't ready yet
+        float minOffset = FOV_MIN - baseFov;
+        float maxOffset = FOV_MAX - baseFov;
+        return Math.max(minOffset, Math.min(maxOffset, offset));
     }
 }

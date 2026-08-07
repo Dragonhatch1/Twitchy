@@ -16,7 +16,7 @@ public class PlayerFlipRenderer {
         GL11.glPushMatrix();
         GL11.glTranslatef(0.0F, halfHeight, 0.0F);
         GL11.glRotatef(180.0F, 0.0F, 0.0F, 1.0F);
-        GL11.glTranslatef(0.0F, -halfHeight, 0.0F);
+        GL11.glTranslatef(0.0F, halfHeight, 0.0F);
     }
 
     @SubscribeEvent
