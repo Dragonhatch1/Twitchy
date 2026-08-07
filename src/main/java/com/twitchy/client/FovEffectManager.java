@@ -26,7 +26,7 @@ import cpw.mods.fml.common.Loader;
 public final class FovEffectManager {
 
     /** Hour of day (24h, local time) the effect resets back to 0. */
-    private static final int DAILY_RESET_HOUR = 18; // 6pm
+    private static final long RESET_AFTER_MS = (5 * 60 * 1000L); //5 minute timer for FoV
 
     private static Field debugCamFOVField;
     private static Field prevDebugCamFOVField;
@@ -37,15 +37,15 @@ public final class FovEffectManager {
     private static volatile float pendingDelta = 0.0F;
 
     /** Vanilla's own FOV options-menu slider range (30-110, unchanged since 1.7.10). */
-    private static final float FOV_MIN = 30.0F;
-    private static final float FOV_MAX = 110.0F;
+    private static final float FOV_MIN = 5.0F;
+    private static final float FOV_MAX = 170.0F;
 
     private FovEffectManager() {}
 
     private static class State {
 
         float offset = 0.0F;
-        String lastResetDate = ""; // yyyy-MM-dd, empty = never reset yet
+        long resetAtMillis = 0L;
     }
 
     static {
@@ -82,42 +82,22 @@ public final class FovEffectManager {
             float delta = pendingDelta;
             pendingDelta = 0.0F;
             state.offset = clampOffset(state.offset + delta);
-            state.lastResetDate = LocalDate.now()
-                .toString();
+            state.resetAtMillis = System.currentTimeMillis() + RESET_AFTER_MS;
             save();
             applyToRenderer(state.offset);
         }
 
-        checkForDailyReset();
+        checkForReset();
     }
 
-    private static void checkForDailyReset() {
-        if (state.offset == 0.0F) return; // nothing active, nothing to reset
-
-        LocalDateTime now = LocalDateTime.now();
-        String today = now.toLocalDate()
-            .toString();
-        boolean pastResetTimeToday = now.getHour() >= DAILY_RESET_HOUR;
-
-        // Reset once we're at/after today's reset hour AND haven't already reset today
-        // (also covers redeeming after the reset hour on a day we haven't reset yet, and
-        // simply having the game closed across the reset time - it catches up on next tick).
-        if (pastResetTimeToday && !today.equals(state.lastResetDate)) {
-            Twitchy.LOG.info("FOV effect reset (daily {}:00 reset reached).", DAILY_RESET_HOUR);
+    private static void checkForReset() {
+        if (state.offset == 0.0F || state.resetAtMillis == 0L) return;
+        if (System.currentTimeMillis() >= state.resetAtMillis) {
+            Twitchy.LOG.info("FOV effect reset (5 minutes since last change).");
             state.offset = 0.0F;
-            state.lastResetDate = today;
+            state.resetAtMillis = 0L;
             save();
             applyToRenderer(0.0F);
-        } else if (!pastResetTimeToday) {
-            // A new day started before the reset hour - make sure a stale lastResetDate from
-            // yesterday doesn't block today's reset once we do reach the hour.
-            if (!state.lastResetDate.isEmpty() && !state.lastResetDate.equals(today)
-                && LocalDate.parse(state.lastResetDate)
-                    .isBefore(
-                        now.toLocalDate()
-                            .minusDays(1))) {
-                // no-op safeguard slot for future use; current logic already re-checks by date string
-            }
         }
     }
 

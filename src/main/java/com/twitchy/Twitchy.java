@@ -53,9 +53,6 @@ public class Twitchy {
     }
 }
 
-// TODO Potentially need it to pull current dimension when setStorage is being set. Rather than us supplying a
-// dimension.
 // TODO Fix Dedicated Server Falling into ground on Reverse Grav, instead of up. Maybe -yMotion?
-// TODO Powerfail and Explosion Sound
+// TODO Powerfail and Explosion Sound, and Hey Listen! Navi
 // TODO Hot Potato needs it own item
-// TODO FOV Reset doesnt work, change to 5-10minute timer? try it for a stream with clamps at like super extremes.
