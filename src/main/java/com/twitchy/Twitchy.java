@@ -58,3 +58,4 @@ public class Twitchy {
 // TODO Fix Dedicated Server Falling into ground on Reverse Grav, instead of up. Maybe -yMotion?
 // TODO Powerfail and Explosion Sound
 // TODO Hot Potato needs it own item
+// TODO FOV Reset doesnt work, change to 5-10minute timer? try it for a stream with clamps at like super extremes.
