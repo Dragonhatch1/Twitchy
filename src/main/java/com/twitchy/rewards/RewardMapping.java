@@ -14,6 +14,6 @@ public class RewardMapping {
     public String title;
     public int cost = 100;
     public String prompt = "";
-
+    public boolean requiresUserInput = false;
     public RewardAction action;
 }

@@ -21,10 +21,9 @@ import net.minecraftforge.client.event.RenderGameOverlayEvent;
 public class ToastEffect {
 
     private static final long FADE_IN_MS = 300;
-    private static final long HOLD_MS = 2200;
+    private static final long HOLD_MS = 5000;
     private static final long FADE_OUT_MS = 500;
     private static final long TOTAL_MS = FADE_IN_MS + HOLD_MS + FADE_OUT_MS;
-
     /** Marquee scroll speed in pixels/second - constant regardless of message length, so longer
      *  messages take proportionally longer rather than feeling rushed. */
     private static final float MARQUEE_SPEED_PX_PER_SEC = 65.0F;
@@ -42,6 +41,8 @@ public class ToastEffect {
 
     private static final String MARQUEE_SEPARATOR = "     \u2022     "; // bullet, spaced out
     private static final int MARQUEE_MAX_CHARS = 2000; // safety cap over a long stream session
+
+    private static final int CHAT_BUBBLE_MAX_TEXT_WIDTH = 140; // px cap before text wraps to a new line
 
     private static class PendingToast {
 
@@ -189,16 +190,28 @@ public class ToastEffect {
         int a = (int) (alpha * 255) << 24;
 
         boolean hasSub = subtitle != null && !subtitle.isEmpty();
-        int lineWidth = Math.max(font.getStringWidth(title), hasSub ? font.getStringWidth(subtitle) : 0);
-        int padding = 8;
-        int bubbleWidth = lineWidth + padding * 2;
-        int lineHeight = 11;
-        int bubbleHeight = padding + lineHeight + (hasSub ? lineHeight : 0);
 
-        int margin = 14;
-        int right = screenWidth - margin;
+        java.util.List<String> lines = new java.util.ArrayList<>();
+        lines.addAll(font.listFormattedStringToWidth(title, CHAT_BUBBLE_MAX_TEXT_WIDTH));
+        if (hasSub) {
+            lines.addAll(font.listFormattedStringToWidth(subtitle, CHAT_BUBBLE_MAX_TEXT_WIDTH));
+        }
+
+        int actualTextWidth = 0;
+        for (String line : lines) {
+            actualTextWidth = Math.max(actualTextWidth, font.getStringWidth(line));
+        }
+
+        int padding = 8;
+        int bubbleWidth = actualTextWidth + padding * 2;
+        int lineHeight = 11;
+        int bubbleHeight = padding + lineHeight * lines.size();
+
+        int marginBottom = 100;
+        int marginRight = 14;
+        int right = screenWidth - marginRight;
         int left = right - bubbleWidth;
-        int bottom = screenHeight - margin;
+        int bottom = screenHeight - marginBottom;
         int top = bottom - bubbleHeight;
 
         int borderColor = a;
@@ -208,6 +221,7 @@ public class ToastEffect {
         GL11.glPushMatrix();
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glDisable(GL11.GL_DEPTH_TEST);
+        GL11.glDisable(GL11.GL_CULL_FACE);
 
         float radius = 6.0F;
         drawRoundedRect(left - 2, top - 2, right + 2, bottom + 2, radius, borderColor);
@@ -217,11 +231,11 @@ public class ToastEffect {
         drawTriangle(tailX, bottom, tailX + 16, bottom, tailX + 4, bottom + 12, borderColor);
         drawTriangle(tailX + 2, bottom, tailX + 12, bottom, tailX + 4, bottom + 8, fillColor);
 
-        font.drawString(title, left + padding, top + padding / 2, textColor);
-        if (hasSub) {
-            font.drawString(subtitle, left + padding, top + padding / 2 + lineHeight, textColor);
+        for (int i = 0; i < lines.size(); i++) {
+            font.drawString(lines.get(i), left + padding, top + padding / 2 + lineHeight * i, textColor);
         }
 
+        GL11.glEnable(GL11.GL_CULL_FACE);
         GL11.glEnable(GL11.GL_DEPTH_TEST);
         GL11.glPopMatrix();
     }

@@ -158,6 +158,7 @@ public class RewardConfig {
         shout.cost = 200;
         shout.prompt = "Shoutout something on screen!";
         shout.enabled = false;
+        shout.requiresUserInput = true;
         shout.action = new RewardAction();
         shout.action.type = RewardActionType.SERVER_CHAT_MESSAGE;
         shout.action.toastTitle = "{viewer} says:";

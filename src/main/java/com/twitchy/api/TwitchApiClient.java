@@ -111,11 +111,12 @@ public final class TwitchApiClient {
     }
 
     public static CompletableFuture<CustomRewards> createCustomReward(TwitchCredentials creds, String title, int cost,
-        String prompt) {
+        String prompt, boolean requiresUserInput) {
         CreateCustomRewardRequest body = new CreateCustomRewardRequest();
         body.title = title;
         body.cost = cost;
         body.prompt = prompt;
+        body.is_user_input_required = requiresUserInput;
 
         HttpRequest request = baseRequest(
             HELIX_BASE + "/channel_points/custom_rewards?broadcaster_id=" + creds.userId,
@@ -155,9 +156,10 @@ public final class TwitchApiClient {
     }
 
     public static CompletableFuture<Void> updateCustomReward(TwitchCredentials creds, String twitchRewardId,
-        boolean enabled) {
+        boolean enabled, boolean requiresUserInput) {
         UpdateCustomRewardRequest body = new UpdateCustomRewardRequest();
         body.is_enabled = enabled;
+        body.is_user_input_required = requiresUserInput;
 
         HttpRequest request = HttpRequest.newBuilder()
             .uri(

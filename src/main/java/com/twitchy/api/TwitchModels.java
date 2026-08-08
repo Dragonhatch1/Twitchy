@@ -128,11 +128,13 @@ public final class TwitchModels {
         public int cost;
         public String prompt;
         public boolean is_enabled = true;
+        public boolean is_user_input_required;
     }
 
     public static class UpdateCustomRewardRequest {
 
         public Boolean is_enabled;
+        public Boolean is_user_input_required;
     }
 
     public static class UpdateRedemptionStatusRequest {
