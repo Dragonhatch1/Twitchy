@@ -213,7 +213,7 @@ public class RewardConfig {
         powerfail.action = new RewardAction();
         powerfail.action.type = RewardActionType.PLAY_SOUND;
         powerfail.action.sound = "ic2:machines:InterruptOne";
-        powerfail.action.soundVolume = 0.5F;
+        powerfail.action.soundVolume = 0.2F;
         powerfail.action.soundPitch = 1.0F;
         defaults.add(powerfail);
 
@@ -226,7 +226,7 @@ public class RewardConfig {
         explosion.action = new RewardAction();
         explosion.action.type = RewardActionType.PLAY_SOUND;
         explosion.action.sound = "random.explode";
-        explosion.action.soundVolume = 0.5F;
+        explosion.action.soundVolume = 0.2F;
         explosion.action.soundPitch = 1.0F;
         defaults.add(explosion);
 
@@ -239,7 +239,7 @@ public class RewardConfig {
         heylisten.action = new RewardAction();
         heylisten.action.type = RewardActionType.PLAY_SOUND;
         heylisten.action.sound = "twitchy:heylisten";
-        heylisten.action.soundVolume = 0.5F;
+        heylisten.action.soundVolume = 0.2F;
         heylisten.action.soundPitch = 1.0F;
         defaults.add(heylisten);
 

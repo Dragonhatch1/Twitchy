@@ -54,7 +54,6 @@ public class Twitchy {
 }
 
 // TODO Fix Dedicated Server Falling into ground on Reverse Grav, instead of up. Maybe -yMotion?
-// TODO make Hey, Listen Sound Effect
 // TODO Hot Potato needs it own item
 // TODO Captcha for channel points
 // TODO Death Captcha for Bits
