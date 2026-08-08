@@ -1,5 +1,7 @@
 package com.twitchy.rewards;
 
+import scala.Int;
+
 /**
  * Describes one configured action for a reward redemption. Only the fields relevant to
  * {@link #type} need to be set in rewards.json; the rest are ignored.
@@ -52,6 +54,7 @@ public class RewardAction {
      * Optional, works with ANY action type: shows a big center-screen toast when redeemed.
      * toastTitle triggers it; toastSubtitle is optional. Both support {viewer}/{input} placeholders.
      */
+    public int toastType = 3;
     public String toastTitle;
     public String toastSubtitle;
 

@@ -99,6 +99,8 @@ public class RewardConfig {
         gamba.action.item = "7440";
         gamba.action.amount = 64;
         gamba.action.metadata = 32233;
+        gamba.action.toastTitle = "{viewer} redeemed Gamba!";
+        gamba.action.toastType = 3;
         defaults.add(gamba);
 
         RewardMapping camera180 = new RewardMapping();
@@ -110,7 +112,8 @@ public class RewardConfig {
         camera180.action = new RewardAction();
         camera180.action.type = RewardActionType.CLIENT_EFFECT;
         camera180.action.cameraFlipSeconds = 10;
-        camera180.action.message = "{viewer} rotated the camera!";
+        camera180.action.toastTitle = "{viewer} redeemed Upside-Down Camera";
+        camera180.action.toastType = 3;
         defaults.add(camera180);
 
         RewardMapping reverseGravity = new RewardMapping();
@@ -122,6 +125,8 @@ public class RewardConfig {
         reverseGravity.action = new RewardAction();
         reverseGravity.action.type = RewardActionType.GRAVITY_FLIP;
         reverseGravity.action.cameraFlipSeconds = 5;
+        reverseGravity.action.toastTitle = "{viewer} redeemed Reverse Gravity";
+        reverseGravity.action.toastType = 3;
         defaults.add(reverseGravity);
 
         RewardMapping zombie = new RewardMapping();
@@ -149,13 +154,15 @@ public class RewardConfig {
 
         RewardMapping shout = new RewardMapping();
         shout.key = "shoutout";
-        shout.title = "Shoutout";
-        shout.cost = 50;
-        shout.prompt = "Get a shoutout in-game!";
+        shout.title = "Shoutout!";
+        shout.cost = 200;
+        shout.prompt = "Shoutout something on screen!";
         shout.enabled = false;
         shout.action = new RewardAction();
         shout.action.type = RewardActionType.SERVER_CHAT_MESSAGE;
-        shout.action.message = "{viewer} says: {input}";
+        shout.action.toastTitle = "{viewer} says:";
+        shout.action.toastSubtitle = "{input}";
+        shout.action.toastType = 2;
         defaults.add(shout);
 
         RewardMapping fovUp = new RewardMapping();
@@ -167,6 +174,8 @@ public class RewardConfig {
         fovUp.action = new RewardAction();
         fovUp.action.type = RewardActionType.FOV_CHANGE;
         fovUp.action.fovOffset = 1.0F;
+        fovUp.action.toastTitle = "{viewer} widened the FoV";
+        fovUp.action.toastType = 3;
         defaults.add(fovUp);
 
         RewardMapping fovDown = new RewardMapping();
@@ -178,6 +187,8 @@ public class RewardConfig {
         fovDown.action = new RewardAction();
         fovDown.action.type = RewardActionType.FOV_CHANGE;
         fovDown.action.fovOffset = -1.0F;
+        fovDown.action.toastTitle = "{viewer} shrunk the FoV";
+        fovDown.action.toastType = 3;
         defaults.add(fovDown);
 
         RewardMapping hotPotato = new RewardMapping();
@@ -202,6 +213,8 @@ public class RewardConfig {
         inventoryScramble.prompt = "Randomly shuffle my hotbar and inventory!";
         inventoryScramble.action = new RewardAction();
         inventoryScramble.action.type = RewardActionType.INVENTORY_SCRAMBLE;
+        inventoryScramble.action.toastTitle = "{viewer} scrambled the inventory";
+        inventoryScramble.action.toastType = 3;
         defaults.add(inventoryScramble);
 
         RewardMapping powerfail = new RewardMapping();

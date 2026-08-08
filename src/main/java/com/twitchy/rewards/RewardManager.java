@@ -69,7 +69,7 @@ public final class RewardManager {
             String title = substitute(action.toastTitle, viewerDisplayName, userInput);
             String subtitle = action.toastSubtitle == null ? ""
                 : substitute(action.toastSubtitle, viewerDisplayName, userInput);
-            ToastEffect.requestShow(title, subtitle);
+            ToastEffect.requestShow(title, subtitle, action.toastType);
         }
 
         if (action.type == RewardActionType.FOV_CHANGE) {

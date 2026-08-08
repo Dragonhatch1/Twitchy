@@ -59,5 +59,4 @@ public class Twitchy {
 // TODO Death Captcha for Bits
 // TODO Mob Spawning for Bits
 // TODO Spawn entity??? on Sub | Might need to make custom entity.
-// TODO Setup Shoutout to write into a Chat bubble Toast
-// TODO Setup Toasts with integer identifier, 1 means Hot potato Toast, 2 means Chat bubble Toast
+// TODO Reshape chat bubble, to be more rounded.
