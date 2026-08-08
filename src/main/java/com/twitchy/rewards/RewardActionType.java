@@ -21,5 +21,7 @@ public enum RewardActionType {
     /** Adjusts the player's FOV by a fixed offset until the next daily reset time. Client-only. */
     FOV_CHANGE,
     /** Randomly shuffles the target player's hotbar + main inventory slots. Runs on the server. */
-    INVENTORY_SCRAMBLE
+    INVENTORY_SCRAMBLE,
+    /** Plays a sound - vanilla, another mod's, or one bundled in Twitchy itself. Client-only, no server round-trip. */
+    PLAY_SOUND
 }

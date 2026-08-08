@@ -59,6 +59,7 @@ public class MessageRedeemActionHandler implements IMessageHandler<MessageRedeem
             case GRAVITY_FLIP -> gravityFlip(action, sender);
             case INVENTORY_SCRAMBLE -> scrambleInventory(server, action, message, sender);
             case FOV_CHANGE -> true;
+            case PLAY_SOUND -> true;
             case CLIENT_EFFECT -> true; // Client Effects have no packets sent.
         };
         reportResult(sender, message, success);

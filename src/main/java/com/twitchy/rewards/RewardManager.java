@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
+import com.twitchy.client.ToastEffect;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.util.ChatComponentText;
@@ -68,8 +69,9 @@ public final class RewardManager {
             String title = substitute(action.toastTitle, viewerDisplayName, userInput);
             String subtitle = action.toastSubtitle == null ? ""
                 : substitute(action.toastSubtitle, viewerDisplayName, userInput);
-            com.twitchy.client.ToastEffect.requestShow(title, subtitle);
+            ToastEffect.requestShow(title, subtitle);
         }
+
         if (action.type == RewardActionType.FOV_CHANGE) {
             FovEffectManager.requestApply(action.fovOffset);
             fulfill(redemptionId, twitchRewards, true);
@@ -78,6 +80,13 @@ public final class RewardManager {
         if (action.type == RewardActionType.CLIENT_EFFECT) {
             applyClientEffect(action, viewerDisplayName, userInput);
             fulfill(redemptionId, twitchRewards, true);
+            return;
+        }
+        if (action.type == RewardActionType.PLAY_SOUND) {
+            if (action.sound != null && !action.sound.isBlank()) {
+                playSound(action.sound, action.soundVolume, action.soundPitch);
+            }
+            fulfill(redemptionId, twitchRewards, true); // purely local, succeeds the moment it plays
             return;
         }
         if (action.type == RewardActionType.GRAVITY_FLIP) {
@@ -94,15 +103,7 @@ public final class RewardManager {
             mc.thePlayer.addChatMessage(new ChatComponentText(text));
         }
         if (action.sound != null && !action.sound.isBlank() && mc.thePlayer != null) {
-            mc.getSoundHandler()
-                .playSound(
-                    new PositionedSoundRecord(
-                        new ResourceLocation(action.sound),
-                        1.0F,
-                        1.0F,
-                        (float) mc.thePlayer.posX,
-                        (float) mc.thePlayer.posY,
-                        (float) mc.thePlayer.posZ));
+            playSound(action.sound, action.soundVolume, action.soundPitch);
         }
         if (action.cameraFlipSeconds > 0) {
             CameraFlipEffect.requestActivate(action.cameraFlipSeconds);
@@ -164,5 +165,15 @@ public final class RewardManager {
                     .warn("Failed to mark redemption {} as fulfilled/canceled: {}", redemptionId, ex.getMessage());
                 return null;
             });
+    }
+
+    private static void playSound(String soundName, float volume, float pitch) {
+        Minecraft mc = Minecraft.getMinecraft();
+        if (mc.thePlayer == null) return;
+        mc.getSoundHandler()
+            .playSound(
+                new PositionedSoundRecord(
+                    new ResourceLocation(soundName), volume, pitch,
+                    (float) mc.thePlayer.posX, (float) mc.thePlayer.posY, (float) mc.thePlayer.posZ));
     }
 }

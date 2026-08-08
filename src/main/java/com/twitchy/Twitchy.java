@@ -54,5 +54,11 @@ public class Twitchy {
 }
 
 // TODO Fix Dedicated Server Falling into ground on Reverse Grav, instead of up. Maybe -yMotion?
-// TODO Powerfail and Explosion Sound, and Hey Listen! Navi
+// TODO make Hey, Listen Sound Effect
 // TODO Hot Potato needs it own item
+// TODO Captcha for channel points
+// TODO Death Captcha for Bits
+// TODO Mob Spawning for Bits
+// TODO Spawn entity??? on Sub | Might need to make custom entity.
+// TODO Setup Shoutout to write into a Chat bubble Toast
+// TODO Setup Toasts with integer identifier, 1 means Hot potato Toast, 2 means Chat bubble Toast

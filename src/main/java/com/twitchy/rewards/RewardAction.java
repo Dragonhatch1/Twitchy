@@ -54,4 +54,9 @@ public class RewardAction {
      */
     public String toastTitle;
     public String toastSubtitle;
+
+    /** Volume for CLIENT_EFFECT/PLAY_SOUND's sound field. Default 1.0. */
+    public float soundVolume = 1.0F;
+    /** Pitch for CLIENT_EFFECT/PLAY_SOUND's sound field. Default 1.0 (try 0.5-2.0 for variety). */
+    public float soundPitch = 1.0F;
 }

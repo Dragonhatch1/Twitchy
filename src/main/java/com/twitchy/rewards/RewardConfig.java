@@ -192,6 +192,7 @@ public class RewardConfig {
         hotPotato.action.amount = 1;
         hotPotato.action.toastTitle = "HOT POTATO";
         hotPotato.action.toastSubtitle = "{viewer} gave you an Unstable Ingot!";
+        defaults.add(hotPotato);
 
         RewardMapping inventoryScramble = new RewardMapping();
         inventoryScramble.key = "inventory_scramble";
@@ -201,6 +202,46 @@ public class RewardConfig {
         inventoryScramble.prompt = "Randomly shuffle my hotbar and inventory!";
         inventoryScramble.action = new RewardAction();
         inventoryScramble.action.type = RewardActionType.INVENTORY_SCRAMBLE;
+        defaults.add(inventoryScramble);
+
+        RewardMapping powerfail = new RewardMapping();
+        powerfail.key = "powerfail";
+        powerfail.enabled = false;
+        powerfail.title = "Powerfail!";
+        powerfail.cost = 75;
+        powerfail.prompt = "Play the Powerfail sound effect!";
+        powerfail.action = new RewardAction();
+        powerfail.action.type = RewardActionType.PLAY_SOUND;
+        powerfail.action.sound = "ic2:machines:InterruptOne";
+        powerfail.action.soundVolume = 0.5F;
+        powerfail.action.soundPitch = 1.0F;
+        defaults.add(powerfail);
+
+        RewardMapping explosion = new RewardMapping();
+        explosion.key = "explosion";
+        explosion.enabled = false;
+        explosion.title = "Explosion!";
+        explosion.cost = 75;
+        explosion.prompt = "Play the TnT Explosion sound effect!";
+        explosion.action = new RewardAction();
+        explosion.action.type = RewardActionType.PLAY_SOUND;
+        explosion.action.sound = "random.explode";
+        explosion.action.soundVolume = 0.5F;
+        explosion.action.soundPitch = 1.0F;
+        defaults.add(explosion);
+
+        RewardMapping heylisten = new RewardMapping();
+        heylisten.key = "heylisten";
+        heylisten.enabled = false;
+        heylisten.title = "Hey! Listen!";
+        heylisten.cost = 75;
+        heylisten.prompt = "Play the Hey! Listen! sound effect from Legend of Zelda!";
+        heylisten.action = new RewardAction();
+        heylisten.action.type = RewardActionType.PLAY_SOUND;
+        heylisten.action.sound = "twitchy:heylisten";
+        heylisten.action.soundVolume = 0.5F;
+        heylisten.action.soundPitch = 1.0F;
+        defaults.add(heylisten);
 
         return defaults;
     }
