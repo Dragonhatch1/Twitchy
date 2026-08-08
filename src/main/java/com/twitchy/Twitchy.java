@@ -59,4 +59,3 @@ public class Twitchy {
 // TODO Death Captcha for Bits
 // TODO Mob Spawning for Bits
 // TODO Spawn entity??? on Sub | Might need to make custom entity.
-// TODO Default Rewards.json prints unnecessary modifiers to configs. such as Volume and Pitch on Gamba.

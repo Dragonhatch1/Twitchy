@@ -28,8 +28,11 @@ import cpw.mods.fml.common.Loader;
  */
 public class RewardConfig {
 
-    private static final Gson GSON = new GsonBuilder().setPrettyPrinting()
+    private static final Gson GSON = new GsonBuilder()
+        .setPrettyPrinting()
+        .registerTypeAdapter(RewardAction.class, new RewardActionSerializer())
         .create();
+
     private static final Type LIST_TYPE = new TypeToken<ArrayList<RewardMapping>>() {}.getType();
 
     private static volatile List<RewardMapping> mappings = new ArrayList<>();
@@ -156,7 +159,7 @@ public class RewardConfig {
         shout.key = "shoutout";
         shout.title = "Shoutout!";
         shout.cost = 200;
-        shout.prompt = "Shoutout something on screen!";
+        shout.prompt = "Say something on Stream!";
         shout.enabled = false;
         shout.requiresUserInput = true;
         shout.action = new RewardAction();

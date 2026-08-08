@@ -122,13 +122,15 @@ public final class RewardManager {
         for (RewardMapping mapping : RewardConfig.all()) {
             Optional<String> existingId = RewardIdRegistry.twitchIdForKey(mapping.key);
 
+            boolean requiresInput = mapping.requiresUserInput != null && mapping.requiresUserInput;
+
             if (existingId.isEmpty()) {
                 if (!mapping.enabled) {
                     continue;
                 }
 
                 CompletableFuture<Void> task = TwitchApiClient
-                    .createCustomReward(creds, mapping.title, mapping.cost, mapping.prompt, mapping.requiresUserInput)
+                    .createCustomReward(creds, mapping.title, mapping.cost, mapping.prompt, requiresInput)
                     .thenAccept(reward -> {
                         RewardIdRegistry.put(creds.userId, mapping.key, reward.id);
                         Twitchy.LOG.info(
@@ -142,7 +144,7 @@ public final class RewardManager {
                 // Already created previously - push the config's enabled state to Twitch every sync,
                 // so toggling "enabled" in rewards.json actually pauses/resumes it on Twitch's side too.
                 CompletableFuture<Void> task = TwitchApiClient
-                    .updateCustomReward(creds, existingId.get(), mapping.enabled, mapping.requiresUserInput)
+                    .updateCustomReward(creds, existingId.get(), mapping.enabled, requiresInput)
                     .exceptionally(ex -> {
                         // Don't let one stale/manually-deleted reward block the whole connect flow.
                         Twitchy.LOG
