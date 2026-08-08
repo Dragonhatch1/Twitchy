@@ -4,6 +4,7 @@ import java.lang.reflect.Type;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 
@@ -57,6 +58,15 @@ public class RewardActionSerializer implements JsonSerializer<RewardAction> {
                 json.addProperty("sound", action.sound);
                 json.addProperty("soundVolume", action.soundVolume);
                 json.addProperty("soundPitch", action.soundPitch);
+            }
+            case KEY_SEQUENCE_CHALLENGE -> {
+                if (action.keySequence != null && action.keySequence.length > 0) {
+                    com.google.gson.JsonArray arr = new com.google.gson.JsonArray();
+                    for (String key : action.keySequence) {
+                        arr.add(new JsonPrimitive(key));
+                    }
+                    json.add("keySequence", arr);
+                }
             }
         }
 

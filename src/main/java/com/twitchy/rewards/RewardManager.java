@@ -25,6 +25,9 @@ import com.twitchy.network.PacketHandler;
  */
 public final class RewardManager {
 
+    private static final int CHALLENGE_MIN_LENGTH = 8;
+    private static final int CHALLENGE_MAX_LENGTH = 20;
+
     private RewardManager() {}
 
     public static void handleRedemption(RewardRedemptionEvent event) {
@@ -77,9 +80,10 @@ public final class RewardManager {
         if (action.type == RewardActionType.KEY_SEQUENCE_CHALLENGE) {
             String[] sequence = (action.keySequence != null && action.keySequence.length > 0)
                 ? action.keySequence
-                : generateRandomWasdSequence(Math.max(1, action.challengeLength));
+                : generateRandomWasdSequence(randomChallengeLength());
+            int seconds = (int) (sequence.length * 1.2F); // truncation = floor for positive numbers, e.g. 8*1.2=9.6 -> 9
             fulfill(redemptionId, twitchRewards, true);
-            KeySequenceChallengeManager.requestStart(sequence, Math.max(1, action.challengeSeconds));
+            KeySequenceChallengeManager.requestStart(sequence, seconds);
             return;
         }
         if (action.type == RewardActionType.CLIENT_EFFECT) {
@@ -193,5 +197,9 @@ public final class RewardManager {
             seq[i] = String.valueOf(WASD_POOL[random.nextInt(WASD_POOL.length)]);
         }
         return seq;
+    }
+
+    private static int randomChallengeLength() {
+        return CHALLENGE_MIN_LENGTH + new java.util.Random().nextInt(CHALLENGE_MAX_LENGTH - CHALLENGE_MIN_LENGTH + 1);
     }
 }

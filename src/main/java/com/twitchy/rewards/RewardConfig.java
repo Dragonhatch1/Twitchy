@@ -94,7 +94,7 @@ public class RewardConfig {
         RewardMapping gamba = new RewardMapping();
         gamba.key = "Gamba";
         gamba.title = "Gamba!";
-        gamba.cost = 100;
+        gamba.cost = 75;
         gamba.prompt = "Spawn Gamba Tokens in the Chest!";
         gamba.enabled = false;
         gamba.action = new RewardAction();
@@ -106,10 +106,25 @@ public class RewardConfig {
         gamba.action.toastType = 3;
         defaults.add(gamba);
 
+        RewardMapping gamba5 = new RewardMapping();
+        gamba5.key = "Gamba5";
+        gamba5.title = "5x Gamba!";
+        gamba5.cost = 375;
+        gamba5.prompt = "Spawn 5 stacks of Activated Carbon Mesh in the chest for Gamba!";
+        gamba5.enabled = false;
+        gamba5.action = new RewardAction();
+        gamba5.action.type = RewardActionType.DEPOSIT_ITEM;
+        gamba5.action.item = "7440";
+        gamba5.action.amount = 320;
+        gamba5.action.metadata = 32233;
+        gamba5.action.toastTitle = "{viewer} redeemed 5x Gamba!";
+        gamba5.action.toastType = 3;
+        defaults.add(gamba5);
+
         RewardMapping camera180 = new RewardMapping();
         camera180.key = "camera_180";
         camera180.title = "Upside-Down Camera";
-        camera180.cost = 100;
+        camera180.cost = 150;
         camera180.prompt = "180s my camera for 10 seconds!";
         camera180.enabled = false;
         camera180.action = new RewardAction();
@@ -122,7 +137,7 @@ public class RewardConfig {
         RewardMapping reverseGravity = new RewardMapping();
         reverseGravity.key = "reverse_gravity";
         reverseGravity.title = "Reverse Gravity";
-        reverseGravity.cost = 100;
+        reverseGravity.cost = 250;
         reverseGravity.prompt = "Reverse Gravity for 5 seconds";
         reverseGravity.enabled = false;
         reverseGravity.action = new RewardAction();
@@ -158,7 +173,7 @@ public class RewardConfig {
         RewardMapping shout = new RewardMapping();
         shout.key = "shoutout";
         shout.title = "Shoutout!";
-        shout.cost = 200;
+        shout.cost = 150;
         shout.prompt = "Say something on Stream!";
         shout.enabled = false;
         shout.requiresUserInput = true;
@@ -264,7 +279,7 @@ public class RewardConfig {
         wasdcaptcha.key = "wasd_captcha";
         wasdcaptcha.enabled = false;
         wasdcaptcha.title = "Captcha fun!";
-        wasdcaptcha.cost = 300;
+        wasdcaptcha.cost = 500;
         wasdcaptcha.prompt = "Complete a random captcha!";
         wasdcaptcha.action = new RewardAction();
         wasdcaptcha.action.type = RewardActionType.KEY_SEQUENCE_CHALLENGE;

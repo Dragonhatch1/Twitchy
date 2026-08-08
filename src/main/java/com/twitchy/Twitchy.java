@@ -57,4 +57,4 @@ public class Twitchy {
 // TODO Death Captcha for Bits
 // TODO Mob Spawning for Bits
 // TODO Spawn entity??? on Sub | Might need to make custom entity.
-// TODO set Captcha length to min 8 max 20 | 1.2s per button.
+// TODO Add small amount of damage to failure of Channel Point Captcha
