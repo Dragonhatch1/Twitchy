@@ -24,7 +24,9 @@ public enum RewardActionType {
     INVENTORY_SCRAMBLE,
     /** Plays a sound - vanilla, another mod's, or one bundled in Twitchy itself. Client-only, no server round-trip. */
     PLAY_SOUND,
-    /** Client-only GUI mini-game: hit a WASD sequence in order before time runs out. Fulfillment is
-     *  deferred until the challenge actually resolves, unlike the other instant client-side types. */
+    /**
+     * Client-only GUI mini-game: hit a WASD sequence in order before time runs out. Fulfillment is
+     * deferred until the challenge actually resolves, unlike the other instant client-side types.
+     */
     KEY_SEQUENCE_CHALLENGE
 }

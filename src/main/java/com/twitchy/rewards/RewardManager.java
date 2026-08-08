@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
-import com.twitchy.client.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.util.ChatComponentText;
@@ -15,6 +14,7 @@ import com.twitchy.Twitchy;
 import com.twitchy.api.TwitchApiClient;
 import com.twitchy.api.TwitchModels.RewardRedemptionEvent;
 import com.twitchy.auth.TwitchCredentials;
+import com.twitchy.client.*;
 import com.twitchy.network.MessageRedeemAction;
 import com.twitchy.network.PacketHandler;
 
@@ -78,10 +78,10 @@ public final class RewardManager {
             return;
         }
         if (action.type == RewardActionType.KEY_SEQUENCE_CHALLENGE) {
-            String[] sequence = (action.keySequence != null && action.keySequence.length > 0)
-                ? action.keySequence
+            String[] sequence = (action.keySequence != null && action.keySequence.length > 0) ? action.keySequence
                 : generateRandomWasdSequence(randomChallengeLength());
-            int seconds = (int) (sequence.length * 1.2F); // truncation = floor for positive numbers, e.g. 8*1.2=9.6 -> 9
+            int seconds = (int) (sequence.length * 1.2F); // truncation = floor for positive numbers, e.g. 8*1.2=9.6 ->
+                                                          // 9
             fulfill(redemptionId, twitchRewards, true);
             KeySequenceChallengeManager.requestStart(sequence, seconds);
             return;
@@ -184,8 +184,12 @@ public final class RewardManager {
         mc.getSoundHandler()
             .playSound(
                 new PositionedSoundRecord(
-                    new ResourceLocation(soundName), volume, pitch,
-                    (float) mc.thePlayer.posX, (float) mc.thePlayer.posY, (float) mc.thePlayer.posZ));
+                    new ResourceLocation(soundName),
+                    volume,
+                    pitch,
+                    (float) mc.thePlayer.posX,
+                    (float) mc.thePlayer.posY,
+                    (float) mc.thePlayer.posZ));
     }
 
     private static final char[] WASD_POOL = { 'W', 'A', 'S', 'D' };

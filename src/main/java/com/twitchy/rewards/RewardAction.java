@@ -1,7 +1,5 @@
 package com.twitchy.rewards;
 
-import scala.Int;
-
 /**
  * Describes one configured action for a reward redemption. Only the fields relevant to
  * {@link #type} need to be set in rewards.json; the rest are ignored.
@@ -63,7 +61,9 @@ public class RewardAction {
     /** Pitch for CLIENT_EFFECT/PLAY_SOUND's sound field. Default 1.0 (try 0.5-2.0 for variety). */
     public float soundPitch = 1.0F;
 
-    /** KEY_SEQUENCE_CHALLENGE: explicit sequence, e.g. ["W","A","S","D"]. If null/empty, a random
-     *  sequence of length challengeLength is generated from W/A/S/D each time it's redeemed. */
+    /**
+     * KEY_SEQUENCE_CHALLENGE: explicit sequence, e.g. ["W","A","S","D"]. If null/empty, a random
+     * sequence of length challengeLength is generated from W/A/S/D each time it's redeemed.
+     */
     public String[] keySequence;
 }

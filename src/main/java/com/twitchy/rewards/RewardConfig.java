@@ -28,8 +28,7 @@ import cpw.mods.fml.common.Loader;
  */
 public class RewardConfig {
 
-    private static final Gson GSON = new GsonBuilder()
-        .setPrettyPrinting()
+    private static final Gson GSON = new GsonBuilder().setPrettyPrinting()
         .registerTypeAdapter(RewardAction.class, new RewardActionSerializer())
         .create();
 

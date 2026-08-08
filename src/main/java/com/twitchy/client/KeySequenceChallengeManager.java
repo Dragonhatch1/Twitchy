@@ -2,9 +2,11 @@ package com.twitchy.client;
 
 import net.minecraft.client.Minecraft;
 
-/** Client-side dispatcher for the WASD key-sequence challenge GUI. requestStart() is safe to call
- *  from any thread (redemptions arrive on the EventSub background thread); the actual GUI only
- *  ever opens from tick(), which must only ever run on the client thread. */
+/**
+ * Client-side dispatcher for the WASD key-sequence challenge GUI. requestStart() is safe to call
+ * from any thread (redemptions arrive on the EventSub background thread); the actual GUI only
+ * ever opens from tick(), which must only ever run on the client thread.
+ */
 public final class KeySequenceChallengeManager {
 
     private static volatile PendingChallenge pending;

@@ -3,13 +3,14 @@ package com.twitchy.client;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-import org.lwjgl.opengl.GL11;
-
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
+
+import org.lwjgl.opengl.GL11;
+
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 /**
  * Renders one of several toast styles when a redemption requests one. toastType 1 (big center
@@ -24,14 +25,15 @@ public class ToastEffect {
     private static final long HOLD_MS = 5000;
     private static final long FADE_OUT_MS = 500;
     private static final long TOTAL_MS = FADE_IN_MS + HOLD_MS + FADE_OUT_MS;
-    /** Marquee scroll speed in pixels/second - constant regardless of message length, so longer
-     *  messages take proportionally longer rather than feeling rushed. */
+    /**
+     * Marquee scroll speed in pixels/second - constant regardless of message length, so longer
+     * messages take proportionally longer rather than feeling rushed.
+     */
     private static final float MARQUEE_SPEED_PX_PER_SEC = 65.0F;
     private static final float MARQUEE_TEXT_SCALE = 0.8F;
 
     private static volatile PendingToast pending;
     private static ActiveToast active;
-
 
     private static final Queue<MarqueeEntry> marqueeQueue = new ConcurrentLinkedQueue<>();
     private static final StringBuilder marqueeText = new StringBuilder(); // render-thread only, never cleared
@@ -81,8 +83,10 @@ public class ToastEffect {
         }
     }
 
-    /** Safe to call from ANY thread. Type 3 (marquee) joins the persistent rotation queue; types
-     *  1 and 2 replace whatever one-shot toast is currently showing, same as before. */
+    /**
+     * Safe to call from ANY thread. Type 3 (marquee) joins the persistent rotation queue; types
+     * 1 and 2 replace whatever one-shot toast is currently showing, same as before.
+     */
     public static void requestShow(String title, String subtitle, int toastType) {
         if (toastType == 3) {
             String text = (subtitle != null && !subtitle.isEmpty()) ? title + "   -   " + subtitle : title;
@@ -268,7 +272,8 @@ public class ToastEffect {
         int screenWidth = res.getScaledWidth();
 
         long now = System.nanoTime();
-        float deltaSeconds = Math.min((now - lastFrameNanos) / 1_000_000_000.0F, 0.25F); // clamp against big pauses/lag spikes
+        float deltaSeconds = Math.min((now - lastFrameNanos) / 1_000_000_000.0F, 0.25F); // clamp against big pauses/lag
+                                                                                         // spikes
         lastFrameNanos = now;
 
         marqueeScrollX -= MARQUEE_SPEED_PX_PER_SEC * deltaSeconds;
@@ -369,9 +374,9 @@ public class ToastEffect {
         GL11.glEnd();
 
         // Round off each corner with a quarter-circle fan.
-        drawCornerArc(left + radius, top + radius, radius, 180, 270);   // top-left
-        drawCornerArc(right - radius, top + radius, radius, 270, 360);  // top-right
-        drawCornerArc(right - radius, bottom - radius, radius, 0, 90);  // bottom-right
+        drawCornerArc(left + radius, top + radius, radius, 180, 270); // top-left
+        drawCornerArc(right - radius, top + radius, radius, 270, 360); // top-right
+        drawCornerArc(right - radius, bottom - radius, radius, 0, 90); // bottom-right
         drawCornerArc(left + radius, bottom - radius, radius, 90, 180); // bottom-left
 
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);

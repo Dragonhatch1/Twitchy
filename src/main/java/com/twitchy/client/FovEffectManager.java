@@ -5,8 +5,6 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Field;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.EntityRenderer;
@@ -26,7 +24,7 @@ import cpw.mods.fml.common.Loader;
 public final class FovEffectManager {
 
     /** Hour of day (24h, local time) the effect resets back to 0. */
-    private static final long RESET_AFTER_MS = (5 * 60 * 1000L); //5 minute timer for FoV
+    private static final long RESET_AFTER_MS = (5 * 60 * 1000L); // 5 minute timer for FoV
 
     private static Field debugCamFOVField;
     private static Field prevDebugCamFOVField;
