@@ -54,7 +54,7 @@ public class Twitchy {
 }
 
 // TODO Hot Potato needs it own item
-// TODO Captcha for channel points
 // TODO Death Captcha for Bits
 // TODO Mob Spawning for Bits
 // TODO Spawn entity??? on Sub | Might need to make custom entity.
+// TODO set Captcha length to min 8 max 20 | 1.2s per button.

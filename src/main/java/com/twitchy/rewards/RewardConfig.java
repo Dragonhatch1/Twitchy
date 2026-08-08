@@ -260,6 +260,16 @@ public class RewardConfig {
         heylisten.action.soundPitch = 1.0F;
         defaults.add(heylisten);
 
+        RewardMapping wasdcaptcha = new RewardMapping();
+        wasdcaptcha.key = "wasd_captcha";
+        wasdcaptcha.enabled = false;
+        wasdcaptcha.title = "Captcha fun!";
+        wasdcaptcha.cost = 300;
+        wasdcaptcha.prompt = "Complete a random captcha!";
+        wasdcaptcha.action = new RewardAction();
+        wasdcaptcha.action.type = RewardActionType.KEY_SEQUENCE_CHALLENGE;
+        defaults.add(wasdcaptcha);
+
         return defaults;
     }
 }

@@ -52,6 +52,7 @@ public class ClientEventHandler {
         if (event.phase == TickEvent.Phase.END) {
             CameraFlipEffect.tick();
             FovEffectManager.tick();
+            KeySequenceChallengeManager.tick();
         }
     }
 }

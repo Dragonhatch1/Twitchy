@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
-import com.twitchy.client.ToastEffect;
+import com.twitchy.client.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.util.ChatComponentText;
@@ -15,9 +15,6 @@ import com.twitchy.Twitchy;
 import com.twitchy.api.TwitchApiClient;
 import com.twitchy.api.TwitchModels.RewardRedemptionEvent;
 import com.twitchy.auth.TwitchCredentials;
-import com.twitchy.client.CameraFlipEffect;
-import com.twitchy.client.FovEffectManager;
-import com.twitchy.client.TwitchSessionManager;
 import com.twitchy.network.MessageRedeemAction;
 import com.twitchy.network.PacketHandler;
 
@@ -75,6 +72,14 @@ public final class RewardManager {
         if (action.type == RewardActionType.FOV_CHANGE) {
             FovEffectManager.requestApply(action.fovOffset);
             fulfill(redemptionId, twitchRewards, true);
+            return;
+        }
+        if (action.type == RewardActionType.KEY_SEQUENCE_CHALLENGE) {
+            String[] sequence = (action.keySequence != null && action.keySequence.length > 0)
+                ? action.keySequence
+                : generateRandomWasdSequence(Math.max(1, action.challengeLength));
+            fulfill(redemptionId, twitchRewards, true);
+            KeySequenceChallengeManager.requestStart(sequence, Math.max(1, action.challengeSeconds));
             return;
         }
         if (action.type == RewardActionType.CLIENT_EFFECT) {
@@ -177,5 +182,16 @@ public final class RewardManager {
                 new PositionedSoundRecord(
                     new ResourceLocation(soundName), volume, pitch,
                     (float) mc.thePlayer.posX, (float) mc.thePlayer.posY, (float) mc.thePlayer.posZ));
+    }
+
+    private static final char[] WASD_POOL = { 'W', 'A', 'S', 'D' };
+
+    private static String[] generateRandomWasdSequence(int length) {
+        java.util.Random random = new java.util.Random();
+        String[] seq = new String[length];
+        for (int i = 0; i < length; i++) {
+            seq[i] = String.valueOf(WASD_POOL[random.nextInt(WASD_POOL.length)]);
+        }
+        return seq;
     }
 }

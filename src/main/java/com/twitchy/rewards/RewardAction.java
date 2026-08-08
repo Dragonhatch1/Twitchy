@@ -62,4 +62,12 @@ public class RewardAction {
     public float soundVolume = 1.0F;
     /** Pitch for CLIENT_EFFECT/PLAY_SOUND's sound field. Default 1.0 (try 0.5-2.0 for variety). */
     public float soundPitch = 1.0F;
+
+    /** KEY_SEQUENCE_CHALLENGE: explicit sequence, e.g. ["W","A","S","D"]. If null/empty, a random
+     *  sequence of length challengeLength is generated from W/A/S/D each time it's redeemed. */
+    public String[] keySequence;
+    /** KEY_SEQUENCE_CHALLENGE: length of the randomly-generated sequence when keySequence isn't set. */
+    public int challengeLength = 5;
+    /** KEY_SEQUENCE_CHALLENGE: total time (seconds) allowed to complete the whole sequence. */
+    public int challengeSeconds = 8;
 }
