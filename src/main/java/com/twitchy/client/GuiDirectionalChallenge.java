@@ -90,6 +90,7 @@ public class GuiDirectionalChallenge extends GuiScreen {
     private void resolve(boolean success) {
         if (resolved) return;
         resolved = true;
+        KeySequenceChallengeManager.notifyResolved();
         this.mc.displayGuiScreen(null);
     }
 
