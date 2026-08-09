@@ -57,4 +57,5 @@ public class Twitchy {
 // TODO Death Captcha for Bits
 // TODO Mob Spawning for Bits
 // TODO Spawn entity??? on Sub | Might need to make custom entity.
-// TODO Add small amount of damage to failure of Channel Point Captcha
+// TODO Add failure of Channel Point Captcha
+// TODO Word Wrap Captcha icons
