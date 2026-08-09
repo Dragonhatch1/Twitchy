@@ -56,6 +56,5 @@ public class Twitchy {
 // TODO Hot Potato needs it own item
 // TODO Death Captcha for Bits
 // TODO Mob Spawning for Bits
-// TODO Spawn entity??? on Sub | Might need to make custom entity.
+// TODO Spawn entity on Sub | Fish in ball that rolls around to follow you | can roam when your not near it
 // TODO Add failure of Channel Point Captcha
-// TODO need to queue Captcha behind each other, not let them overtake the current one
