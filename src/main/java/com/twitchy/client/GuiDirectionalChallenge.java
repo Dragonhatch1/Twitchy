@@ -20,6 +20,12 @@ public class GuiDirectionalChallenge extends GuiScreen {
     private static final int SLOT_SIZE_NEXT = 30;
     private static final int SLOT_GAP = 10;
 
+    private static final int VISIBLE_WINDOW = 6; // how many slots shown at once (current + upcoming)
+    private static final long SLIDE_ANIM_MS = 150;
+
+    private float slideOffset = 0.0F; // 1.0 = just shifted, decays to 0.0 = settled
+    private long lastRenderNanos = 0;
+
     public GuiDirectionalChallenge(String[] sequence, int seconds) {
         this.sequence = sequence;
         this.totalMillis = seconds * 1000L;
@@ -50,6 +56,7 @@ public class GuiDirectionalChallenge extends GuiScreen {
         char expected = sequence[progressIndex].charAt(0);
         if (Character.toUpperCase(pressed) == Character.toUpperCase(expected)) {
             progressIndex++;
+            slideOffset = 1.0F; // kick off the slide-left animation
             if (progressIndex >= sequence.length) {
                 resolve(true);
             }
@@ -103,24 +110,35 @@ public class GuiDirectionalChallenge extends GuiScreen {
 
         int centerX = screenWidth / 2;
         int centerY = screenHeight / 2;
-        int totalWidth = SLOT_SIZE_CURRENT + (sequence.length - 1) * (SLOT_SIZE_NEXT + SLOT_GAP) + SLOT_GAP;
-        int x = centerX - totalWidth / 2;
+
+        // Decay the slide animation based on real elapsed time since the last frame.
+        long nowNanos = System.nanoTime();
+        float deltaMs = lastRenderNanos == 0 ? 0 : (nowNanos - lastRenderNanos) / 1_000_000.0F;
+        lastRenderNanos = nowNanos;
+        slideOffset = Math.max(0.0F, slideOffset - deltaMs / SLIDE_ANIM_MS);
 
         boolean flashing = now < flashUntilMillis;
 
-        for (int i = 0; i < sequence.length; i++) {
-            boolean isCurrent = i == progressIndex;
-            boolean isDone = i < progressIndex;
+        int windowEnd = Math.min(sequence.length, progressIndex + VISIBLE_WINDOW);
+        int visibleCount = windowEnd - progressIndex;
+
+        int slotSpacing = SLOT_SIZE_NEXT + SLOT_GAP;
+        int rowWidth = SLOT_SIZE_CURRENT + Math.max(0, visibleCount - 1) * slotSpacing;
+        // The extra slideOffset*slotSpacing shifts the whole row right, then animates back down to 0 -
+        // visually reads as the row sliding left into its settled position right after a hit.
+        int x = centerX - rowWidth / 2 + (int) (slideOffset * slotSpacing);
+
+        for (int k = 0; k < visibleCount; k++) {
+            int i = progressIndex + k;
+            boolean isCurrent = k == 0;
             int size = isCurrent ? SLOT_SIZE_CURRENT : SLOT_SIZE_NEXT;
             int slotTop = centerY - size / 2;
 
-            int mainColor = isCurrent ? (flashing ? 0xFFFFFFFF : 0xFFFF2E6C) : (isDone ? 0x99FF2E6C : 0xFFFF2E6C);
+            int mainColor = isCurrent ? (flashing ? 0xFFFFFFFF : 0xFFFF2E6C) : 0xFFFF2E6C;
             int ghostColor = 0x992EE6FF;
 
-            // channel-split "glitch" double outline
             drawBoxOutline(x - 2, slotTop - 2, x + size - 2, slotTop + size - 2, 2, ghostColor);
             drawBoxOutline(x, slotTop, x + size, slotTop + size, 2, mainColor);
-
             drawWasdLetter(sequence[i].charAt(0), x + size / 2, slotTop + size / 2, isCurrent ? 2.2F : 1.4F, mainColor);
 
             x += size + SLOT_GAP;

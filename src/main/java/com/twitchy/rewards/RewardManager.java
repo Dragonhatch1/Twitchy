@@ -80,7 +80,7 @@ public final class RewardManager {
         if (action.type == RewardActionType.KEY_SEQUENCE_CHALLENGE) {
             String[] sequence = (action.keySequence != null && action.keySequence.length > 0) ? action.keySequence
                 : generateRandomWasdSequence(randomChallengeLength());
-            int seconds = (int) (sequence.length * 0.8F); // truncation = floor for positive numbers, e.g. 8*1.2=9.6 ->
+            int seconds = (int) (sequence.length * 0.6F); // truncation = floor for positive numbers, e.g. 8*1.2=9.6 ->
                                                           // 9
             fulfill(redemptionId, twitchRewards, true);
             KeySequenceChallengeManager.requestStart(sequence, seconds);
