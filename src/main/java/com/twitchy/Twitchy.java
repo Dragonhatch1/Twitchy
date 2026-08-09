@@ -58,5 +58,4 @@ public class Twitchy {
 // TODO Mob Spawning for Bits
 // TODO Spawn entity??? on Sub | Might need to make custom entity.
 // TODO Add failure of Channel Point Captcha
-// TODO Add clamp to Captcha timer? I see it being a problem on bigger ones. | Maybe even lower time?
-// TODO Captcha need a Toast title to it
+// TODO need to queue Captcha behind each other, not let them overtake the current one

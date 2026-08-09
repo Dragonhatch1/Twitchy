@@ -26,9 +26,14 @@ public class GuiDirectionalChallenge extends GuiScreen {
     private float slideOffset = 0.0F; // 1.0 = just shifted, decays to 0.0 = settled
     private long lastRenderNanos = 0;
 
-    public GuiDirectionalChallenge(String[] sequence, int seconds) {
+    private final String title;
+    private final String subtitle;
+
+    public GuiDirectionalChallenge(String[] sequence, int seconds, String title, String subtitle) {
         this.sequence = sequence;
         this.totalMillis = seconds * 1000L;
+        this.title = title;
+        this.subtitle = subtitle;
     }
 
     @Override
@@ -128,6 +133,12 @@ public class GuiDirectionalChallenge extends GuiScreen {
         // visually reads as the row sliding left into its settled position right after a hit.
         int x = centerX - rowWidth / 2 + (int) (slideOffset * slotSpacing);
 
+        if (title != null && !title.isEmpty()) {
+            int titleY = centerY - 60; // above the slot row
+            int titleW = this.fontRendererObj.getStringWidth(title);
+            this.fontRendererObj.drawStringWithShadow(title, centerX - titleW / 2, titleY, 0xFFFF2E6C);
+        }
+
         for (int k = 0; k < visibleCount; k++) {
             int i = progressIndex + k;
             boolean isCurrent = k == 0;
@@ -152,6 +163,12 @@ public class GuiDirectionalChallenge extends GuiScreen {
         int barTop = centerY + 50;
         drawRect(barLeft, barTop, barLeft + barWidth, barTop + 6, 0xAA330000);
         drawRect(barLeft, barTop, barLeft + (int) (barWidth * remainingFrac), barTop + 6, 0xFFFF2E6C);
+
+        if (subtitle != null && !subtitle.isEmpty()) {
+            int subtitleY = barTop + 14; // below the countdown bar
+            int subtitleW = this.fontRendererObj.getStringWidth(subtitle);
+            this.fontRendererObj.drawStringWithShadow(subtitle, centerX - subtitleW / 2, subtitleY, 0x99FF2E6C);
+        }
 
         GL11.glEnable(GL11.GL_CULL_FACE);
         GL11.glEnable(GL11.GL_DEPTH_TEST);

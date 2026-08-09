@@ -69,7 +69,7 @@ public final class RewardManager {
         }
         RewardAction action = maybeAction.get();
 
-        if (action.toastTitle != null && !action.toastTitle.isBlank()) {
+        if (action.type != RewardActionType.KEY_SEQUENCE_CHALLENGE && action.toastTitle != null && !action.toastTitle.isBlank()) {
             String title = substitute(action.toastTitle, viewerDisplayName, userInput);
             String subtitle = action.toastSubtitle == null ? ""
                 : substitute(action.toastSubtitle, viewerDisplayName, userInput);
@@ -84,10 +84,15 @@ public final class RewardManager {
         if (action.type == RewardActionType.KEY_SEQUENCE_CHALLENGE) {
             String[] sequence = (action.keySequence != null && action.keySequence.length > 0) ? action.keySequence
                 : generateRandomWasdSequence(randomChallengeLength());
-            int seconds = (int) (sequence.length * 0.6F); // truncation = floor for positive numbers, e.g. 8*1.2=9.6 ->
-                                                          // 9
+            int seconds = (int) (sequence.length * 0.6F); // float here is my timer multiplier
+
+            String title = (action.toastTitle != null && !action.toastTitle.isBlank())
+                ? substitute(action.toastTitle, viewerDisplayName, userInput) : null;
+            String subtitle = (action.toastSubtitle != null && !action.toastSubtitle.isBlank())
+                ? substitute(action.toastSubtitle, viewerDisplayName, userInput) : null;
+
             fulfill(redemptionId, twitchRewards, true);
-            KeySequenceChallengeManager.requestStart(sequence, seconds);
+            KeySequenceChallengeManager.requestStart(sequence, seconds, title, subtitle);
             return;
         }
         if (action.type == RewardActionType.CLIENT_EFFECT) {

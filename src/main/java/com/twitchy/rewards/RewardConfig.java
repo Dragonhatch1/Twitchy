@@ -282,6 +282,8 @@ public class RewardConfig {
         wasdcaptcha.prompt = "Complete a random captcha!";
         wasdcaptcha.action = new RewardAction();
         wasdcaptcha.action.type = RewardActionType.KEY_SEQUENCE_CHALLENGE;
+        wasdcaptcha.action.toastTitle = "PROVE YOU'RE HUMAN";
+        wasdcaptcha.action.toastSubtitle = "{viewer} gave you a captcha :)";
         defaults.add(wasdcaptcha);
 
         return defaults;
