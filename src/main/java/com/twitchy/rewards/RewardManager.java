@@ -14,7 +14,11 @@ import com.twitchy.Twitchy;
 import com.twitchy.api.TwitchApiClient;
 import com.twitchy.api.TwitchModels.RewardRedemptionEvent;
 import com.twitchy.auth.TwitchCredentials;
-import com.twitchy.client.*;
+import com.twitchy.client.CameraFlipEffect;
+import com.twitchy.client.FovEffectManager;
+import com.twitchy.client.KeySequenceChallengeManager;
+import com.twitchy.client.ToastEffect;
+import com.twitchy.client.TwitchSessionManager;
 import com.twitchy.network.MessageRedeemAction;
 import com.twitchy.network.PacketHandler;
 
