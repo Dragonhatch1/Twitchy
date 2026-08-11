@@ -38,8 +38,10 @@ public final class KeySequenceChallengeManager {
         queue.add(new PendingChallenge(sequence, seconds, title, subtitle));
     }
 
-    /** Called by GuiDirectionalChallenge right before it closes, whether won, lost, or escaped -
-     *  signals the manager it's safe to open the next queued challenge, if any. */
+    /**
+     * Called by GuiDirectionalChallenge right before it closes, whether won, lost, or escaped -
+     * signals the manager it's safe to open the next queued challenge, if any.
+     */
     public static void notifyResolved() {
         challengeActive = false;
     }

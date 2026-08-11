@@ -20,6 +20,7 @@ public class Twitchy {
 
     public static final String MODID = "twitchy";
     public static final Logger LOG = LogManager.getLogger(MODID);
+    private static int nextEntityId = 1;
 
     @SidedProxy(clientSide = "com.twitchy.ClientProxy", serverSide = "com.twitchy.CommonProxy")
     public static CommonProxy proxy;
@@ -59,3 +60,4 @@ public class Twitchy {
 // TODO Spawn fish in Fishing grounds for 1-2k channel points.
 // TODO Spawn entity on Sub | Fish in ball that rolls around to follow you | can roam when your not near it
 // TODO Add failure of Channel Point Captcha
+// TODO Pong as a captcha?
