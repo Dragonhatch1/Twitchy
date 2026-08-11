@@ -58,6 +58,6 @@ public class Twitchy {
 // TODO Death Captcha for Bits
 // TODO Mob Spawning for Bits
 // TODO Spawn fish in Fishing grounds for 1-2k channel points.
-// TODO Spawn entity on Sub | Fish in ball that rolls around to follow you | can roam when your not near it
+// TODO Spawn entity on Sub | Twilight forest Entity | Ravens, Tiny Birds,
 // TODO Add failure of Channel Point Captcha
 // TODO Pong as a captcha?
