@@ -20,6 +20,7 @@ import com.twitchy.api.TwitchModels.HelixUsersResponse;
 import com.twitchy.api.TwitchModels.SendChatMessageRequest;
 import com.twitchy.api.TwitchModels.UpdateCustomRewardRequest;
 import com.twitchy.api.TwitchModels.UpdateRedemptionStatusRequest;
+import com.twitchy.api.TwitchModels.ChattersResponse;
 import com.twitchy.auth.TwitchCredentials;
 
 /** Thin wrapper around the bits of Twitch's Helix REST API this mod needs. Client-side only. */
@@ -247,5 +248,18 @@ public final class TwitchApiClient {
                 }
                 Twitchy.LOG.info("Subscribed to chat messages for {}", creds.userLogin);
             });
+    }
+
+    public static CompletableFuture<ChattersResponse> getChatters(TwitchCredentials creds) {
+        HttpRequest request = baseRequest(
+            HELIX_BASE + "/chat/chatters?broadcaster_id=" + creds.userId + "&moderator_id=" + creds.userId,
+            creds.accessToken).GET().build();
+
+        return HTTP.sendAsync(request, HttpResponse.BodyHandlers.ofString()).thenApply(resp -> {
+            if (resp.statusCode() != 200) {
+                throw new RuntimeException("Failed to get chatters (HTTP " + resp.statusCode() + "): " + resp.body());
+            }
+            return GSON.fromJson(resp.body(), ChattersResponse.class);
+        });
     }
 }

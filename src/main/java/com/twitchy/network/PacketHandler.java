@@ -40,6 +40,8 @@ public final class PacketHandler {
             nextId++,
             Side.SERVER);
         WRAPPER.registerMessage(MessageSyncPlayerFlipHandler.class, MessageSyncPlayerFlip.class, nextId++, Side.CLIENT);
+        WRAPPER.registerMessage(MessageSyncViewerListHandler.class, MessageSyncViewerList.class, nextId++, Side.SERVER);
+        WRAPPER.registerMessage(MessageDespawnAllViewerFollowersHandler.class, MessageDespawnAllViewerFollowers.class, nextId++, Side.SERVER);
     }
 
     public static void sendToServer(IMessage message) {

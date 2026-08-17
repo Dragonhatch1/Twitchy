@@ -1,5 +1,8 @@
 package com.twitchy;
 
+import com.twitchy.entity.EntityViewerFollower;
+import com.twitchy.entity.ViewerFollowerManager;
+import cpw.mods.fml.common.registry.EntityRegistry;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -29,6 +32,7 @@ public class Twitchy {
     public void preInit(FMLPreInitializationEvent event) {
         Config.synchronizeConfiguration(event.getSuggestedConfigurationFile());
         PacketHandler.init();
+        EntityRegistry.registerModEntity(EntityViewerFollower.class, "TwitchyViewerFollower", nextEntityId++, this, 64, 1, true);
         proxy.preInit(event);
     }
 
@@ -57,7 +61,6 @@ public class Twitchy {
 // TODO Hot Potato needs it own item
 // TODO Death Captcha for Bits
 // TODO Mob Spawning for Bits
-// TODO Spawn fish in Fishing grounds for 1-2k channel points.
 // TODO Spawn entity on Sub | Twilight forest Entity | Ravens, Tiny Birds,
 // TODO Add failure of Channel Point Captcha
 // TODO Pong as a captcha?

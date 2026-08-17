@@ -31,7 +31,7 @@ public class TwitchAuth {
 
     /** Scopes requested. Adjust here if you add features that need more. */
     public static final String[] SCOPES = { "channel:read:redemptions", "channel:manage:redemptions", "user:write:chat",
-        "user:bot", "chat:read", "user:read:chat" };
+        "user:bot", "chat:read", "user:read:chat", "moderator:read:chatters" };
 
     private static final SecureRandom RANDOM = new SecureRandom();
 

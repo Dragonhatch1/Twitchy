@@ -1,5 +1,8 @@
 package com.twitchy;
 
+import com.twitchy.client.RenderViewerFollower;
+import com.twitchy.entity.EntityViewerFollower;
+import cpw.mods.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.client.ClientCommandHandler;
 import net.minecraftforge.common.MinecraftForge;
 
@@ -36,6 +39,7 @@ public class ClientProxy extends CommonProxy {
             .register(new ClientEventHandler());
         MinecraftForge.EVENT_BUS.register(new PlayerFlipRenderer());
         MinecraftForge.EVENT_BUS.register(new ToastEffect());
+        RenderingRegistry.registerEntityRenderingHandler(EntityViewerFollower.class, new RenderViewerFollower());
     }
 
     @Override

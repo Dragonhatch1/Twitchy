@@ -9,6 +9,8 @@ import com.twitchy.api.TwitchEventSubClient;
 import com.twitchy.auth.TwitchAuth;
 import com.twitchy.auth.TwitchCredentials;
 import com.twitchy.chat.ChatCommandManager;
+import com.twitchy.network.MessageDespawnAllViewerFollowers;
+import com.twitchy.network.PacketHandler;
 import com.twitchy.rewards.RewardManager;
 
 /**
@@ -88,6 +90,7 @@ public final class TwitchSessionManager {
     public void disconnect() {
         eventSubReady = false;
         if (eventSubClient != null) {
+            PacketHandler.sendToServer(new MessageDespawnAllViewerFollowers());
             eventSubClient.disconnect();
             eventSubClient = null;
         }
