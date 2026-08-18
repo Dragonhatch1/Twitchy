@@ -5,15 +5,15 @@ import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import io.netty.buffer.ByteBuf;
 
 /** Sent server -> client so the owning client can mark the Twitch redemption FULFILLED or CANCELED. */
-public class MessageRedeemResult implements IMessage {
+public class RedeemResultPacket implements IMessage {
 
     public String redemptionId;
     public String twitchRewardId;
     public boolean success;
 
-    public MessageRedeemResult() {}
+    public RedeemResultPacket() {}
 
-    public MessageRedeemResult(String redemptionId, String twitchRewardId, boolean success) {
+    public RedeemResultPacket(String redemptionId, String twitchRewardId, boolean success) {
         this.redemptionId = redemptionId;
         this.twitchRewardId = twitchRewardId;
         this.success = success;

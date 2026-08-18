@@ -1,37 +1,14 @@
 package com.twitchy.entity;
 
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.PlayerEvent;
-import cpw.mods.fml.common.gameevent.TickEvent;
-import cpw.mods.fml.relauncher.Side;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.PlayerEvent;
 
 public class ViewerFollowerHandler {
 
     private boolean sweepDone = false;
-    private static final long RESPAWN_DELAY_MS = 60 * 1000L;
-
-    private static final List<PendingRespawn> pending = new ArrayList<>();
-
-    private static class PendingRespawn {
-
-        final String userId;
-        final String userLogin;
-        final EntityPlayerMP target;
-        final long respawnAtMillis;
-
-        PendingRespawn(String userId, String userLogin, EntityPlayerMP target, long respawnAtMillis) {
-            this.userId = userId;
-            this.userLogin = userLogin;
-            this.target = target;
-            this.respawnAtMillis = respawnAtMillis;
-        }
-    }
 
     @SubscribeEvent
     public void onPlayerLoggedOut(PlayerEvent.PlayerLoggedOutEvent event) {
@@ -56,6 +33,16 @@ public class ViewerFollowerHandler {
 
     @SubscribeEvent
     public void onLivingDeath(LivingDeathEvent event) {
+        // Credit a kill if a viewer follower landed the final blow - tell the owning streamer's
+        // client directly, since kill data lives in THEIR local ChatterGear.json, not the server's.
+        if (event.source != null && event.source.getEntity() instanceof EntityViewerFollower killer) {
+            if (killer.getTargetPlayer() instanceof net.minecraft.entity.player.EntityPlayerMP owner) {
+                com.twitchy.network.PacketHandler
+                    .sendTo(new com.twitchy.network.KillCreditPacket(killer.getTwitchUserId()), owner);
+            }
+        }
+
+        // Existing logic: a viewer follower itself dying, for respawn tracking.
         if (!(event.entityLiving instanceof EntityViewerFollower follower)) return;
         if (follower.worldObj.isRemote) return;
 

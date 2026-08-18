@@ -20,28 +20,30 @@ public final class PacketHandler {
     public static void init() {
         WRAPPER = NetworkRegistry.INSTANCE.newSimpleChannel(Twitchy.MODID);
         WRAPPER.registerMessage(
-            MessageRedeemActionHandler.class,
-            MessageRedeemAction.class,
+            RedeemActionHandler.class,
+            RedeemActionPacket.class,
             nextId++,
             cpw.mods.fml.relauncher.Side.SERVER);
         WRAPPER.registerMessage(
-            MessageChatRelayHandler.class,
-            MessageChatRelay.class,
+            ChatRelayHandler.class,
+            ChatRelayPacket.class,
             nextId++,
             cpw.mods.fml.relauncher.Side.CLIENT);
         WRAPPER.registerMessage(
-            MessageRedeemResultHandler.class,
-            MessageRedeemResult.class,
+            RedeemResultHandler.class,
+            RedeemResultPacket.class,
             nextId++,
             cpw.mods.fml.relauncher.Side.CLIENT);
+        WRAPPER.registerMessage(SetStorageTargetHandler.class, SetStorageTargetPacket.class, nextId++, Side.SERVER);
+        WRAPPER.registerMessage(SyncPlayerFlipHandler.class, SyncPlayerFlipPacket.class, nextId++, Side.CLIENT);
+        WRAPPER.registerMessage(SyncViewerListHandler.class, SyncViewerListPacket.class, nextId++, Side.SERVER);
         WRAPPER.registerMessage(
-            MessageSetStorageTargetHandler.class,
-            MessageSetStorageTarget.class,
+            DespawnAllViewerFollowersHandler.class,
+            DespawnAllViewerFollowersPacket.class,
             nextId++,
             Side.SERVER);
-        WRAPPER.registerMessage(MessageSyncPlayerFlipHandler.class, MessageSyncPlayerFlip.class, nextId++, Side.CLIENT);
-        WRAPPER.registerMessage(MessageSyncViewerListHandler.class, MessageSyncViewerList.class, nextId++, Side.SERVER);
-        WRAPPER.registerMessage(MessageDespawnAllViewerFollowersHandler.class, MessageDespawnAllViewerFollowers.class, nextId++, Side.SERVER);
+        WRAPPER.registerMessage(ApplyGearHandler.class, ApplyGearPacket.class, nextId++, Side.SERVER);
+        WRAPPER.registerMessage(KillCreditHandler.class, KillCreditPacket.class, nextId++, Side.CLIENT);
     }
 
     public static void sendToServer(IMessage message) {

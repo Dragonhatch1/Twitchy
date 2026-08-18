@@ -5,14 +5,14 @@ import java.util.UUID;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import io.netty.buffer.ByteBuf;
 
-public class MessageSyncPlayerFlip implements IMessage {
+public class SyncPlayerFlipPacket implements IMessage {
 
     public UUID playerId;
     public boolean flipped;
 
-    public MessageSyncPlayerFlip() {}
+    public SyncPlayerFlipPacket() {}
 
-    public MessageSyncPlayerFlip(UUID playerId, boolean flipped) {
+    public SyncPlayerFlipPacket(UUID playerId, boolean flipped) {
         this.playerId = playerId;
         this.flipped = flipped;
     }

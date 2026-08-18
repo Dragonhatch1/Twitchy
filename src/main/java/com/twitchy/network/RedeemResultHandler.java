@@ -8,10 +8,10 @@ import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 
-public class MessageRedeemResultHandler implements IMessageHandler<MessageRedeemResult, IMessage> {
+public class RedeemResultHandler implements IMessageHandler<RedeemResultPacket, IMessage> {
 
     @Override
-    public IMessage onMessage(MessageRedeemResult message, MessageContext ctx) {
+    public IMessage onMessage(RedeemResultPacket message, MessageContext ctx) {
         if (message.redemptionId == null || message.redemptionId.isBlank()) return null;
         if (!TwitchSessionManager.INSTANCE.hasStoredToken()) return null;
 

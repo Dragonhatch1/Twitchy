@@ -297,7 +297,7 @@ public class RewardConfig {
         RewardMapping gearleather = new RewardMapping();
         gearleather.key = "gear_leather";
         gearleather.enabled = false;
-        gearleather.title = "Buy Leather Armour for your character!";
+        gearleather.title = "Buy Leather Armour!";
         gearleather.cost = 1000;
         gearleather.prompt = "Equip your character with a full Leather Armour set!";
         gearleather.action = new RewardAction();
@@ -388,6 +388,56 @@ public class RewardConfig {
             gearPiece("minecraft:diamond_chestplate", 0, 3),
             gearPiece("minecraft:diamond_helmet", 0, 4));
         defaults.add(geardiamond);
+
+        RewardMapping swordWooden = new RewardMapping();
+        swordWooden.key = "sword_wooden";
+        swordWooden.enabled = false;
+        swordWooden.title = "Buy Wooden Sword!";
+        swordWooden.cost = 500;
+        swordWooden.prompt = "Buy a Wooden Sword! Great at helping with Last Hits.";
+        swordWooden.action = new RewardAction();
+        swordWooden.action.type = RewardActionType.GEAR_UPGRADE;
+        swordWooden.action.newItem = List.of(gearPiece("minecraft:wooden_sword", 0, 0));
+        defaults.add(swordWooden);
+
+        RewardMapping swordStone = new RewardMapping();
+        swordStone.key = "sword_stone";
+        swordStone.enabled = false;
+        swordStone.title = "Upgrade to Stone Sword!";
+        swordStone.cost = 1000;
+        swordStone.prompt = "Upgrade to a Stone Sword! Requires 3 last hits & a Wooden Sword.";
+        swordStone.action = new RewardAction();
+        swordStone.action.type = RewardActionType.GEAR_UPGRADE;
+        swordStone.action.requiredKills = 3;
+        swordStone.action.prevItemReq = List.of(gearPiece("minecraft:wooden_sword", 0, 0));
+        swordStone.action.newItem = List.of(gearPiece("minecraft:stone_sword", 0, 0));
+        defaults.add(swordStone);
+
+        RewardMapping swordIron = new RewardMapping();
+        swordIron.key = "sword_Iron";
+        swordIron.enabled = false;
+        swordIron.title = "Upgrade to Iron Sword!";
+        swordIron.cost = 5000;
+        swordIron.prompt = "Upgrade to a Iron Sword! Requires 10 last hits & a Stone Sword.";
+        swordIron.action = new RewardAction();
+        swordIron.action.type = RewardActionType.GEAR_UPGRADE;
+        swordIron.action.requiredKills = 10;
+        swordIron.action.prevItemReq = List.of(gearPiece("minecraft:stone_sword", 0, 0));
+        swordIron.action.newItem = List.of(gearPiece("minecraft:iron_sword", 0, 0));
+        defaults.add(swordIron);
+
+        RewardMapping swordDiamond = new RewardMapping();
+        swordDiamond.key = "sword_diamond";
+        swordDiamond.enabled = false;
+        swordDiamond.title = "Upgrade to Diamond Sword!";
+        swordDiamond.cost = 10000;
+        swordDiamond.prompt = "Upgrade to a Diamond Sword! Requires 30 last hits & a Iron Sword.";
+        swordDiamond.action = new RewardAction();
+        swordDiamond.action.type = RewardActionType.GEAR_UPGRADE;
+        swordDiamond.action.requiredKills = 30;
+        swordDiamond.action.prevItemReq = List.of(gearPiece("minecraft:iron_sword", 0, 0));
+        swordDiamond.action.newItem = List.of(gearPiece("minecraft:diamond_sword", 0, 0));
+        defaults.add(swordDiamond);
 
         return defaults;
     }

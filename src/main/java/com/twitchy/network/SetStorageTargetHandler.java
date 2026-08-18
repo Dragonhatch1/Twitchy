@@ -9,10 +9,10 @@ import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 
-public class MessageSetStorageTargetHandler implements IMessageHandler<MessageSetStorageTarget, IMessage> {
+public class SetStorageTargetHandler implements IMessageHandler<SetStorageTargetPacket, IMessage> {
 
     @Override
-    public IMessage onMessage(MessageSetStorageTarget message, MessageContext ctx) {
+    public IMessage onMessage(SetStorageTargetPacket message, MessageContext ctx) {
         Config.setStorageTarget(message.x, message.y, message.z, message.dimension);
         EntityPlayerMP sender = ctx.getServerHandler().playerEntity;
         if (sender != null) {

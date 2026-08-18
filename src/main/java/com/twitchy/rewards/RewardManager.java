@@ -19,8 +19,9 @@ import com.twitchy.client.FovEffectManager;
 import com.twitchy.client.KeySequenceChallengeManager;
 import com.twitchy.client.ToastEffect;
 import com.twitchy.client.TwitchSessionManager;
-import com.twitchy.network.MessageRedeemAction;
+import com.twitchy.network.ApplyGearPacket;
 import com.twitchy.network.PacketHandler;
+import com.twitchy.network.RedeemActionPacket;
 
 /**
  * Client-side only. Handles an incoming redemption event: resolves the configured action and
@@ -55,13 +56,14 @@ public final class RewardManager {
      * Returns false if no mapping exists for this key.
      */
     public static boolean testAction(String key) {
-        if (RewardConfig.findByKey(key).isEmpty()) return false;
+        if (RewardConfig.findByKey(key)
+            .isEmpty()) return false;
         dispatch(key, "testviewer", "TestViewer", "test-user-id", "test input", null, null);
         return true;
     }
 
     private static void dispatch(String key, String viewerLogin, String viewerDisplayName, String viewerUserId,
-                                 String userInput, String redemptionId, String twitchRewards) {
+        String userInput, String redemptionId, String twitchRewards) {
         Optional<RewardAction> maybeAction = RewardConfig.findByKey(key);
         if (maybeAction.isEmpty()) {
             fulfill(redemptionId, twitchRewards, false);
@@ -110,13 +112,39 @@ public final class RewardManager {
             fulfill(redemptionId, twitchRewards, true);
             return;
         }
+        if (action.type == RewardActionType.GEAR_UPGRADE) {
+            if (!com.twitchy.entity.ViewerFollowerGear.meetsRequirement(viewerUserId, action.prevItemReq)) {
+                fulfill(redemptionId, twitchRewards, false);
+                return;
+            }
+            if (!com.twitchy.entity.ViewerFollowerGear.hasEnoughKills(viewerUserId, action.requiredKills)) {
+                fulfill(redemptionId, twitchRewards, false);
+                return;
+            }
+            if (action.newItem == null || action.newItem.isEmpty()) {
+                fulfill(redemptionId, twitchRewards, false);
+                return;
+            }
+            com.twitchy.entity.ViewerFollowerGear.spendKills(viewerUserId, action.requiredKills);
+            com.twitchy.entity.ViewerFollowerGear.applyUpgrade(viewerUserId, action.newItem);
+            PacketHandler.sendToServer(new ApplyGearPacket(viewerUserId, action.newItem));
+            fulfill(redemptionId, twitchRewards, true);
+            return;
+        }
         if (action.type == RewardActionType.GRAVITY_FLIP) {
             CameraFlipEffect.requestActivate(action.cameraFlipSeconds > 0 ? action.cameraFlipSeconds : 5);
         }
         // GEAR_UPGRADE falls through here too, same as GIVE_ITEM/DEPOSIT_ITEM/SPAWN_ENTITY - all the
         // real work happens server-side, since gear storage and live entities are both server concerns.
         PacketHandler.sendToServer(
-            new MessageRedeemAction(key, viewerLogin, viewerDisplayName, viewerUserId, userInput, redemptionId, twitchRewards));
+            new RedeemActionPacket(
+                key,
+                viewerLogin,
+                viewerDisplayName,
+                viewerUserId,
+                userInput,
+                redemptionId,
+                twitchRewards));
     }
 
     private static void applyClientEffect(RewardAction action, String viewerDisplayName, String userInput) {

@@ -11,12 +11,13 @@ public class EntityAIFollowSpecificPlayer extends EntityAIBase {
     private final EntityLivingBase target;
     private final double speed;
     private final float startDist; // was "minDist" - the trigger-to-begin distance (larger)
-    private final float stopDist;  // was "maxDist" - the close-enough-to-stop distance (smaller)
+    private final float stopDist; // was "maxDist" - the close-enough-to-stop distance (smaller)
     private final PathNavigate navigator;
     private int repathDelay;
     private boolean hadAvoidsWater;
 
-    public EntityAIFollowSpecificPlayer(EntityCreature entity, EntityLivingBase target, double speed, float startDist, float stopDist) {
+    public EntityAIFollowSpecificPlayer(EntityCreature entity, EntityLivingBase target, double speed, float startDist,
+        float stopDist) {
         this.entity = entity;
         this.target = target;
         this.speed = speed;
@@ -52,7 +53,8 @@ public class EntityAIFollowSpecificPlayer extends EntityAIBase {
 
     @Override
     public void updateTask() {
-        entity.getLookHelper().setLookPositionWithEntity(target, 10.0F, (float) entity.getVerticalFaceSpeed());
+        entity.getLookHelper()
+            .setLookPositionWithEntity(target, 10.0F, (float) entity.getVerticalFaceSpeed());
         if (--repathDelay <= 0) {
             repathDelay = 10;
             navigator.tryMoveToEntityLiving(target, speed);

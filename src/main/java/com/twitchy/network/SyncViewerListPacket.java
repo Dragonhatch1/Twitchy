@@ -1,25 +1,29 @@
 package com.twitchy.network;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.twitchy.api.TwitchModels;
+import com.twitchy.entity.ViewerFollowerGear;
+import com.twitchy.rewards.RewardAction.GearPiece;
 
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import io.netty.buffer.ByteBuf;
 
-public class MessageSyncViewerList implements IMessage {
+public class SyncViewerListPacket implements IMessage {
 
     public List<String> userIds = new ArrayList<>();
     public List<String> userLogins = new ArrayList<>();
+    public List<List<GearPiece>> gearPerUser = new ArrayList<>();
 
-    public MessageSyncViewerList() {}
+    public SyncViewerListPacket() {}
 
-    public MessageSyncViewerList(List<TwitchModels.Chatter> chatters) {
+    public SyncViewerListPacket(List<TwitchModels.Chatter> chatters) {
         for (TwitchModels.Chatter c : chatters) {
             userIds.add(c.user_id);
             userLogins.add(c.user_login);
+            gearPerUser.add(ViewerFollowerGear.getGear(c.user_id)); // read locally, on the client, where it's actually
+                                                                    // loaded
         }
     }
 
@@ -29,6 +33,13 @@ public class MessageSyncViewerList implements IMessage {
         for (int i = 0; i < userIds.size(); i++) {
             writeString(buf, userIds.get(i));
             writeString(buf, userLogins.get(i));
+            List<GearPiece> gear = gearPerUser.get(i);
+            buf.writeInt(gear.size());
+            for (GearPiece piece : gear) {
+                writeString(buf, piece.item);
+                buf.writeInt(piece.metadata);
+                buf.writeInt(piece.slot);
+            }
         }
     }
 
@@ -38,6 +49,16 @@ public class MessageSyncViewerList implements IMessage {
         for (int i = 0; i < count; i++) {
             userIds.add(readString(buf));
             userLogins.add(readString(buf));
+            int gearCount = buf.readInt();
+            List<GearPiece> gear = new ArrayList<>();
+            for (int g = 0; g < gearCount; g++) {
+                GearPiece piece = new GearPiece();
+                piece.item = readString(buf);
+                piece.metadata = buf.readInt();
+                piece.slot = buf.readInt();
+                gear.add(piece);
+            }
+            gearPerUser.add(gear);
         }
     }
 

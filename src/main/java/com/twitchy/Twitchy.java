@@ -1,12 +1,10 @@
 package com.twitchy;
 
-import com.twitchy.entity.EntityViewerFollower;
-import com.twitchy.entity.ViewerFollowerGear;
-import com.twitchy.entity.ViewerFollowerHandler;
-import cpw.mods.fml.common.registry.EntityRegistry;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.twitchy.entity.EntityViewerFollower;
+import com.twitchy.entity.ViewerFollowerHandler;
 import com.twitchy.network.PacketHandler;
 import com.twitchy.rewards.GravityFlipManager;
 import com.twitchy.rewards.RewardConfig;
@@ -18,6 +16,7 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
+import cpw.mods.fml.common.registry.EntityRegistry;
 
 @Mod(modid = Twitchy.MODID, version = Tags.VERSION, name = "Twitchy", acceptedMinecraftVersions = "[1.7.10]")
 public class Twitchy {
@@ -33,7 +32,8 @@ public class Twitchy {
     public void preInit(FMLPreInitializationEvent event) {
         Config.synchronizeConfiguration(event.getSuggestedConfigurationFile());
         PacketHandler.init();
-        EntityRegistry.registerModEntity(EntityViewerFollower.class, "TwitchyViewerFollower", nextEntityId++, this, 64, 1, true);
+        EntityRegistry
+            .registerModEntity(EntityViewerFollower.class, "TwitchyViewerFollower", nextEntityId++, this, 64, 1, true);
         proxy.preInit(event);
     }
 
@@ -58,10 +58,10 @@ public class Twitchy {
         proxy.serverStarting(event);
 
         ViewerFollowerHandler viewerFollowerHandler = new ViewerFollowerHandler();
-        FMLCommonHandler.instance().bus().register(viewerFollowerHandler);
+        FMLCommonHandler.instance()
+            .bus()
+            .register(viewerFollowerHandler);
         net.minecraftforge.common.MinecraftForge.EVENT_BUS.register(viewerFollowerHandler);
-
-        ViewerFollowerGear.load();
     }
 }
 
@@ -72,6 +72,7 @@ public class Twitchy {
 // TODO Add failure of Channel Point Captcha
 // TODO Pong as a captcha?
 
-// TODO Twitchy Viewer Followers should pull gear from client-side/locally. not server-side
 // TODO Viewer Followers still dont respawn upon save and quit, need to disconnect and reconnect.
 // TODO Viewers need to stare at owner more
+// TODO Adjust Follow Range of Viewers
+// TODO !kills to check last hits.

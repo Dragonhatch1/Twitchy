@@ -5,13 +5,13 @@ import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import io.netty.buffer.ByteBuf;
 
 /** Sent server -> client so in-game events (commands, deaths, etc.) can post to Twitch chat. */
-public class MessageChatRelay implements IMessage {
+public class ChatRelayPacket implements IMessage {
 
     public String message;
 
-    public MessageChatRelay() {}
+    public ChatRelayPacket() {}
 
-    public MessageChatRelay(String message) {
+    public ChatRelayPacket(String message) {
         this.message = message;
     }
 

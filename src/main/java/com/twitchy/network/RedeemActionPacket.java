@@ -4,7 +4,7 @@ import cpw.mods.fml.common.network.ByteBufUtils;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import io.netty.buffer.ByteBuf;
 
-public class MessageRedeemAction implements IMessage {
+public class RedeemActionPacket implements IMessage {
 
     public String rewardKey;
     public String viewerLogin;
@@ -14,10 +14,10 @@ public class MessageRedeemAction implements IMessage {
     public String redemptionId;
     public String twitchRewards;
 
-    public MessageRedeemAction() {}
+    public RedeemActionPacket() {}
 
-    public MessageRedeemAction(String rewardKey, String viewerLogin, String viewerDisplayName, String viewerUserId,
-                               String userInput, String redemptionId, String twitchRewards) {
+    public RedeemActionPacket(String rewardKey, String viewerLogin, String viewerDisplayName, String viewerUserId,
+        String userInput, String redemptionId, String twitchRewards) {
         this.rewardKey = rewardKey;
         this.viewerLogin = viewerLogin;
         this.viewerDisplayName = viewerDisplayName;

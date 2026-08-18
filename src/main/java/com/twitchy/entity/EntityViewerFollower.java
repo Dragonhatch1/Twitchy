@@ -1,7 +1,6 @@
 package com.twitchy.entity;
 
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.ai.EntityAIFollowOwner;
 import net.minecraft.entity.passive.EntityWolf;
 import net.minecraft.world.World;
 
@@ -31,7 +30,9 @@ public class EntityViewerFollower extends EntityWolf {
     public void initFollow(EntityLivingBase target, String twitchUserId, String viewerName) {
         this.twitchUserId = twitchUserId;
         this.setTamed(true);
-        this.func_152115_b(target.getUniqueID().toString());
+        this.func_152115_b(
+            target.getUniqueID()
+                .toString());
         this.setCustomNameTag(viewerName);
         this.setAlwaysRenderNameTag(true);
     }

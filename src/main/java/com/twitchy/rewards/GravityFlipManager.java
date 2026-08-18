@@ -7,8 +7,8 @@ import java.util.UUID;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.play.server.S12PacketEntityVelocity;
 
-import com.twitchy.network.MessageSyncPlayerFlip;
 import com.twitchy.network.PacketHandler;
+import com.twitchy.network.SyncPlayerFlipPacket;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
@@ -27,7 +27,7 @@ public class GravityFlipManager {
         boolean wasActive = expiresAtMillis.containsKey(id);
         expiresAtMillis.put(id, System.currentTimeMillis() + Math.max(1, durationSeconds) * 1000L);
         if (!wasActive) {
-            PacketHandler.sendToAll(new MessageSyncPlayerFlip(id, true));
+            PacketHandler.sendToAll(new SyncPlayerFlipPacket(id, true));
         }
     }
 
@@ -42,7 +42,7 @@ public class GravityFlipManager {
 
         if (System.currentTimeMillis() >= expiry) {
             expiresAtMillis.remove(id);
-            PacketHandler.sendToAll(new MessageSyncPlayerFlip(id, false));
+            PacketHandler.sendToAll(new SyncPlayerFlipPacket(id, false));
             return;
         }
 

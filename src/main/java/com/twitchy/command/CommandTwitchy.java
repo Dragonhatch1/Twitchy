@@ -6,8 +6,8 @@ import net.minecraft.util.ChatComponentText;
 
 import com.twitchy.chat.ChatCommandConfig;
 import com.twitchy.client.TwitchSessionManager;
-import com.twitchy.network.MessageSetStorageTarget;
 import com.twitchy.network.PacketHandler;
+import com.twitchy.network.SetStorageTargetPacket;
 import com.twitchy.rewards.RewardConfig;
 import com.twitchy.rewards.RewardManager;
 
@@ -124,7 +124,7 @@ public class CommandTwitchy extends CommandBase {
                         : (net.minecraft.client.Minecraft.getMinecraft().thePlayer != null
                             ? net.minecraft.client.Minecraft.getMinecraft().thePlayer.dimension
                             : 0);
-                    PacketHandler.sendToServer(new MessageSetStorageTarget(x, y, z, dimension));
+                    PacketHandler.sendToServer(new SetStorageTargetPacket(x, y, z, dimension));
                 } catch (NumberFormatException e) {
                     reply(sender, "x/y/z/dimension must be whole numbers.");
                 }

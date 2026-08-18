@@ -27,16 +27,16 @@ import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 
 /** Runs server-side. Looks the reward up from the server's OWN rewards.json and executes it. */
-public class MessageRedeemActionHandler implements IMessageHandler<MessageRedeemAction, IMessage> {
+public class RedeemActionHandler implements IMessageHandler<RedeemActionPacket, IMessage> {
 
     @Override
-    public IMessage onMessage(MessageRedeemAction message, MessageContext ctx) {
+    public IMessage onMessage(RedeemActionPacket message, MessageContext ctx) {
         EntityPlayerMP sender = ctx.getServerHandler().playerEntity;
         execute(MinecraftServer.getServer(), message, sender);
         return null;
     }
 
-    private void execute(MinecraftServer server, MessageRedeemAction message, EntityPlayerMP sender) {
+    private void execute(MinecraftServer server, RedeemActionPacket message, EntityPlayerMP sender) {
         Optional<RewardAction> maybeAction = RewardConfig.findByKey(message.rewardKey);
         if (maybeAction.isEmpty()) {
             Twitchy.LOG.warn("Received redemption for unconfigured reward key '{}', ignoring.", message.rewardKey);
@@ -58,7 +58,7 @@ public class MessageRedeemActionHandler implements IMessageHandler<MessageRedeem
             case DEPOSIT_ITEM -> depositItem(server, action);
             case GRAVITY_FLIP -> gravityFlip(action, sender);
             case INVENTORY_SCRAMBLE -> scrambleInventory(server, action, message, sender);
-            case GEAR_UPGRADE -> gearUpgrade(action, message);
+            case GEAR_UPGRADE -> true;
             case FOV_CHANGE -> true;
             case PLAY_SOUND -> true;
             case KEY_SEQUENCE_CHALLENGE -> true;
@@ -67,12 +67,12 @@ public class MessageRedeemActionHandler implements IMessageHandler<MessageRedeem
         reportResult(sender, message, success);
     }
 
-    private void reportResult(EntityPlayerMP sender, MessageRedeemAction message, boolean success) {
+    private void reportResult(EntityPlayerMP sender, RedeemActionPacket message, boolean success) {
         if (sender == null || message.redemptionId == null || message.redemptionId.isBlank()) return;
-        PacketHandler.sendTo(new MessageRedeemResult(message.redemptionId, message.twitchRewards, success), sender);
+        PacketHandler.sendTo(new RedeemResultPacket(message.redemptionId, message.twitchRewards, success), sender);
     }
 
-    private EntityPlayerMP resolveTargetPlayer(MinecraftServer server, RewardAction action, MessageRedeemAction message,
+    private EntityPlayerMP resolveTargetPlayer(MinecraftServer server, RewardAction action, RedeemActionPacket message,
         EntityPlayerMP sender) {
         if ("linked".equalsIgnoreCase(action.target)) {
             String linked = ViewerLinkRegistry.resolve(message.viewerLogin);
@@ -91,7 +91,7 @@ public class MessageRedeemActionHandler implements IMessageHandler<MessageRedeem
         return sender;
     }
 
-    private boolean giveItem(MinecraftServer server, RewardAction action, MessageRedeemAction message,
+    private boolean giveItem(MinecraftServer server, RewardAction action, RedeemActionPacket message,
         EntityPlayerMP sender) {
         EntityPlayerMP player = resolveTargetPlayer(server, action, message, sender);
         if (player == null) {
@@ -110,7 +110,7 @@ public class MessageRedeemActionHandler implements IMessageHandler<MessageRedeem
         return true;
     }
 
-    private boolean runCommand(MinecraftServer server, RewardAction action, MessageRedeemAction message) {
+    private boolean runCommand(MinecraftServer server, RewardAction action, RedeemActionPacket message) {
         if (action.command == null || action.command.isBlank()) return false;
         String command = action.command.replace("{viewer}", safe(message.viewerDisplayName))
             .replace("{input}", safe(message.userInput));
@@ -120,7 +120,7 @@ public class MessageRedeemActionHandler implements IMessageHandler<MessageRedeem
         return true;
     }
 
-    private boolean spawnEntity(MinecraftServer server, RewardAction action, MessageRedeemAction message,
+    private boolean spawnEntity(MinecraftServer server, RewardAction action, RedeemActionPacket message,
         EntityPlayerMP sender) {
         if (action.entity == null || action.entity.isBlank()) return false;
         EntityPlayerMP player = resolveTargetPlayer(server, action, message, sender);
@@ -142,7 +142,7 @@ public class MessageRedeemActionHandler implements IMessageHandler<MessageRedeem
         return true;
     }
 
-    private boolean broadcastChat(MinecraftServer server, RewardAction action, MessageRedeemAction message) {
+    private boolean broadcastChat(MinecraftServer server, RewardAction action, RedeemActionPacket message) {
         if (action.message == null || action.message.isBlank()) return false;
         String text = action.message.replace("{viewer}", safe(message.viewerDisplayName))
             .replace("{input}", safe(message.userInput));
@@ -242,7 +242,7 @@ public class MessageRedeemActionHandler implements IMessageHandler<MessageRedeem
         return true;
     }
 
-    private boolean scrambleInventory(MinecraftServer server, RewardAction action, MessageRedeemAction message,
+    private boolean scrambleInventory(MinecraftServer server, RewardAction action, RedeemActionPacket message,
         EntityPlayerMP sender) {
         EntityPlayerMP player = resolveTargetPlayer(server, action, message, sender);
         if (player == null) {
@@ -260,26 +260,6 @@ public class MessageRedeemActionHandler implements IMessageHandler<MessageRedeem
         }
 
         player.inventoryContainer.detectAndSendChanges(); // push the shuffled contents to the client's GUI
-        return true;
-    }
-
-    private boolean gearUpgrade(RewardAction action, MessageRedeemAction message) {
-        String userId = message.viewerUserId;
-        if (userId == null || userId.isBlank()) {
-            Twitchy.LOG.warn("GEAR_UPGRADE: redemption had no viewer user id, skipping.");
-            return false;
-        }
-        if (!com.twitchy.entity.ViewerFollowerGear.meetsRequirement(userId, action.prevItemReq)) {
-            Twitchy.LOG.info(
-                "GEAR_UPGRADE: {} doesn't meet the prerequisite gear for '{}', refunding.",
-                message.viewerDisplayName,
-                message.rewardKey);
-            return false;
-        }
-        if (action.newItem == null || action.newItem.isEmpty()) return false;
-
-        com.twitchy.entity.ViewerFollowerGear.applyUpgrade(userId, action.newItem);
-        com.twitchy.entity.ViewerFollowerManager.applyGear(userId, action.newItem);
         return true;
     }
 }

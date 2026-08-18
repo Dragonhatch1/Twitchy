@@ -6,8 +6,8 @@ import java.util.List;
 import com.twitchy.Twitchy;
 import com.twitchy.api.TwitchApiClient;
 import com.twitchy.api.TwitchModels;
-import com.twitchy.network.MessageSyncViewerList;
 import com.twitchy.network.PacketHandler;
+import com.twitchy.network.SyncViewerListPacket;
 
 public class ViewerFollowerClientPoller {
 
@@ -29,10 +29,11 @@ public class ViewerFollowerClientPoller {
                 String selfId = TwitchSessionManager.INSTANCE.credentials().userId;
                 List<TwitchModels.Chatter> filtered = new ArrayList<>();
                 for (TwitchModels.Chatter c : response.data) {
-                    //if (!c.user_id.equals(selfId)) // TODO Uncomment and fix. This gets rid of Broadcaster Filter for Entity Spawning
+                    // if (!c.user_id.equals(selfId)) // TODO Uncomment and fix. This gets rid of Broadcaster Filter for
+                    // Entity Spawning
                     filtered.add(c); // filter out the broadcaster here, client-side
                 }
-                PacketHandler.sendToServer(new MessageSyncViewerList(filtered));
+                PacketHandler.sendToServer(new SyncViewerListPacket(filtered));
             })
             .exceptionally(ex -> {
                 Twitchy.LOG.error("Failed to poll chatters for viewer followers", ex);
@@ -41,10 +42,12 @@ public class ViewerFollowerClientPoller {
             .whenComplete((r, e) -> pollInFlight = false);
     }
 
-    /** Defensive reset so a poll that was mid-flight when the world unloaded (and whose
-     *  whenComplete callback may never fire, since the future keeps chasing an HTTP call from a
-     *  session that no longer exists) can never permanently wedge future polling. Call this
-     *  whenever the Twitch session tears down. */
+    /**
+     * Defensive reset so a poll that was mid-flight when the world unloaded (and whose
+     * whenComplete callback may never fire, since the future keeps chasing an HTTP call from a
+     * session that no longer exists) can never permanently wedge future polling. Call this
+     * whenever the Twitch session tears down.
+     */
     public void reset() {
         pollInFlight = false;
         lastPollMillis = 0;

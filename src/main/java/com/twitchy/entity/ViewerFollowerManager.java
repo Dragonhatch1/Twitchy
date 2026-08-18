@@ -6,17 +6,19 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.twitchy.network.MessageRedeemActionHandler;
-import com.twitchy.rewards.RewardAction;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+
+import com.twitchy.network.RedeemActionHandler;
+import com.twitchy.rewards.RewardAction;
 
 public class ViewerFollowerManager {
 
     private static final Map<String, EntityViewerFollower> activeFollowers = new HashMap<>();
 
-    public static void reconcile(EntityPlayerMP target, List<String> userIds, List<String> userLogins) {
+    public static void reconcile(EntityPlayerMP target, List<String> userIds, List<String> userLogins,
+        List<List<RewardAction.GearPiece>> gearPerUser) {
         Set<String> currentIds = new HashSet<>(userIds);
 
         for (int i = 0; i < userIds.size(); i++) {
@@ -24,14 +26,16 @@ public class ViewerFollowerManager {
 
             if (activeFollowers.containsKey(id)) continue;
 
-            spawnFollower(target, id, userLogins.get(i));
+            spawnFollower(target, id, userLogins.get(i), gearPerUser.get(i));
         }
 
-        activeFollowers.entrySet().removeIf(entry -> {
-            if (currentIds.contains(entry.getKey())) return false;
-            entry.getValue().setDead();
-            return true;
-        });
+        activeFollowers.entrySet()
+            .removeIf(entry -> {
+                if (currentIds.contains(entry.getKey())) return false;
+                entry.getValue()
+                    .setDead();
+                return true;
+            });
     }
 
     public static void despawnAll() {
@@ -42,19 +46,23 @@ public class ViewerFollowerManager {
     }
 
     public static void despawnForPlayer(EntityPlayerMP player) {
-        activeFollowers.entrySet().removeIf(entry -> {
-            if (entry.getValue().getTargetPlayer() != player) return false;
-            entry.getValue().setDead();
-            return true;
-        });
+        activeFollowers.entrySet()
+            .removeIf(entry -> {
+                if (entry.getValue()
+                    .getTargetPlayer() != player) return false;
+                entry.getValue()
+                    .setDead();
+                return true;
+            });
     }
 
-    public static void spawnFollower(EntityPlayerMP target, String userId, String userLogin) {
+    public static void spawnFollower(EntityPlayerMP target, String userId, String userLogin,
+        List<RewardAction.GearPiece> gear) {
         EntityViewerFollower follower = new EntityViewerFollower(target.worldObj);
         follower.setPosition(target.posX, target.posY, target.posZ);
         follower.initFollow(target, userId, userLogin);
-        MessageRedeemActionHandler resolver = new MessageRedeemActionHandler();
-        for (RewardAction.GearPiece piece : ViewerFollowerGear.getGear(userId)) {
+        RedeemActionHandler resolver = new RedeemActionHandler();
+        for (RewardAction.GearPiece piece : gear) {
             Item item = resolver.resolveItem(piece.item);
             if (item != null) {
                 follower.setCurrentItemOrArmor(piece.slot, new ItemStack(item, 1, piece.metadata));
@@ -70,8 +78,9 @@ public class ViewerFollowerManager {
 
     public static void applyGear(String userId, List<RewardAction.GearPiece> pieces) {
         EntityViewerFollower follower = activeFollowers.get(userId);
-        if (follower == null) return; // not currently active - the saved record alone is enough, applied next time they spawn
-        MessageRedeemActionHandler resolver = new MessageRedeemActionHandler();
+        if (follower == null) return; // not currently active - the saved record alone is enough, applied next time they
+                                      // spawn
+        RedeemActionHandler resolver = new RedeemActionHandler();
         for (RewardAction.GearPiece piece : pieces) {
             Item item = resolver.resolveItem(piece.item);
             if (item == null) continue;

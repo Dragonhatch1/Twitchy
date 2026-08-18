@@ -1,10 +1,10 @@
 package com.twitchy.client;
 
-import com.twitchy.entity.EntityViewerFollower;
-
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.renderer.entity.RenderBiped;
 import net.minecraft.util.ResourceLocation;
+
+import com.twitchy.entity.EntityViewerFollower;
 
 public class RenderViewerFollower extends RenderBiped {
 

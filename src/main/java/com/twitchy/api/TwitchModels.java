@@ -160,18 +160,21 @@ public final class TwitchModels {
     }
 
     public static class ChattersResponse {
+
         public List<Chatter> data;
         public Pagination pagination;
         public int total;
     }
 
     public static class Chatter {
+
         public String user_id;
         public String user_login;
         public String user_name;
     }
 
     public static class Pagination {
+
         public String cursor;
     }
 }

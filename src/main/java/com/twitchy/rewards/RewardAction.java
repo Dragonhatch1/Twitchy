@@ -69,18 +69,29 @@ public class RewardAction {
      */
     public String[] keySequence;
 
-    /** GEAR_UPGRADE: items the chatter must already have equipped before this upgrade is granted.
-     *  Null or empty = no requirement. */
+    /**
+     * GEAR_UPGRADE: items the chatter must already have equipped before this upgrade is granted.
+     * Null or empty = no requirement.
+     */
     public List<GearPiece> prevItemReq;
     /** GEAR_UPGRADE: the new gear set to equip - each piece overwrites whatever was in its own slot. */
     public List<GearPiece> newItem;
 
     public static class GearPiece {
+
         /** Item ID string, same convention as GIVE_ITEM/DEPOSIT_ITEM elsewhere in this project. */
         public String item;
         public int metadata;
-        /** 0=held, 1=boots, 2=leggings, 3=chestplate, 4=helmet - confirmed from vanilla's own
-         *  EntityLiving.getArmorItemForSlot switch. */
+        /**
+         * 0=held, 1=boots, 2=leggings, 3=chestplate, 4=helmet - confirmed from vanilla's own
+         * EntityLiving.getArmorItemForSlot switch.
+         */
         public int slot;
     }
+
+    /**
+     * GEAR_UPGRADE: minimum accumulated last-hit kills required, in addition to any prevItemReq.
+     * 0 = no kill requirement. Spent (deducted) automatically once the redemption succeeds.
+     */
+    public int requiredKills = 0;
 }
