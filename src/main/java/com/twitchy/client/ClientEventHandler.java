@@ -19,10 +19,6 @@ import cpw.mods.fml.common.network.FMLNetworkEvent;
  */
 public class ClientEventHandler {
 
-    // TODO Remove when done with debug
-    private static int chattersDebugTickCounter = 0;
-    private static final int CHATTERS_DEBUG_INTERVAL_TICKS = 100; // Throttled to not hit HTTPs request time-out
-
     private final ViewerFollowerClientPoller viewerFollowerPoller = new ViewerFollowerClientPoller();
 
     @SubscribeEvent
@@ -62,22 +58,6 @@ public class ClientEventHandler {
             FovEffectManager.tick();
             viewerFollowerPoller.tick();
             KeySequenceChallengeManager.tick();
-        }
-
-        // TODO Twitch Viewer List Debug REMOVE AFTER DONE
-        if (TwitchSessionManager.INSTANCE.hasStoredToken() && ++chattersDebugTickCounter >= CHATTERS_DEBUG_INTERVAL_TICKS) {
-            chattersDebugTickCounter = 0;
-            TwitchApiClient.getChatters(TwitchSessionManager.INSTANCE.credentials())
-                .thenAccept(resp -> {
-                    Twitchy.LOG.info("[DEBUG] Chatters ({} total):", resp.total);
-                    for (TwitchModels.Chatter c : resp.data) {
-                        Twitchy.LOG.info("  - {} (id={})", c.user_login, c.user_id);
-                    }
-                })
-                .exceptionally(ex -> {
-                    Twitchy.LOG.error("[DEBUG] Failed to fetch chatters", ex);
-                    return null;
-                });
         }
     }
 }

@@ -17,13 +17,10 @@ public class ViewerFollowerManager {
 
         for (int i = 0; i < userIds.size(); i++) {
             String id = userIds.get(i);
+
             if (activeFollowers.containsKey(id)) continue;
 
-            EntityViewerFollower follower = new EntityViewerFollower(target.worldObj);
-            follower.setPosition(target.posX, target.posY, target.posZ);
-            follower.initFollow(target, id, userLogins.get(i));
-            target.worldObj.spawnEntityInWorld(follower);
-            activeFollowers.put(id, follower);
+            spawnFollower(target, id, userLogins.get(i));
         }
 
         activeFollowers.entrySet().removeIf(entry -> {
@@ -38,5 +35,25 @@ public class ViewerFollowerManager {
             follower.setDead();
         }
         activeFollowers.clear();
+    }
+
+    public static void despawnForPlayer(EntityPlayerMP player) {
+        activeFollowers.entrySet().removeIf(entry -> {
+            if (entry.getValue().getTargetPlayer() != player) return false;
+            entry.getValue().setDead();
+            return true;
+        });
+    }
+
+    public static void spawnFollower(EntityPlayerMP target, String userId, String userLogin) {
+        EntityViewerFollower follower = new EntityViewerFollower(target.worldObj);
+        follower.setPosition(target.posX, target.posY, target.posZ);
+        follower.initFollow(target, userId, userLogin);
+        target.worldObj.spawnEntityInWorld(follower);
+        activeFollowers.put(userId, follower);
+    }
+
+    public static void removeFromTracking(String userId) {
+        activeFollowers.remove(userId);
     }
 }

@@ -1,7 +1,7 @@
 package com.twitchy;
 
 import com.twitchy.entity.EntityViewerFollower;
-import com.twitchy.entity.ViewerFollowerManager;
+import com.twitchy.entity.ViewerFollowerHandler;
 import cpw.mods.fml.common.registry.EntityRegistry;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -55,6 +55,10 @@ public class Twitchy {
             .bus()
             .register(new GravityFlipManager());
         proxy.serverStarting(event);
+
+        ViewerFollowerHandler viewerFollowerHandler = new ViewerFollowerHandler();
+        FMLCommonHandler.instance().bus().register(viewerFollowerHandler);
+        net.minecraftforge.common.MinecraftForge.EVENT_BUS.register(viewerFollowerHandler);
     }
 }
 
