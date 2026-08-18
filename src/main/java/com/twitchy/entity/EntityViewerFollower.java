@@ -20,7 +20,7 @@ public class EntityViewerFollower extends EntityWolf {
         super(world);
         this.setSize(0.6F, 1.8F); // Wolf's own constructor sets wolf-sized proportions - restore player-like size
 
-        this.tasks.removeTask(this.aiSit); // EntityAISit - stored as a real field on EntityTameable, not an anonymous instance
+        this.tasks.removeTask(this.aiSit);
         this.tasks.taskEntries.removeIf(entry -> entry.action instanceof net.minecraft.entity.ai.EntityAIMate);
         this.tasks.taskEntries.removeIf(entry -> entry.action instanceof net.minecraft.entity.ai.EntityAIWander);
         this.tasks.taskEntries.removeIf(entry -> entry.action instanceof net.minecraft.entity.ai.EntityAIBeg);
@@ -41,7 +41,7 @@ public class EntityViewerFollower extends EntityWolf {
     }
 
     public EntityLivingBase getTargetPlayer() {
-        return getOwner(); // resolved from the owner UUID set in initFollow
+        return getOwner();
     }
 
     @Override
@@ -51,21 +51,21 @@ public class EntityViewerFollower extends EntityWolf {
 
     @Override
     protected String getLivingSound() {
-        return null; // no idle sound at all - remove this override entirely if you'd rather use a real sound
+        return null;
     }
 
     @Override
     protected String getHurtSound() {
-        return "damage.hit"; // vanilla's generic hurt sound, in place of "mob.wolf.hurt"
+        return "damage.hit";
     }
 
     @Override
     protected String getDeathSound() {
-        return "damage.hit"; // no dedicated generic death sound exists the same way - reusing hurt as a placeholder
+        return "damage.hit";
     }
 
     @Override
     public boolean isWet() {
-        return false; // suppresses the entire wolf shake mechanism (sound + visual trigger) at its single source
+        return false;
     }
 }
