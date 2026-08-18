@@ -7,28 +7,40 @@ import java.util.Optional;
 import com.twitchy.Twitchy;
 import com.twitchy.api.TwitchModels.ChatMessageEvent;
 import com.twitchy.client.TwitchSessionManager;
+import com.twitchy.entity.ViewerFollowerGear;
 
 /** Client-side only. Watches incoming Twitch chat messages for configured trigger phrases. */
 public final class ChatCommandManager {
-
-    private static final Map<String, Long> cooldownUntil = new HashMap<>();
 
     private ChatCommandManager() {}
 
     public static void handleChatMessage(ChatMessageEvent event) {
         if (event.message == null || event.message.text == null) return;
 
+        String trimmed = event.message.text.trim();
+        if (trimmed.equalsIgnoreCase("!kills")) {
+            handleKillsCommand(event);
+            return;
+        }
+
         Optional<ChatCommand> maybeCommand = ChatCommandConfig.findForMessage(event.message.text);
         if (maybeCommand.isEmpty()) return;
         ChatCommand command = maybeCommand.get();
 
         String key = command.trigger.toLowerCase();
-        long now = System.currentTimeMillis();
-        Long until = cooldownUntil.get(key);
-        if (until != null && now < until) return; // on cooldown, ignore silently
-
-        cooldownUntil.put(key, now + (command.cooldownSeconds * 1000L));
         respond(command, event.chatter_user_name);
+    }
+
+    private static void handleKillsCommand(ChatMessageEvent event) {
+        int kills = ViewerFollowerGear.getLastHits(event.chatter_user_id);
+        String name = event.chatter_user_name == null ? "" : event.chatter_user_name;
+        String response = name + " has " + kills + " last hit" + (kills == 1 ? "" : "s") + "!";
+
+        TwitchSessionManager.INSTANCE.sendChatMessage(response)
+            .exceptionally(ex -> {
+                Twitchy.LOG.warn("Failed to respond to !kills: {}", ex.getMessage());
+                return null;
+            });
     }
 
     /** Simulates a trigger locally for testing (/twitchy testchat), bypassing Twitch entirely. */

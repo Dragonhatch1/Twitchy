@@ -75,4 +75,3 @@ public class Twitchy {
 // TODO Viewer Followers still dont respawn upon save and quit, need to disconnect and reconnect.
 // TODO Viewers need to stare at owner more
 // TODO Adjust Follow Range of Viewers
-// TODO !kills to check last hits.
