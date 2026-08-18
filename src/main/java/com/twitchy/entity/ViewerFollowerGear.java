@@ -47,20 +47,14 @@ public final class ViewerFollowerGear {
 
     public static void load() {
         File f = file();
-        Twitchy.LOG
-            .info("[DEBUG] ViewerFollowerGear.load() called. file={} exists={}", f.getAbsolutePath(), f.exists());
         if (!f.exists()) return;
         try (FileReader reader = new FileReader(f)) {
             java.lang.reflect.Type type = new TypeToken<Map<String, ChatterRecord>>() {}.getType();
             Map<String, ChatterRecord> loaded = GSON.fromJson(reader, type);
             if (loaded != null) {
                 chatters = loaded;
-                Twitchy.LOG.info("[DEBUG] loaded {} chatter record(s), keys={}", chatters.size(), chatters.keySet());
-            } else {
-                Twitchy.LOG.warn("[DEBUG] fromJson returned null despite file existing");
             }
         } catch (Exception e) {
-            Twitchy.LOG.error("[DEBUG] Failed to load ChatterGear.json", e);
             chatters = new HashMap<>();
         }
     }
@@ -85,19 +79,12 @@ public final class ViewerFollowerGear {
     }
 
     public static boolean meetsRequirement(String userId, List<GearPiece> required) {
-        Twitchy.LOG.info(
-            "[DEBUG] meetsRequirement called for userId='{}', required={}, currentChattersKeys={}",
-            userId,
-            required,
-            chatters.keySet());
         if (required == null || required.isEmpty()) return true;
         List<GearPiece> current = getGear(userId);
-        Twitchy.LOG.info("[DEBUG] current gear for '{}': {}", userId, current);
         for (GearPiece req : required) {
             boolean found = current.stream()
                 .anyMatch(g -> g.item.equals(req.item) && g.metadata == req.metadata);
             if (!found) {
-                Twitchy.LOG.info("[DEBUG] missing required piece: {}", req.item);
                 return false;
             }
         }
@@ -105,7 +92,6 @@ public final class ViewerFollowerGear {
     }
 
     public static void applyUpgrade(String userId, List<GearPiece> newPieces) {
-        Twitchy.LOG.info("[DEBUG] applyUpgrade called for userId='{}', pieces={}", userId, newPieces);
         ChatterRecord record = recordFor(userId);
         for (GearPiece piece : newPieces) {
             record.gear.removeIf(g -> g.slot == piece.slot);
@@ -128,7 +114,6 @@ public final class ViewerFollowerGear {
 
     public static boolean hasEnoughKills(String userId, int required) {
         int have = getLastHits(userId);
-        Twitchy.LOG.info("[DEBUG] hasEnoughKills for '{}': have={}, required={}", userId, have, required);
         if (required <= 0) return true;
         return have >= required;
     }
