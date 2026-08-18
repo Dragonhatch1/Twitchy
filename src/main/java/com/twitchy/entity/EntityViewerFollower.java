@@ -1,5 +1,6 @@
 package com.twitchy.entity;
 
+import com.twitchy.entity.ai.AiStareAtOwner;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.passive.EntityWolf;
 import net.minecraft.world.World;
@@ -24,6 +25,7 @@ public class EntityViewerFollower extends EntityWolf {
         this.tasks.taskEntries.removeIf(entry -> entry.action instanceof net.minecraft.entity.ai.EntityAIWander);
         this.tasks.taskEntries.removeIf(entry -> entry.action instanceof net.minecraft.entity.ai.EntityAIBeg);
         this.tasks.taskEntries.removeIf(entry -> entry.action instanceof net.minecraft.entity.ai.EntityAILookIdle);
+        this.tasks.taskEntries.removeIf(entry -> entry.action instanceof net.minecraft.entity.ai.EntityAIWatchClosest);
     }
 
     /** Call once, right after construction, before spawning into the world. */
@@ -35,6 +37,7 @@ public class EntityViewerFollower extends EntityWolf {
                 .toString());
         this.setCustomNameTag(viewerName);
         this.setAlwaysRenderNameTag(true);
+        this.tasks.addTask(6, new AiStareAtOwner(this, target));
     }
 
     public String getTwitchUserId() {
