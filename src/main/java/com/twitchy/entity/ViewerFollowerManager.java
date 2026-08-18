@@ -6,7 +6,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.twitchy.network.MessageRedeemActionHandler;
+import com.twitchy.rewards.RewardAction;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 
 public class ViewerFollowerManager {
 
@@ -49,11 +53,29 @@ public class ViewerFollowerManager {
         EntityViewerFollower follower = new EntityViewerFollower(target.worldObj);
         follower.setPosition(target.posX, target.posY, target.posZ);
         follower.initFollow(target, userId, userLogin);
+        MessageRedeemActionHandler resolver = new MessageRedeemActionHandler();
+        for (RewardAction.GearPiece piece : ViewerFollowerGear.getGear(userId)) {
+            Item item = resolver.resolveItem(piece.item);
+            if (item != null) {
+                follower.setCurrentItemOrArmor(piece.slot, new ItemStack(item, 1, piece.metadata));
+            }
+        }
         target.worldObj.spawnEntityInWorld(follower);
         activeFollowers.put(userId, follower);
     }
 
     public static void removeFromTracking(String userId) {
         activeFollowers.remove(userId);
+    }
+
+    public static void applyGear(String userId, List<RewardAction.GearPiece> pieces) {
+        EntityViewerFollower follower = activeFollowers.get(userId);
+        if (follower == null) return; // not currently active - the saved record alone is enough, applied next time they spawn
+        MessageRedeemActionHandler resolver = new MessageRedeemActionHandler();
+        for (RewardAction.GearPiece piece : pieces) {
+            Item item = resolver.resolveItem(piece.item);
+            if (item == null) continue;
+            follower.setCurrentItemOrArmor(piece.slot, new ItemStack(item, 1, piece.metadata));
+        }
     }
 }

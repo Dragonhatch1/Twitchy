@@ -28,5 +28,9 @@ public enum RewardActionType {
      * Client-only GUI mini-game: hit a WASD sequence in order before time runs out. Fulfillment is
      * deferred until the challenge actually resolves, unlike the other instant client-side types.
      */
-    KEY_SEQUENCE_CHALLENGE
+    KEY_SEQUENCE_CHALLENGE,
+    /** Grants a chatter a new gear set on their spawned entity, gated behind an optional prerequisite
+     *  set they must already have equipped. Persists to ChatterGear.json and live-updates their
+     *  entity immediately if one's currently spawned. */
+    GEAR_UPGRADE
 }

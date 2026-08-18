@@ -58,6 +58,7 @@ public class MessageRedeemActionHandler implements IMessageHandler<MessageRedeem
             case DEPOSIT_ITEM -> depositItem(server, action);
             case GRAVITY_FLIP -> gravityFlip(action, sender);
             case INVENTORY_SCRAMBLE -> scrambleInventory(server, action, message, sender);
+            case GEAR_UPGRADE -> gearUpgrade(action, message);
             case FOV_CHANGE -> true;
             case PLAY_SOUND -> true;
             case KEY_SEQUENCE_CHALLENGE -> true;
@@ -224,7 +225,7 @@ public class MessageRedeemActionHandler implements IMessageHandler<MessageRedeem
         }
     }
 
-    private Item resolveItem(String itemIdentifier) {
+    public Item resolveItem(String itemIdentifier) {
         if (itemIdentifier == null || itemIdentifier.isBlank()) return null;
         try {
             int numericId = Integer.parseInt(itemIdentifier.trim());
@@ -259,6 +260,26 @@ public class MessageRedeemActionHandler implements IMessageHandler<MessageRedeem
         }
 
         player.inventoryContainer.detectAndSendChanges(); // push the shuffled contents to the client's GUI
+        return true;
+    }
+
+    private boolean gearUpgrade(RewardAction action, MessageRedeemAction message) {
+        String userId = message.viewerUserId;
+        if (userId == null || userId.isBlank()) {
+            Twitchy.LOG.warn("GEAR_UPGRADE: redemption had no viewer user id, skipping.");
+            return false;
+        }
+        if (!com.twitchy.entity.ViewerFollowerGear.meetsRequirement(userId, action.prevItemReq)) {
+            Twitchy.LOG.info(
+                "GEAR_UPGRADE: {} doesn't meet the prerequisite gear for '{}', refunding.",
+                message.viewerDisplayName,
+                message.rewardKey);
+            return false;
+        }
+        if (action.newItem == null || action.newItem.isEmpty()) return false;
+
+        com.twitchy.entity.ViewerFollowerGear.applyUpgrade(userId, action.newItem);
+        com.twitchy.entity.ViewerFollowerManager.applyGear(userId, action.newItem);
         return true;
     }
 }

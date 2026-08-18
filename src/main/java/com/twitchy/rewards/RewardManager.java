@@ -44,6 +44,7 @@ public final class RewardManager {
             maybeKey.get(),
             event.user_login,
             event.user_name,
+            event.user_id,
             event.user_input == null ? "" : event.user_input,
             event.id,
             event.reward.id);
@@ -54,14 +55,13 @@ public final class RewardManager {
      * Returns false if no mapping exists for this key.
      */
     public static boolean testAction(String key) {
-        if (RewardConfig.findByKey(key)
-            .isEmpty()) return false;
-        dispatch(key, "testviewer", "TestViewer", "test input", null, null);
+        if (RewardConfig.findByKey(key).isEmpty()) return false;
+        dispatch(key, "testviewer", "TestViewer", "test-user-id", "test input", null, null);
         return true;
     }
 
-    private static void dispatch(String key, String viewerLogin, String viewerDisplayName, String userInput,
-        String redemptionId, String twitchRewards) {
+    private static void dispatch(String key, String viewerLogin, String viewerDisplayName, String viewerUserId,
+                                 String userInput, String redemptionId, String twitchRewards) {
         Optional<RewardAction> maybeAction = RewardConfig.findByKey(key);
         if (maybeAction.isEmpty()) {
             fulfill(redemptionId, twitchRewards, false);
@@ -85,7 +85,7 @@ public final class RewardManager {
         if (action.type == RewardActionType.KEY_SEQUENCE_CHALLENGE) {
             String[] sequence = (action.keySequence != null && action.keySequence.length > 0) ? action.keySequence
                 : generateRandomWasdSequence(randomChallengeLength());
-            int seconds = (int) (sequence.length * 0.6F); // float here is my timer multiplier
+            int seconds = (int) (sequence.length * 0.6F);
 
             String title = (action.toastTitle != null && !action.toastTitle.isBlank())
                 ? substitute(action.toastTitle, viewerDisplayName, userInput)
@@ -107,14 +107,16 @@ public final class RewardManager {
             if (action.sound != null && !action.sound.isBlank()) {
                 playSound(action.sound, action.soundVolume, action.soundPitch);
             }
-            fulfill(redemptionId, twitchRewards, true); // purely local, succeeds the moment it plays
+            fulfill(redemptionId, twitchRewards, true);
             return;
         }
         if (action.type == RewardActionType.GRAVITY_FLIP) {
             CameraFlipEffect.requestActivate(action.cameraFlipSeconds > 0 ? action.cameraFlipSeconds : 5);
         }
+        // GEAR_UPGRADE falls through here too, same as GIVE_ITEM/DEPOSIT_ITEM/SPAWN_ENTITY - all the
+        // real work happens server-side, since gear storage and live entities are both server concerns.
         PacketHandler.sendToServer(
-            new MessageRedeemAction(key, viewerLogin, viewerDisplayName, userInput, redemptionId, twitchRewards));
+            new MessageRedeemAction(key, viewerLogin, viewerDisplayName, viewerUserId, userInput, redemptionId, twitchRewards));
     }
 
     private static void applyClientEffect(RewardAction action, String viewerDisplayName, String userInput) {

@@ -3,8 +3,6 @@ package com.twitchy.client;
 import com.twitchy.Config;
 import com.twitchy.Twitchy;
 
-import com.twitchy.api.TwitchApiClient;
-import com.twitchy.api.TwitchModels;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.ClientTickEvent;
@@ -27,10 +25,13 @@ public class ClientEventHandler {
             Twitchy.LOG.info("Left the world - closing the Twitchy EventSub session (token kept).");
         }
         TwitchSessionManager.INSTANCE.disconnect();
+        viewerFollowerPoller.reset();
     }
 
     @SubscribeEvent
     public void onConnect(FMLNetworkEvent.ClientConnectedToServerEvent event) {
+        TwitchSessionManager.INSTANCE.disconnect();
+        viewerFollowerPoller.reset();
         if (!Config.autoConnectOnJoin) return;
         if (!TwitchSessionManager.INSTANCE.hasStoredToken()) return; // never auto-open the browser unprompted
         if (TwitchSessionManager.INSTANCE.isEventSubReady()) return; // already connected somehow

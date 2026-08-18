@@ -87,6 +87,14 @@ public class RewardConfig {
         return Optional.empty();
     }
 
+    private static RewardAction.GearPiece gearPiece(String item, int metadata, int slot) {
+        RewardAction.GearPiece piece = new RewardAction.GearPiece();
+        piece.item = item;
+        piece.metadata = metadata;
+        piece.slot = slot;
+        return piece;
+    }
+
     private static List<RewardMapping> defaultMappings() {
         List<RewardMapping> defaults = new ArrayList<>();
 
@@ -285,6 +293,101 @@ public class RewardConfig {
         wasdcaptcha.action.toastTitle = "PROVE YOU'RE HUMAN";
         wasdcaptcha.action.toastSubtitle = "{viewer} gave you a captcha :)";
         defaults.add(wasdcaptcha);
+
+        RewardMapping gearleather = new RewardMapping();
+        gearleather.key = "gear_leather";
+        gearleather.enabled = false;
+        gearleather.title = "Buy Leather Armour for your character!";
+        gearleather.cost = 1000;
+        gearleather.prompt = "Equip your character with a full Leather Armour set!";
+        gearleather.action = new RewardAction();
+        gearleather.action.type = RewardActionType.GEAR_UPGRADE;
+        gearleather.action.newItem = List.of(
+            gearPiece("minecraft:leather_boots", 0, 1),
+            gearPiece("minecraft:leather_leggings", 0, 2),
+            gearPiece("minecraft:leather_chestplate", 0, 3),
+            gearPiece("minecraft:leather_helmet", 0, 4));
+        defaults.add(gearleather);
+
+        RewardMapping geargold = new RewardMapping();
+        geargold.key = "gear_gold";
+        geargold.enabled = false;
+        geargold.title = "Upgrade to Gold Armor!";
+        geargold.cost = 4000;
+        geargold.prompt = "Upgrade your character's armor to Gold! Must have Leather Armour first.";
+        geargold.action = new RewardAction();
+        geargold.action.type = RewardActionType.GEAR_UPGRADE;
+        geargold.action.prevItemReq = List.of(
+            gearPiece("minecraft:leather_boots", 0, 1),
+            gearPiece("minecraft:leather_leggings", 0, 2),
+            gearPiece("minecraft:leather_chestplate", 0, 3),
+            gearPiece("minecraft:leather_helmet", 0, 4));
+        geargold.action.newItem = List.of(
+            gearPiece("minecraft:golden_boots", 0, 1),
+            gearPiece("minecraft:golden_leggings", 0, 2),
+            gearPiece("minecraft:golden_chestplate", 0, 3),
+            gearPiece("minecraft:golden_helmet", 0, 4));
+        defaults.add(geargold);
+
+        RewardMapping gearchain = new RewardMapping();
+        gearchain.key = "gear_chain";
+        gearchain.enabled = false;
+        gearchain.title = "Upgrade to Chain Armor!";
+        gearchain.cost = 8000;
+        gearchain.prompt = "Upgrade your character's armor to Chain! Must have Gold Armour first.";
+        gearchain.action = new RewardAction();
+        gearchain.action.type = RewardActionType.GEAR_UPGRADE;
+        gearchain.action.prevItemReq = List.of(
+            gearPiece("minecraft:golden_boots", 0, 1),
+            gearPiece("minecraft:golden_leggings", 0, 2),
+            gearPiece("minecraft:golden_chestplate", 0, 3),
+            gearPiece("minecraft:golden_helmet", 0, 4));
+        gearchain.action.newItem = List.of(
+            gearPiece("minecraft:chainmail_boots", 0, 1),
+            gearPiece("minecraft:chainmail_leggings", 0, 2),
+            gearPiece("minecraft:chainmail_chestplate", 0, 3),
+            gearPiece("minecraft:chainmail_helmet", 0, 4));
+        defaults.add(gearchain);
+
+        RewardMapping geariron = new RewardMapping();
+        geariron.key = "gear_iron";
+        geariron.enabled = false;
+        geariron.title = "Upgrade to Iron Armor!";
+        geariron.cost = 16000;
+        geariron.prompt = "Upgrade your character's armor to Iron! Must have Chain Armour first.";
+        geariron.action = new RewardAction();
+        geariron.action.type = RewardActionType.GEAR_UPGRADE;
+        geariron.action.prevItemReq = List.of(
+            gearPiece("minecraft:chainmail_boots", 0, 1),
+            gearPiece("minecraft:chainmail_leggings", 0, 2),
+            gearPiece("minecraft:chainmail_chestplate", 0, 3),
+            gearPiece("minecraft:chainmail_helmet", 0, 4));
+        geariron.action.newItem = List.of(
+            gearPiece("minecraft:iron_boots", 0, 1),
+            gearPiece("minecraft:iron_leggings", 0, 2),
+            gearPiece("minecraft:iron_chestplate", 0, 3),
+            gearPiece("minecraft:iron_helmet", 0, 4));
+        defaults.add(geariron);
+
+        RewardMapping geardiamond = new RewardMapping();
+        geardiamond.key = "gear_diamond";
+        geardiamond.enabled = false;
+        geardiamond.title = "Upgrade to Diamond Armor!";
+        geardiamond.cost = 32000;
+        geardiamond.prompt = "Upgrade your character's armor to Diamond! Must have Iron Armour first.";
+        geardiamond.action = new RewardAction();
+        geardiamond.action.type = RewardActionType.GEAR_UPGRADE;
+        geardiamond.action.prevItemReq = List.of(
+            gearPiece("minecraft:iron_boots", 0, 1),
+            gearPiece("minecraft:iron_leggings", 0, 2),
+            gearPiece("minecraft:iron_chestplate", 0, 3),
+            gearPiece("minecraft:iron_helmet", 0, 4));
+        geardiamond.action.newItem = List.of(
+            gearPiece("minecraft:diamond_boots", 0, 1),
+            gearPiece("minecraft:diamond_leggings", 0, 2),
+            gearPiece("minecraft:diamond_chestplate", 0, 3),
+            gearPiece("minecraft:diamond_helmet", 0, 4));
+        defaults.add(geardiamond);
 
         return defaults;
     }

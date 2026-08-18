@@ -68,6 +68,14 @@ public class RewardActionSerializer implements JsonSerializer<RewardAction> {
                     json.add("keySequence", arr);
                 }
             }
+            case GEAR_UPGRADE -> {
+                if (action.prevItemReq != null && !action.prevItemReq.isEmpty()) {
+                    json.add("prevItemReq", context.serialize(action.prevItemReq));
+                }
+                if (action.newItem != null && !action.newItem.isEmpty()) {
+                    json.add("newItem", context.serialize(action.newItem));
+                }
+            }
         }
 
         // Toast fields apply to any type, but only worth writing if a toast is actually configured.

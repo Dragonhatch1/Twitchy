@@ -1,5 +1,7 @@
 package com.twitchy.rewards;
 
+import java.util.List;
+
 /**
  * Describes one configured action for a reward redemption. Only the fields relevant to
  * {@link #type} need to be set in rewards.json; the rest are ignored.
@@ -66,4 +68,19 @@ public class RewardAction {
      * sequence of length challengeLength is generated from W/A/S/D each time it's redeemed.
      */
     public String[] keySequence;
+
+    /** GEAR_UPGRADE: items the chatter must already have equipped before this upgrade is granted.
+     *  Null or empty = no requirement. */
+    public List<GearPiece> prevItemReq;
+    /** GEAR_UPGRADE: the new gear set to equip - each piece overwrites whatever was in its own slot. */
+    public List<GearPiece> newItem;
+
+    public static class GearPiece {
+        /** Item ID string, same convention as GIVE_ITEM/DEPOSIT_ITEM elsewhere in this project. */
+        public String item;
+        public int metadata;
+        /** 0=held, 1=boots, 2=leggings, 3=chestplate, 4=helmet - confirmed from vanilla's own
+         *  EntityLiving.getArmorItemForSlot switch. */
+        public int slot;
+    }
 }

@@ -1,6 +1,7 @@
 package com.twitchy;
 
 import com.twitchy.entity.EntityViewerFollower;
+import com.twitchy.entity.ViewerFollowerGear;
 import com.twitchy.entity.ViewerFollowerHandler;
 import cpw.mods.fml.common.registry.EntityRegistry;
 import org.apache.logging.log4j.LogManager;
@@ -59,6 +60,8 @@ public class Twitchy {
         ViewerFollowerHandler viewerFollowerHandler = new ViewerFollowerHandler();
         FMLCommonHandler.instance().bus().register(viewerFollowerHandler);
         net.minecraftforge.common.MinecraftForge.EVENT_BUS.register(viewerFollowerHandler);
+
+        ViewerFollowerGear.load();
     }
 }
 
@@ -68,3 +71,7 @@ public class Twitchy {
 // TODO Spawn entity on Sub | Twilight forest Entity | Ravens, Tiny Birds,
 // TODO Add failure of Channel Point Captcha
 // TODO Pong as a captcha?
+
+// TODO Twitchy Viewer Followers should pull gear from client-side/locally. not server-side
+// TODO Viewer Followers still dont respawn upon save and quit, need to disconnect and reconnect.
+// TODO Viewers need to stare at owner more

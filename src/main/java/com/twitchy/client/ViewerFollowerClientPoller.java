@@ -11,13 +11,13 @@ import com.twitchy.network.PacketHandler;
 
 public class ViewerFollowerClientPoller {
 
-    private static final long POLL_INTERVAL_MS = 60 * 1000L;
+    private static final long POLL_INTERVAL_MS = 15 * 1000L; // TODO Change back to 60 when done
     private long lastPollMillis = 0;
-    private boolean pollInFlight = false;
+    private volatile boolean pollInFlight = false;
 
     /** Call once per client tick, on the client thread. */
     public void tick() {
-        if (pollInFlight || !TwitchSessionManager.INSTANCE.hasStoredToken()) return;
+        if (pollInFlight || !TwitchSessionManager.INSTANCE.isEventSubReady()) return;
 
         long now = System.currentTimeMillis();
         if (now - lastPollMillis < POLL_INTERVAL_MS) return;
@@ -29,7 +29,8 @@ public class ViewerFollowerClientPoller {
                 String selfId = TwitchSessionManager.INSTANCE.credentials().userId;
                 List<TwitchModels.Chatter> filtered = new ArrayList<>();
                 for (TwitchModels.Chatter c : response.data) {
-                    if (!c.user_id.equals(selfId)) filtered.add(c); // filter out the broadcaster here, client-side
+                    //if (!c.user_id.equals(selfId)) // TODO Uncomment and fix. This gets rid of Broadcaster Filter for Entity Spawning
+                    filtered.add(c); // filter out the broadcaster here, client-side
                 }
                 PacketHandler.sendToServer(new MessageSyncViewerList(filtered));
             })
@@ -38,5 +39,14 @@ public class ViewerFollowerClientPoller {
                 return null;
             })
             .whenComplete((r, e) -> pollInFlight = false);
+    }
+
+    /** Defensive reset so a poll that was mid-flight when the world unloaded (and whose
+     *  whenComplete callback may never fire, since the future keeps chasing an HTTP call from a
+     *  session that no longer exists) can never permanently wedge future polling. Call this
+     *  whenever the Twitch session tears down. */
+    public void reset() {
+        pollInFlight = false;
+        lastPollMillis = 0;
     }
 }

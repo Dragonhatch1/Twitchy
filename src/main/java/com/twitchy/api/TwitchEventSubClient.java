@@ -88,6 +88,8 @@ public class TwitchEventSubClient implements WebSocket.Listener {
 
     @Override
     public CompletionStage<?> onClose(WebSocket webSocket, int statusCode, String reason) {
+        Twitchy.LOG.info("[DEBUG] onClose fired. intentionallyClosed={} webSocket==currentSocket={}",
+            intentionallyClosed, webSocket == currentSocket);
         Twitchy.LOG.info("EventSub WebSocket closed: {} {}", statusCode, reason);
         if (webSocket != currentSocket) {
             return null;

@@ -89,6 +89,7 @@ public final class TwitchSessionManager {
 
     public void disconnect() {
         eventSubReady = false;
+        connecting.set(false);
         if (eventSubClient != null) {
             PacketHandler.sendToServer(new MessageDespawnAllViewerFollowers());
             eventSubClient.disconnect();
