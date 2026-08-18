@@ -29,8 +29,7 @@ public class ViewerFollowerClientPoller {
                 String selfId = TwitchSessionManager.INSTANCE.credentials().userId;
                 List<TwitchModels.Chatter> filtered = new ArrayList<>();
                 for (TwitchModels.Chatter c : response.data) {
-                    // if (!c.user_id.equals(selfId)) // TODO Uncomment and fix. This gets rid of Broadcaster Filter for
-                    // Entity Spawning
+                    // if (!c.user_id.equals(selfId)) // TODO Uncomment and fix. This gets rid of Broadcaster Filter
                     filtered.add(c); // filter out the broadcaster here, client-side
                 }
                 PacketHandler.sendToServer(new SyncViewerListPacket(filtered));

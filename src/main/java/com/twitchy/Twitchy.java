@@ -73,3 +73,4 @@ public class Twitchy {
 // TODO Spawn Mobs and Boss mobs on raid
 // TODO Captcha Failure spawns clutch of 2 mobs
 // TODO Add 3x random mob spawn | can add 5 minute cooldown on Twitch side
+// TODO if Shrunken installed, allow users to adjust their size.
