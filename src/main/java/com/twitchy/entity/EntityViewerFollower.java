@@ -1,9 +1,10 @@
 package com.twitchy.entity;
 
-import com.twitchy.entity.ai.AiStareAtOwner;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.passive.EntityWolf;
 import net.minecraft.world.World;
+
+import com.twitchy.entity.ai.AiStareAtOwner;
 
 /**
  * A player-shaped "viewer follower" entity - extends EntityWolf entirely for its proven,

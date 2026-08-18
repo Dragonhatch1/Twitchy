@@ -1,7 +1,5 @@
 package com.twitchy.chat;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
 
 import com.twitchy.Twitchy;

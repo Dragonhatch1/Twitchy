@@ -66,11 +66,10 @@ public class Twitchy {
 }
 
 // TODO Hot Potato needs it own item
-// TODO Death Captcha for Bits
-// TODO Mob Spawning for Bits
+// TODO Mob Spawning every 10 Bits
 // TODO Spawn entity on Sub | Twilight forest Entity | Ravens, Tiny Birds,
-// TODO Add failure of Channel Point Captcha
 // TODO Pong as a captcha?
 
-// TODO Viewer Followers still dont respawn upon save and quit, need to disconnect and reconnect.
-// TODO Adjust Follow Range of Viewers
+// TODO Spawn Mobs and Boss mobs on raid
+// TODO Captcha Failure spawns clutch of 2 mobs
+// TODO Add 3x random mob spawn | can add 5 minute cooldown on Twitch side
