@@ -34,6 +34,7 @@ public final class ViewerFollowerGear {
 
         public List<GearPiece> gear = new ArrayList<>();
         public int lastHits = 0;
+        public int bossLastHits = 0;
     }
 
     private static File file() {
@@ -126,6 +127,28 @@ public final class ViewerFollowerGear {
         if (amount <= 0) return;
         ChatterRecord record = recordFor(userId);
         record.lastHits = Math.max(0, record.lastHits - amount);
+        save();
+    }
+
+    public static int getBossLastHits(String userId) {
+        ChatterRecord record = chatters.get(userId);
+        return record != null ? record.bossLastHits : 0;
+    }
+
+    public static void addBossKill(String userId) {
+        recordFor(userId).bossLastHits++;
+        save();
+    }
+
+    public static boolean hasEnoughBossKills(String userId, int required) {
+        if (required <= 0) return true;
+        return getBossLastHits(userId) >= required;
+    }
+
+    public static void spendBossKills(String userId, int amount) {
+        if (amount <= 0) return;
+        ChatterRecord record = recordFor(userId);
+        record.bossLastHits = Math.max(0, record.bossLastHits - amount);
         save();
     }
 }

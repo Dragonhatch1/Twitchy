@@ -1,5 +1,7 @@
 package com.twitchy;
 
+import com.twitchy.entity.EntityListDiscovery;
+import com.twitchy.entity.MobSpawningConfig;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -49,9 +51,11 @@ public class Twitchy {
 
     @Mod.EventHandler
     public void serverStarting(FMLServerStartingEvent event) {
-        // Rewards config is shared: the server needs its own copy to validate/execute actions
-        // requested by the client. /twitchy itself is a client-only command - see ClientProxy.
+
         RewardConfig.load();
+        MobSpawningConfig.load();
+        EntityListDiscovery.generateIfMissing();
+
         FMLCommonHandler.instance()
             .bus()
             .register(new GravityFlipManager());
@@ -66,11 +70,12 @@ public class Twitchy {
 }
 
 // TODO Hot Potato needs it own item
-// TODO Mob Spawning every 10 Bits
+// TODO Mob Spawning every 10 Bits | Boss mob every 100 bits
 // TODO Spawn entity on Sub | Twilight forest Entity | Ravens, Tiny Birds,
 // TODO Pong as a captcha?
 
-// TODO Spawn Mobs and Boss mobs on raid
+// TODO Spawn Mobs and Boss mobs on raid | 1 boss mob every 5|8|10 raiders?
 // TODO Captcha Failure spawns clutch of 2 mobs
 // TODO Add 3x random mob spawn | can add 5 minute cooldown on Twitch side
 // TODO if Shrunken installed, allow users to adjust their size.
+// TODO Boss kills tracked

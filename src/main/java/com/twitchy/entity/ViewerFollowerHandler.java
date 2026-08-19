@@ -1,5 +1,8 @@
 package com.twitchy.entity;
 
+import com.twitchy.network.KillCreditPacket;
+import com.twitchy.network.PacketHandler;
+import net.minecraft.entity.EntityList;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 
@@ -34,11 +37,13 @@ public class ViewerFollowerHandler {
     @SubscribeEvent
     public void onLivingDeath(LivingDeathEvent event) {
         // Credit a kill if a viewer follower landed the final blow - tell the owning streamer's
-        // client directly, since kill data lives in THEIR local ChatterGear.json, not the server's.
+        // client directly, since kill data (and now the boss-pool check itself) lives entirely in
+        // THEIR local files, not the server's.
         if (event.source != null && event.source.getEntity() instanceof EntityViewerFollower killer) {
-            if (killer.getTargetPlayer() instanceof net.minecraft.entity.player.EntityPlayerMP owner) {
-                com.twitchy.network.PacketHandler
-                    .sendTo(new com.twitchy.network.KillCreditPacket(killer.getTwitchUserId()), owner);
+            if (killer.getTargetPlayer() instanceof EntityPlayerMP owner) {
+                String killedEntityName = EntityList.getEntityString(event.entityLiving);
+                PacketHandler.sendTo(
+                    new KillCreditPacket(killer.getTwitchUserId(), killedEntityName), owner);
             }
         }
 

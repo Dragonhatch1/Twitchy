@@ -1,10 +1,15 @@
 package com.twitchy.client;
 
+import com.twitchy.entity.MobSpawningConfig;
+import com.twitchy.network.PacketHandler;
+import com.twitchy.network.RequestMobSpawnPacket;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
 
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
+
+import java.util.List;
 
 public class GuiDirectionalChallenge extends GuiScreen {
 
@@ -91,6 +96,14 @@ public class GuiDirectionalChallenge extends GuiScreen {
         if (resolved) return;
         resolved = true;
         KeySequenceChallengeManager.notifyResolved();
+
+        if (!success) {
+            List<String> regularPicks = MobSpawningConfig.pickRandom(2, false);
+            List<String> bossPicks = MobSpawningConfig.pickRandom(2, true);
+            PacketHandler.sendToServer(new RequestMobSpawnPacket(regularPicks, false));
+            PacketHandler.sendToServer(new RequestMobSpawnPacket(bossPicks, true));
+        }
+
         this.mc.displayGuiScreen(null);
     }
 

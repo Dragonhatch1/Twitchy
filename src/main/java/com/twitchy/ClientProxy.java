@@ -1,5 +1,6 @@
 package com.twitchy;
 
+import com.twitchy.entity.MobSpawningConfig;
 import net.minecraftforge.client.ClientCommandHandler;
 import net.minecraftforge.common.MinecraftForge;
 
@@ -29,6 +30,7 @@ public class ClientProxy extends CommonProxy {
         ViewerLinkRegistry.load();
         ChatCommandConfig.load();
         ViewerFollowerGear.load();
+        MobSpawningConfig.load();
     }
 
     @Override

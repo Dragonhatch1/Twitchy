@@ -2,7 +2,6 @@ package com.twitchy.chat;
 
 import java.util.Optional;
 
-import com.twitchy.Twitchy;
 import com.twitchy.api.TwitchModels.ChatMessageEvent;
 import com.twitchy.client.TwitchSessionManager;
 import com.twitchy.entity.ViewerFollowerGear;
@@ -15,8 +14,8 @@ public final class ChatCommandManager {
     public static void handleChatMessage(ChatMessageEvent event) {
         if (event.message == null || event.message.text == null) return;
 
-        String trimmed = event.message.text.trim();
-        if (trimmed.equalsIgnoreCase("!kills")) {
+        String firstWord = event.message.text.trim().split("\\s+", 2)[0];
+        if (firstWord.equalsIgnoreCase("!kills")) {
             handleKillsCommand(event);
             return;
         }
@@ -31,12 +30,14 @@ public final class ChatCommandManager {
 
     private static void handleKillsCommand(ChatMessageEvent event) {
         int kills = ViewerFollowerGear.getLastHits(event.chatter_user_id);
+        int bossKills = ViewerFollowerGear.getBossLastHits(event.chatter_user_id);
         String name = event.chatter_user_name == null ? "" : event.chatter_user_name;
-        String response = name + " has " + kills + " last hit" + (kills == 1 ? "" : "s") + "!";
+        String response = name + " has " + kills + " last hit" + (kills == 1 ? "" : "s") + " & " + bossKills
+            + " boss kill" + (bossKills == 1 ? "" : "s") + "!";
 
         TwitchSessionManager.INSTANCE.sendChatMessage(response)
             .exceptionally(ex -> {
-                Twitchy.LOG.warn("Failed to respond to !kills: {}", ex.getMessage());
+                com.twitchy.Twitchy.LOG.warn("Failed to respond to !kills: {}", ex.getMessage());
                 return null;
             });
     }
@@ -53,7 +54,7 @@ public final class ChatCommandManager {
         String response = command.response.replace("{viewer}", viewerName == null ? "" : viewerName);
         TwitchSessionManager.INSTANCE.sendChatMessage(response)
             .exceptionally(ex -> {
-                Twitchy.LOG.warn("Failed to respond to chat command '{}': {}", command.trigger, ex.getMessage());
+                com.twitchy.Twitchy.LOG.warn("Failed to respond to chat command '{}': {}", command.trigger, ex.getMessage());
                 return null;
             });
     }

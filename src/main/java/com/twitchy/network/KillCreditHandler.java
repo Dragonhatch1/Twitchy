@@ -1,5 +1,6 @@
 package com.twitchy.network;
 
+import com.twitchy.entity.MobSpawningConfig;
 import com.twitchy.entity.ViewerFollowerGear;
 
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
@@ -11,6 +12,9 @@ public class KillCreditHandler implements IMessageHandler<KillCreditPacket, IMes
     @Override
     public IMessage onMessage(KillCreditPacket message, MessageContext ctx) {
         ViewerFollowerGear.addKill(message.viewerUserId);
+        if (message.killedEntityName != null && MobSpawningConfig.isAllowed(message.killedEntityName)) {
+            ViewerFollowerGear.addBossKill(message.viewerUserId);
+        }
         return null;
     }
 }
