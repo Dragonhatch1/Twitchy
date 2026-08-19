@@ -75,7 +75,5 @@ public class Twitchy {
 // TODO Pong as a captcha?
 
 // TODO Spawn Mobs and Boss mobs on raid | 1 boss mob every 5|8|10 raiders?
-// TODO Captcha Failure spawns clutch of 2 mobs
 // TODO Add 3x random mob spawn | can add 5 minute cooldown on Twitch side
 // TODO if Shrunken installed, allow users to adjust their size.
-// TODO Boss kills tracked

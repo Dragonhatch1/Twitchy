@@ -33,12 +33,17 @@ public class GuiDirectionalChallenge extends GuiScreen {
 
     private final String title;
     private final String subtitle;
+    private final int regularSpawnCount;
+    private final int bossSpawnCount;
 
-    public GuiDirectionalChallenge(String[] sequence, int seconds, String title, String subtitle) {
+    public GuiDirectionalChallenge(String[] sequence, int seconds, String title, String subtitle,
+                                   int regularSpawnCount, int bossSpawnCount) {
         this.sequence = sequence;
         this.totalMillis = seconds * 1000L;
         this.title = title;
         this.subtitle = subtitle;
+        this.regularSpawnCount = regularSpawnCount;
+        this.bossSpawnCount = bossSpawnCount;
     }
 
     @Override
@@ -98,10 +103,14 @@ public class GuiDirectionalChallenge extends GuiScreen {
         KeySequenceChallengeManager.notifyResolved();
 
         if (!success) {
-            List<String> regularPicks = MobSpawningConfig.pickRandom(2, false);
-            List<String> bossPicks = MobSpawningConfig.pickRandom(2, true);
-            PacketHandler.sendToServer(new RequestMobSpawnPacket(regularPicks, false));
-            PacketHandler.sendToServer(new RequestMobSpawnPacket(bossPicks, true));
+            if (regularSpawnCount > 0) {
+                java.util.List<String> regularPicks = MobSpawningConfig.pickRandom(regularSpawnCount, false);
+                PacketHandler.sendToServer(new RequestMobSpawnPacket(regularPicks, false));
+            }
+            if (bossSpawnCount > 0) {
+                java.util.List<String> bossPicks = MobSpawningConfig.pickRandom(bossSpawnCount, true);
+                PacketHandler.sendToServer(new RequestMobSpawnPacket(bossPicks, true));
+            }
         }
 
         this.mc.displayGuiScreen(null);

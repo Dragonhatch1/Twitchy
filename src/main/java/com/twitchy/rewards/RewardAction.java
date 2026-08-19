@@ -94,4 +94,9 @@ public class RewardAction {
      * 0 = no kill requirement. Spent (deducted) automatically once the redemption succeeds.
      */
     public int requiredKills = 0;
+
+    /** KEY_SEQUENCE_CHALLENGE: how many regular-pool mobs to spawn on failure. 0 = none. */
+    public int regularSpawnCount = 0;
+    /** KEY_SEQUENCE_CHALLENGE: how many boss-pool mobs to spawn on failure. 0 = none. */
+    public int bossSpawnCount = 0;
 }

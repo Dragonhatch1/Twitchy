@@ -11,7 +11,7 @@ import com.twitchy.network.SyncViewerListPacket;
 
 public class ViewerFollowerClientPoller {
 
-    private static final long POLL_INTERVAL_MS = 15 * 1000L; // TODO Change back to 60 when done
+    private static final long POLL_INTERVAL_MS = 60 * 1000L;
     private long lastPollMillis = 0;
     private volatile boolean pollInFlight = false;
 
@@ -29,8 +29,7 @@ public class ViewerFollowerClientPoller {
                 String selfId = TwitchSessionManager.INSTANCE.credentials().userId;
                 List<TwitchModels.Chatter> filtered = new ArrayList<>();
                 for (TwitchModels.Chatter c : response.data) {
-                    // if (!c.user_id.equals(selfId)) // TODO Uncomment and fix. This gets rid of Broadcaster Filter
-                    filtered.add(c); // filter out the broadcaster here, client-side
+                    if (!c.user_id.equals(selfId)) filtered.add(c);
                 }
                 PacketHandler.sendToServer(new SyncViewerListPacket(filtered));
             })

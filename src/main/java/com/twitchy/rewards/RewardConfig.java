@@ -278,6 +278,8 @@ public class RewardConfig {
         wasdcaptcha.action.type = RewardActionType.KEY_SEQUENCE_CHALLENGE;
         wasdcaptcha.action.toastTitle = "PROVE YOU'RE HUMAN";
         wasdcaptcha.action.toastSubtitle = "{viewer} gave you a captcha :)";
+        wasdcaptcha.action.regularSpawnCount = 2;
+        wasdcaptcha.action.bossSpawnCount = 0;
         defaults.add(wasdcaptcha);
 
         RewardMapping gearleather = new RewardMapping();

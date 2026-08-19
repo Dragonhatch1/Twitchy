@@ -97,7 +97,8 @@ public final class RewardManager {
                 : null;
 
             fulfill(redemptionId, twitchRewards, true);
-            KeySequenceChallengeManager.requestStart(sequence, seconds, title, subtitle);
+            KeySequenceChallengeManager.requestStart(
+                sequence, seconds, title, subtitle, action.regularSpawnCount, action.bossSpawnCount);
             return;
         }
         if (action.type == RewardActionType.CLIENT_EFFECT) {
