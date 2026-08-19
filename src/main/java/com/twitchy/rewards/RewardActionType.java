@@ -35,8 +35,10 @@ public enum RewardActionType {
      * entity immediately if one's currently spawned.
      */
     GEAR_UPGRADE,
-    /** Spawns a batch of random mobs near the redeeming streamer, drawn from their own local
-     *  MobSpawning.json pools - same pipeline the WASD captcha failure uses, just triggered directly
-     *  by redeeming rather than as a consequence. */
+    /**
+     * Spawns a batch of random mobs near the redeeming streamer, drawn from their own local
+     * MobSpawning.json pools - same pipeline the WASD captcha failure uses, just triggered directly
+     * by redeeming rather than as a consequence.
+     */
     SPAWN_RANDOM_MOBS
 }

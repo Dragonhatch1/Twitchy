@@ -1,15 +1,14 @@
 package com.twitchy.client;
 
-import com.twitchy.entity.MobSpawningConfig;
-import com.twitchy.network.PacketHandler;
-import com.twitchy.network.RequestMobSpawnPacket;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
 
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
-import java.util.List;
+import com.twitchy.entity.MobSpawningConfig;
+import com.twitchy.network.PacketHandler;
+import com.twitchy.network.RequestMobSpawnPacket;
 
 public class GuiDirectionalChallenge extends GuiScreen {
 
@@ -36,8 +35,8 @@ public class GuiDirectionalChallenge extends GuiScreen {
     private final int regularSpawnCount;
     private final int bossSpawnCount;
 
-    public GuiDirectionalChallenge(String[] sequence, int seconds, String title, String subtitle,
-                                   int regularSpawnCount, int bossSpawnCount) {
+    public GuiDirectionalChallenge(String[] sequence, int seconds, String title, String subtitle, int regularSpawnCount,
+        int bossSpawnCount) {
         this.sequence = sequence;
         this.totalMillis = seconds * 1000L;
         this.title = title;

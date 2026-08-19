@@ -21,8 +21,8 @@ public final class KeySequenceChallengeManager {
         final int regularSpawnCount;
         final int bossSpawnCount;
 
-        PendingChallenge(String[] sequence, int seconds, String title, String subtitle,
-                         int regularSpawnCount, int bossSpawnCount) {
+        PendingChallenge(String[] sequence, int seconds, String title, String subtitle, int regularSpawnCount,
+            int bossSpawnCount) {
             this.sequence = sequence;
             this.seconds = seconds;
             this.title = title;
@@ -33,7 +33,7 @@ public final class KeySequenceChallengeManager {
     }
 
     public static void requestStart(String[] sequence, int seconds, String title, String subtitle,
-                                    int regularSpawnCount, int bossSpawnCount) {
+        int regularSpawnCount, int bossSpawnCount) {
         queue.add(new PendingChallenge(sequence, seconds, title, subtitle, regularSpawnCount, bossSpawnCount));
     }
 
@@ -52,6 +52,12 @@ public final class KeySequenceChallengeManager {
         if (mc.thePlayer == null) return;
         challengeActive = true;
         mc.displayGuiScreen(
-            new GuiDirectionalChallenge(p.sequence, p.seconds, p.title, p.subtitle, p.regularSpawnCount, p.bossSpawnCount));
+            new GuiDirectionalChallenge(
+                p.sequence,
+                p.seconds,
+                p.title,
+                p.subtitle,
+                p.regularSpawnCount,
+                p.bossSpawnCount));
     }
 }

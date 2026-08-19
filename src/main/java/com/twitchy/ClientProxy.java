@@ -1,6 +1,5 @@
 package com.twitchy;
 
-import com.twitchy.entity.MobSpawningConfig;
 import net.minecraftforge.client.ClientCommandHandler;
 import net.minecraftforge.common.MinecraftForge;
 
@@ -11,6 +10,7 @@ import com.twitchy.client.RenderViewerFollower;
 import com.twitchy.client.ToastEffect;
 import com.twitchy.command.CommandTwitchy;
 import com.twitchy.entity.EntityViewerFollower;
+import com.twitchy.entity.MobSpawningConfig;
 import com.twitchy.entity.ViewerFollowerGear;
 import com.twitchy.rewards.RewardConfig;
 import com.twitchy.rewards.ViewerLinkRegistry;

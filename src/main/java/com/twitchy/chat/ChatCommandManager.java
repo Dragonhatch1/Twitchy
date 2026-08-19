@@ -14,7 +14,8 @@ public final class ChatCommandManager {
     public static void handleChatMessage(ChatMessageEvent event) {
         if (event.message == null || event.message.text == null) return;
 
-        String firstWord = event.message.text.trim().split("\\s+", 2)[0];
+        String firstWord = event.message.text.trim()
+            .split("\\s+", 2)[0];
         if (firstWord.equalsIgnoreCase("!kills")) {
             handleKillsCommand(event);
             return;
@@ -32,8 +33,15 @@ public final class ChatCommandManager {
         int kills = ViewerFollowerGear.getLastHits(event.chatter_user_id);
         int bossKills = ViewerFollowerGear.getBossLastHits(event.chatter_user_id);
         String name = event.chatter_user_name == null ? "" : event.chatter_user_name;
-        String response = name + " has " + kills + " last hit" + (kills == 1 ? "" : "s") + " & " + bossKills
-            + " boss kill" + (bossKills == 1 ? "" : "s") + "!";
+        String response = name + " has "
+            + kills
+            + " last hit"
+            + (kills == 1 ? "" : "s")
+            + " & "
+            + bossKills
+            + " boss kill"
+            + (bossKills == 1 ? "" : "s")
+            + "!";
 
         TwitchSessionManager.INSTANCE.sendChatMessage(response)
             .exceptionally(ex -> {
@@ -54,7 +62,8 @@ public final class ChatCommandManager {
         String response = command.response.replace("{viewer}", viewerName == null ? "" : viewerName);
         TwitchSessionManager.INSTANCE.sendChatMessage(response)
             .exceptionally(ex -> {
-                com.twitchy.Twitchy.LOG.warn("Failed to respond to chat command '{}': {}", command.trigger, ex.getMessage());
+                com.twitchy.Twitchy.LOG
+                    .warn("Failed to respond to chat command '{}': {}", command.trigger, ex.getMessage());
                 return null;
             });
     }

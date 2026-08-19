@@ -1,10 +1,11 @@
 package com.twitchy.entity;
 
-import com.twitchy.network.KillCreditPacket;
-import com.twitchy.network.PacketHandler;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
+
+import com.twitchy.network.KillCreditPacket;
+import com.twitchy.network.PacketHandler;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent;
@@ -42,8 +43,7 @@ public class ViewerFollowerHandler {
         if (event.source != null && event.source.getEntity() instanceof EntityViewerFollower killer) {
             if (killer.getTargetPlayer() instanceof EntityPlayerMP owner) {
                 String killedEntityName = EntityList.getEntityString(event.entityLiving);
-                PacketHandler.sendTo(
-                    new KillCreditPacket(killer.getTwitchUserId(), killedEntityName), owner);
+                PacketHandler.sendTo(new KillCreditPacket(killer.getTwitchUserId(), killedEntityName), owner);
             }
         }
 

@@ -1,11 +1,11 @@
 package com.twitchy;
 
-import com.twitchy.entity.EntityListDiscovery;
-import com.twitchy.entity.MobSpawningConfig;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.twitchy.entity.EntityListDiscovery;
 import com.twitchy.entity.EntityViewerFollower;
+import com.twitchy.entity.MobSpawningConfig;
 import com.twitchy.entity.ViewerFollowerHandler;
 import com.twitchy.network.PacketHandler;
 import com.twitchy.rewards.GravityFlipManager;
@@ -74,6 +74,6 @@ public class Twitchy {
 // TODO Spawn entity on Sub | Twilight forest Entity | Ravens, Tiny Birds,
 // TODO Pong as a captcha?
 
-// TODO Spawn Mobs and Boss mobs on raid | 1 boss mob every 5|8|10 raiders? | Do shoutout on raid so i dont have to think about it
-// TODO Add 3x random mob spawn | can add 5 minute cooldown on Twitch side
+// TODO Spawn Mobs and Boss mobs on raid | 1 boss mob every 5|8|10 raiders? | Do shoutout on raid so i dont have to
+// think about it
 // TODO if Shrunken installed, allow users to adjust their size.

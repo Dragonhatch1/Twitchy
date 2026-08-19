@@ -5,9 +5,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
-import com.twitchy.entity.MobSpawningConfig;
-import com.twitchy.entity.ViewerFollowerGear;
-import com.twitchy.network.RequestMobSpawnPacket;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.util.ChatComponentText;
@@ -22,9 +19,12 @@ import com.twitchy.client.FovEffectManager;
 import com.twitchy.client.KeySequenceChallengeManager;
 import com.twitchy.client.ToastEffect;
 import com.twitchy.client.TwitchSessionManager;
+import com.twitchy.entity.MobSpawningConfig;
+import com.twitchy.entity.ViewerFollowerGear;
 import com.twitchy.network.ApplyGearPacket;
 import com.twitchy.network.PacketHandler;
 import com.twitchy.network.RedeemActionPacket;
+import com.twitchy.network.RequestMobSpawnPacket;
 
 /**
  * Client-side only. Handles an incoming redemption event: resolves the configured action and
@@ -100,8 +100,8 @@ public final class RewardManager {
                 : null;
 
             fulfill(redemptionId, twitchRewards, true);
-            KeySequenceChallengeManager.requestStart(
-                sequence, seconds, title, subtitle, action.regularSpawnCount, action.bossSpawnCount);
+            KeySequenceChallengeManager
+                .requestStart(sequence, seconds, title, subtitle, action.regularSpawnCount, action.bossSpawnCount);
             return;
         }
         if (action.type == RewardActionType.CLIENT_EFFECT) {
