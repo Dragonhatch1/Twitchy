@@ -91,6 +91,7 @@ public final class TwitchModels {
             public String broadcaster_user_id;
             public String moderator_user_id;
             public String user_id;
+            public String to_broadcaster_user_id;
         }
 
         public static class Transport {
@@ -176,5 +177,13 @@ public final class TwitchModels {
     public static class Pagination {
 
         public String cursor;
+    }
+
+    public static class RaidEvent {
+
+        public String from_broadcaster_user_id;
+        public String from_broadcaster_user_login;
+        public String from_broadcaster_user_name;
+        public int viewer_count;
     }
 }

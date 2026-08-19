@@ -265,4 +265,45 @@ public final class TwitchApiClient {
                 return GSON.fromJson(resp.body(), ChattersResponse.class);
             });
     }
+
+    public static CompletableFuture<Void> subscribeToRaids(TwitchCredentials creds, String sessionId) {
+        CreateSubscriptionRequest req = new CreateSubscriptionRequest();
+        req.type = "channel.raid";
+        req.version = "1";
+        req.condition = new CreateSubscriptionRequest.Condition();
+        req.condition.to_broadcaster_user_id = creds.userId; // incoming raids TO us specifically
+        req.transport = new CreateSubscriptionRequest.Transport();
+        req.transport.session_id = sessionId;
+
+        HttpRequest request = baseRequest(HELIX_BASE + "/eventsub/subscriptions", creds.accessToken)
+            .POST(HttpRequest.BodyPublishers.ofString(GSON.toJson(req)))
+            .header("Content-Type", "application/json")
+            .build();
+
+        return HTTP.sendAsync(request, HttpResponse.BodyHandlers.ofString())
+            .thenAccept(resp -> {
+                if (resp.statusCode() != 202 && resp.statusCode() != 200) {
+                    throw new RuntimeException(
+                        "Failed to subscribe to raids (HTTP " + resp.statusCode() + "): " + resp.body());
+                }
+            });
+    }
+
+    public static CompletableFuture<Void> sendShoutout(TwitchCredentials creds, String toBroadcasterId) {
+        HttpRequest request = baseRequest(
+            HELIX_BASE + "/chat/shoutouts?from_broadcaster_id=" + creds.userId
+                + "&to_broadcaster_id=" + toBroadcasterId
+                + "&moderator_id=" + creds.userId,
+            creds.accessToken)
+            .POST(HttpRequest.BodyPublishers.noBody())
+            .build();
+
+        return HTTP.sendAsync(request, HttpResponse.BodyHandlers.ofString())
+            .thenAccept(resp -> {
+                if (resp.statusCode() != 204) {
+                    throw new RuntimeException(
+                        "Failed to send shoutout (HTTP " + resp.statusCode() + "): " + resp.body());
+                }
+            });
+    }
 }

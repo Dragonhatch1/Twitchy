@@ -79,6 +79,7 @@ public final class TwitchSessionManager {
             credentials,
             RewardManager::handleRedemption,
             ChatCommandManager::handleChatMessage,
+            RaidManager::handleRaid,
             () -> {
                 eventSubReady = true;
                 Twitchy.LOG.info("Twitchy is now listening for channel point redemptions on {}", credentials.userLogin);

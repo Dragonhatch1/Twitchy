@@ -1,5 +1,6 @@
 package com.twitchy.command;
 
+import com.twitchy.client.RaidManager;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.ChatComponentText;
@@ -20,7 +21,7 @@ public class CommandTwitchy extends CommandBase {
 
     @Override
     public String getCommandUsage(ICommandSender sender) {
-        return "/twitchy <connect|reauth|disconnect|logout|status|say <msg>|testredeem <key>|testchat <trigger>|setstorage <x> <y> <z> [dim]|reload>";
+        return "/twitchy <connect|reauth|disconnect|logout|status|say <msg>|testredeem <key>|testchat <trigger>|testraid <count>|setstorage <x> <y> <z> [dim]|reload>";
     }
 
     @Override
@@ -128,6 +129,21 @@ public class CommandTwitchy extends CommandBase {
                 } catch (NumberFormatException e) {
                     reply(sender, "x/y/z/dimension must be whole numbers.");
                 }
+            }
+            case "testraid" -> {
+                if (args.length < 2) {
+                    reply(sender, "Usage: /twitchy testraid <viewer count>");
+                    return;
+                }
+                int viewerCount;
+                try {
+                    viewerCount = Integer.parseInt(args[1]);
+                } catch (NumberFormatException e) {
+                    reply(sender, "'" + args[1] + "' isn't a valid number.");
+                    return;
+                }
+                RaidManager.testTrigger(viewerCount);
+                reply(sender, "Simulated a raid of " + viewerCount + " viewers.");
             }
             case "reload" -> {
                 RewardConfig.load();
