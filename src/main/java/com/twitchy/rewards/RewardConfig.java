@@ -427,6 +427,17 @@ public class RewardConfig {
         swordDiamond.action.newItem = List.of(gearPiece("minecraft:diamond_sword", 0, 0));
         defaults.add(swordDiamond);
 
+        RewardMapping randomMobs = new RewardMapping();
+        randomMobs.key = "randomMobs";
+        randomMobs.enabled = false;
+        randomMobs.title = "Release the Mobs!";
+        randomMobs.cost = 400;
+        randomMobs.prompt = "Spawn 3 random mobs near me!";
+        randomMobs.action = new RewardAction();
+        randomMobs.action.type = RewardActionType.SPAWN_RANDOM_MOBS;
+        randomMobs.action.regularSpawnCount = 3;
+        defaults.add(randomMobs);
+
         return defaults;
     }
 }

@@ -5,6 +5,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
+import com.twitchy.entity.MobSpawningConfig;
+import com.twitchy.entity.ViewerFollowerGear;
+import com.twitchy.network.RequestMobSpawnPacket;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.util.ChatComponentText;
@@ -126,17 +129,28 @@ public final class RewardManager {
                 fulfill(redemptionId, twitchRewards, false);
                 return;
             }
-            com.twitchy.entity.ViewerFollowerGear.spendKills(viewerUserId, action.requiredKills);
-            com.twitchy.entity.ViewerFollowerGear.applyUpgrade(viewerUserId, action.newItem);
+            ViewerFollowerGear.spendKills(viewerUserId, action.requiredKills);
+            ViewerFollowerGear.applyUpgrade(viewerUserId, action.newItem);
             PacketHandler.sendToServer(new ApplyGearPacket(viewerUserId, action.newItem));
+            fulfill(redemptionId, twitchRewards, true);
+            return;
+        }
+        if (action.type == RewardActionType.SPAWN_RANDOM_MOBS) {
+            if (action.regularSpawnCount > 0) {
+                List<String> regularPicks = MobSpawningConfig.pickRandom(action.regularSpawnCount, false);
+                PacketHandler.sendToServer(new RequestMobSpawnPacket(regularPicks, false));
+            }
+            if (action.bossSpawnCount > 0) {
+                List<String> bossPicks = MobSpawningConfig.pickRandom(action.bossSpawnCount, true);
+                PacketHandler.sendToServer(new RequestMobSpawnPacket(bossPicks, true));
+            }
             fulfill(redemptionId, twitchRewards, true);
             return;
         }
         if (action.type == RewardActionType.GRAVITY_FLIP) {
             CameraFlipEffect.requestActivate(action.cameraFlipSeconds > 0 ? action.cameraFlipSeconds : 5);
         }
-        // GEAR_UPGRADE falls through here too, same as GIVE_ITEM/DEPOSIT_ITEM/SPAWN_ENTITY - all the
-        // real work happens server-side, since gear storage and live entities are both server concerns.
+
         PacketHandler.sendToServer(
             new RedeemActionPacket(
                 key,

@@ -61,6 +61,7 @@ public class RedeemActionHandler implements IMessageHandler<RedeemActionPacket, 
             case GEAR_UPGRADE -> true;
             case FOV_CHANGE -> true;
             case PLAY_SOUND -> true;
+            case SPAWN_RANDOM_MOBS -> true;
             case KEY_SEQUENCE_CHALLENGE -> true;
             case CLIENT_EFFECT -> true; // Client Effects have no packets sent.
         };
