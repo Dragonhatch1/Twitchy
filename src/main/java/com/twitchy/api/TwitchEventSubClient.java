@@ -37,8 +37,8 @@ public class TwitchEventSubClient implements WebSocket.Listener {
     private volatile boolean intentionallyClosed = false;
 
     public TwitchEventSubClient(TwitchCredentials credentials, Consumer<RewardRedemptionEvent> onRedemption,
-                                Consumer<ChatMessageEvent> onChatMessage, Consumer<TwitchModels.RaidEvent> onRaid,
-                                Runnable onSessionEstablished, Consumer<Throwable> onError) {
+        Consumer<ChatMessageEvent> onChatMessage, Consumer<TwitchModels.RaidEvent> onRaid,
+        Runnable onSessionEstablished, Consumer<Throwable> onError) {
         this.credentials = credentials;
         this.onRedemption = onRedemption;
         this.onChatMessage = onChatMessage;
@@ -131,15 +131,20 @@ public class TwitchEventSubClient implements WebSocket.Listener {
                     : null;
                 if (sessionId != null) {
                     Twitchy.LOG.info("EventSub session established: {}", sessionId);
-                    CompletableFuture<Void> redemptionSub = TwitchApiClient.subscribeToRedemptions(credentials, sessionId);
+                    CompletableFuture<Void> redemptionSub = TwitchApiClient
+                        .subscribeToRedemptions(credentials, sessionId);
                     CompletableFuture<Void> chatSub = TwitchApiClient.subscribeToChatMessages(credentials, sessionId)
                         .exceptionally(ex -> {
-                            Twitchy.LOG.warn("Failed to subscribe to chat messages, chat commands won't work: {}", ex.getMessage());
+                            Twitchy.LOG.warn(
+                                "Failed to subscribe to chat messages, chat commands won't work: {}",
+                                ex.getMessage());
                             return null;
                         });
                     CompletableFuture<Void> raidSub = TwitchApiClient.subscribeToRaids(credentials, sessionId)
                         .exceptionally(ex -> {
-                            Twitchy.LOG.warn("Failed to subscribe to raids, raid mob-spawning won't work: {}", ex.getMessage());
+                            Twitchy.LOG.warn(
+                                "Failed to subscribe to raids, raid mob-spawning won't work: {}",
+                                ex.getMessage());
                             return null;
                         });
                     java.util.concurrent.CompletableFuture.allOf(redemptionSub, chatSub, raidSub)
@@ -170,9 +175,11 @@ public class TwitchEventSubClient implements WebSocket.Listener {
                 if (envelope.payload != null && envelope.payload.event != null) {
                     String subType = envelope.metadata.subscription_type;
                     if ("channel.channel_points_custom_reward_redemption.add".equals(subType)) {
-                        onRedemption.accept(GSON.fromJson(envelope.payload.event, TwitchModels.RewardRedemptionEvent.class));
+                        onRedemption
+                            .accept(GSON.fromJson(envelope.payload.event, TwitchModels.RewardRedemptionEvent.class));
                     } else if ("channel.chat.message".equals(subType)) {
-                        onChatMessage.accept(GSON.fromJson(envelope.payload.event, TwitchModels.ChatMessageEvent.class));
+                        onChatMessage
+                            .accept(GSON.fromJson(envelope.payload.event, TwitchModels.ChatMessageEvent.class));
                     } else if ("channel.raid".equals(subType)) {
                         onRaid.accept(GSON.fromJson(envelope.payload.event, TwitchModels.RaidEvent.class));
                     }

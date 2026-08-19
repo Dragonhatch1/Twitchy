@@ -31,8 +31,11 @@ public class Config {
     /** If true, Twitchy attempts to reconnect the EventSub session automatically on disconnect. */
     public static boolean autoReconnect = true;
 
-    /** In-game username of the broadcaster; the default target for player-affecting reward actions. */
-    public static String broadcasterMinecraftUsername = "";
+    /** If true, automatically spawns random mobs near the streamer when a raid comes in. */
+    public static boolean mobSpawnOnRaid = false;
+
+    /** If true, automatically sends a Twitch Shoutout to the raiding broadcaster on an incoming raid. */
+    public static boolean autoShoutout = false;
 
     // Channel-point deposit container location, set/moved via /twitchy setstorage.
     public static int storageX = 0;
@@ -73,11 +76,6 @@ public class Config {
             Configuration.CATEGORY_GENERAL,
             autoReconnect,
             "Automatically reconnect the EventSub WebSocket session if it drops.");
-        broadcasterMinecraftUsername = configuration.getString(
-            "broadcasterMinecraftUsername",
-            Configuration.CATEGORY_GENERAL,
-            broadcasterMinecraftUsername,
-            "In-game username of the broadcaster.");
         autoConnectOnJoin = configuration.getBoolean(
             "autoConnectOnJoin",
             Configuration.CATEGORY_GENERAL,
@@ -112,6 +110,17 @@ public class Config {
             "storage",
             storageTargetSet,
             "Whether a deposit location has actually been set via /twitchy setstorage yet.");
+
+        mobSpawnOnRaid = configuration.getBoolean(
+            "MobSpawnOnRaid",
+            "Raids",
+            mobSpawnOnRaid,
+            "Automatically spawn random mobs near the streamer on an incoming raid.");
+        autoShoutout = configuration.getBoolean(
+            "AutoShoutout",
+            "Raids",
+            autoShoutout,
+            "Automatically send a Twitch Shoutout to the broadcaster that raided you.");
 
         if (configuration.hasChanged()) {
             configuration.save();

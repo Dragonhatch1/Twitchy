@@ -291,12 +291,14 @@ public final class TwitchApiClient {
 
     public static CompletableFuture<Void> sendShoutout(TwitchCredentials creds, String toBroadcasterId) {
         HttpRequest request = baseRequest(
-            HELIX_BASE + "/chat/shoutouts?from_broadcaster_id=" + creds.userId
-                + "&to_broadcaster_id=" + toBroadcasterId
-                + "&moderator_id=" + creds.userId,
-            creds.accessToken)
-            .POST(HttpRequest.BodyPublishers.noBody())
-            .build();
+            HELIX_BASE + "/chat/shoutouts?from_broadcaster_id="
+                + creds.userId
+                + "&to_broadcaster_id="
+                + toBroadcasterId
+                + "&moderator_id="
+                + creds.userId,
+            creds.accessToken).POST(HttpRequest.BodyPublishers.noBody())
+                .build();
 
         return HTTP.sendAsync(request, HttpResponse.BodyHandlers.ofString())
             .thenAccept(resp -> {

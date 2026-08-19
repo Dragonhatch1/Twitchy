@@ -1,11 +1,11 @@
 package com.twitchy.command;
 
-import com.twitchy.client.RaidManager;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.ChatComponentText;
 
 import com.twitchy.chat.ChatCommandConfig;
+import com.twitchy.client.RaidManager;
 import com.twitchy.client.TwitchSessionManager;
 import com.twitchy.network.PacketHandler;
 import com.twitchy.network.SetStorageTargetPacket;

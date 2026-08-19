@@ -75,5 +75,5 @@ public class Twitchy {
 // TODO Pong as a captcha?
 
 // TODO Shoutout on raid auto | Needs to be Tested
-// TODO Raid Mob Spawning on/Off Config
+// TODO Raid Mob Spawning on/Off Config | Needs to be Tested
 // TODO if Shrunken installed, allow users to adjust their size.
