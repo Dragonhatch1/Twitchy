@@ -74,6 +74,8 @@ public class Twitchy {
 // TODO Spawn entity on Sub | Twilight forest Entity | Ravens, Tiny Birds,
 // TODO Pong as a captcha?
 
-// TODO Shoutout on raid auto | Needs to be Tested
-// TODO Raid Mob Spawning on/Off Config | Needs to be Tested
+// TODO Raids currently not working. Triggering Shoutout, but not the mob spawning.
+// TODO Splash potion of healing redeem
+// TODO people are getting boss kills when no bosses spawn
+// TODO back them up a bit, feeling claustrophobic. Also getting in the way alot.
 // TODO if Shrunken installed, allow users to adjust their size.
