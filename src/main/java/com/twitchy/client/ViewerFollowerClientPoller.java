@@ -23,13 +23,16 @@ public class ViewerFollowerClientPoller {
         if (now - lastPollMillis < POLL_INTERVAL_MS) return;
         lastPollMillis = now;
 
+        RenderViewerFollower.invalidateSkinCache();
+
         pollInFlight = true;
         TwitchApiClient.getChatters(TwitchSessionManager.INSTANCE.credentials())
             .thenAccept(response -> {
                 String selfId = TwitchSessionManager.INSTANCE.credentials().userId;
                 List<TwitchModels.Chatter> filtered = new ArrayList<>();
                 for (TwitchModels.Chatter c : response.data) {
-                    if (!c.user_id.equals(selfId)) filtered.add(c);
+                    //if (!c.user_id.equals(selfId)) // TEMP: broadcaster filter disabled for testing
+                    filtered.add(c);
                 }
                 PacketHandler.sendToServer(new SyncViewerListPacket(filtered));
             })

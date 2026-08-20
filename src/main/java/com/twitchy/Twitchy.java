@@ -77,5 +77,4 @@ public class Twitchy {
 // TODO Viewers would like their own skins | !setusername <name> to store a Minecraft username and look up users? Can store it ChatterGear.json as they give info
 // TODO Splash potion of healing redeem
 // TODO people are getting boss kills when no bosses spawn
-// TODO back them up a bit, feeling claustrophobic. Also getting in the way alot.
 // TODO if Shrunken installed, allow users to adjust their size.

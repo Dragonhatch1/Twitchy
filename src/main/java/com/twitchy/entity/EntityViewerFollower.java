@@ -16,10 +16,12 @@ import com.twitchy.entity.ai.AiStareAtOwner;
 public class EntityViewerFollower extends EntityWolf {
 
     private String twitchUserId;
+    private static final int WATCHER_MINECRAFT_USERNAME = 20;
 
     public EntityViewerFollower(World world) {
         super(world);
         this.setSize(0.6F, 1.8F); // Wolf's own constructor sets wolf-sized proportions - restore player-like size
+        this.dataWatcher.addObject(WATCHER_MINECRAFT_USERNAME, "");
 
         this.tasks.removeTask(this.aiSit);
         this.tasks.taskEntries.removeIf(entry -> entry.action instanceof net.minecraft.entity.ai.EntityAIMate);
@@ -32,7 +34,7 @@ public class EntityViewerFollower extends EntityWolf {
     }
 
     /** Call once, right after construction, before spawning into the world. */
-    public void initFollow(EntityLivingBase target, String twitchUserId, String viewerName) {
+    public void initFollow(EntityLivingBase target, String twitchUserId, String viewerName, String minecraftUsername) {
         this.twitchUserId = twitchUserId;
         this.setTamed(true);
         this.func_152115_b(
@@ -41,6 +43,7 @@ public class EntityViewerFollower extends EntityWolf {
         this.setCustomNameTag(viewerName);
         this.setAlwaysRenderNameTag(true);
         this.tasks.addTask(6, new AiStareAtOwner(this, target));
+        this.dataWatcher.updateObject(WATCHER_MINECRAFT_USERNAME, minecraftUsername == null ? "" : minecraftUsername);
     }
 
     public String getTwitchUserId() {
@@ -50,6 +53,8 @@ public class EntityViewerFollower extends EntityWolf {
     public EntityLivingBase getTargetPlayer() {
         return getOwner();
     }
+
+    public String getMinecraftUsername() { return this.dataWatcher.getWatchableObjectString(WATCHER_MINECRAFT_USERNAME); }
 
     @Override
     protected boolean canDespawn() {
@@ -75,4 +80,6 @@ public class EntityViewerFollower extends EntityWolf {
     public boolean isWet() {
         return false;
     }
+
+
 }

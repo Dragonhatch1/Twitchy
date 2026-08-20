@@ -21,9 +21,6 @@ public final class RaidManager {
     private RaidManager() {}
 
     public static void handleRaid(RaidEvent event) {
-        Twitchy.LOG.info("[DEBUG] handleRaid called. mobSpawnOnRaid={}, viewers={}, from={}",
-            Config.mobSpawnOnRaid, event.viewers, event.from_broadcaster_user_name);
-
         if (Config.mobSpawnOnRaid) {
             int regularCount = event.viewers;
             int bossCount = event.viewers / RAIDERS_PER_BOSS;
@@ -37,12 +34,10 @@ public final class RaidManager {
 
             if (regularCount > 0) {
                 List<String> regularPicks = MobSpawningConfig.pickRandom(regularCount, false);
-                Twitchy.LOG.info("[DEBUG] regularPicks={}", regularPicks);
                 PacketHandler.sendToServer(new RequestMobSpawnPacket(regularPicks, false));
             }
             if (bossCount > 0) {
                 List<String> bossPicks = MobSpawningConfig.pickRandom(bossCount, true);
-                Twitchy.LOG.info("[DEBUG] bossPicks={}", bossPicks);
                 PacketHandler.sendToServer(new RequestMobSpawnPacket(bossPicks, true));
             }
         }

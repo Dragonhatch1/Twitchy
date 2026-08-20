@@ -18,10 +18,6 @@ import com.twitchy.rewards.RewardAction.GearPiece;
 
 import cpw.mods.fml.common.Loader;
 
-/**
- * Persists each chatter's current gear AND accumulated last-hit kill count, keyed by Twitch
- * user_id (never username). Same Gson-file pattern as RewardConfig/ChatCommandConfig.
- */
 public final class ViewerFollowerGear {
 
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting()
@@ -35,6 +31,7 @@ public final class ViewerFollowerGear {
         public List<GearPiece> gear = new ArrayList<>();
         public int lastHits = 0;
         public int bossLastHits = 0;
+        public String minecraftUsername = "";
     }
 
     private static File file() {
@@ -119,10 +116,6 @@ public final class ViewerFollowerGear {
         return have >= required;
     }
 
-    /**
-     * Deducts the spent amount - called only after a gated redemption has already passed its
-     * check, so this should never actually go negative in practice.
-     */
     public static void spendKills(String userId, int amount) {
         if (amount <= 0) return;
         ChatterRecord record = recordFor(userId);
@@ -150,5 +143,17 @@ public final class ViewerFollowerGear {
         ChatterRecord record = recordFor(userId);
         record.bossLastHits = Math.max(0, record.bossLastHits - amount);
         save();
+    }
+
+    // ===================== Skins =====================
+
+    public static void setMinecraftUsername(String userId, String minecraftUsername) {
+        recordFor(userId).minecraftUsername = minecraftUsername;
+        save();
+    }
+
+    public static String getMinecraftUsername(String userId) {
+        ChatterRecord record = chatters.get(userId);
+        return record != null ? record.minecraftUsername : "";
     }
 }

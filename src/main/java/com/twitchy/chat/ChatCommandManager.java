@@ -21,6 +21,11 @@ public final class ChatCommandManager {
             return;
         }
 
+        if (firstWord.equalsIgnoreCase("!setname")) {
+            handleSetNameCommand(event);
+            return;
+        }
+
         Optional<ChatCommand> maybeCommand = ChatCommandConfig.findForMessage(event.message.text);
         if (maybeCommand.isEmpty()) return;
         ChatCommand command = maybeCommand.get();
@@ -48,6 +53,21 @@ public final class ChatCommandManager {
                 com.twitchy.Twitchy.LOG.warn("Failed to respond to !kills: {}", ex.getMessage());
                 return null;
             });
+    }
+
+    private static void handleSetNameCommand(ChatMessageEvent event) {
+        String[] parts = event.message.text.trim().split("\\s+", 2);
+        if (parts.length < 2 || parts[1].isBlank()) {
+            TwitchSessionManager.INSTANCE.sendChatMessage(
+                event.chatter_user_name + " - usage: !setname <your Minecraft username>");
+            return;
+        }
+
+        String username = parts[1].trim();
+        ViewerFollowerGear.setMinecraftUsername(event.chatter_user_id, username);
+
+        TwitchSessionManager.INSTANCE.sendChatMessage(
+            event.chatter_user_name + " - your entity will now use " + username + "'s skin!");
     }
 
     /** Simulates a trigger locally for testing (/twitchy testchat), bypassing Twitch entirely. */

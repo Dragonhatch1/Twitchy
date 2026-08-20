@@ -15,6 +15,7 @@ public class SyncViewerListPacket implements IMessage {
     public List<String> userIds = new ArrayList<>();
     public List<String> userLogins = new ArrayList<>();
     public List<List<GearPiece>> gearPerUser = new ArrayList<>();
+    public List<String> minecraftUsernames = new ArrayList<>();
 
     public SyncViewerListPacket() {}
 
@@ -22,8 +23,8 @@ public class SyncViewerListPacket implements IMessage {
         for (TwitchModels.Chatter c : chatters) {
             userIds.add(c.user_id);
             userLogins.add(c.user_login);
-            gearPerUser.add(ViewerFollowerGear.getGear(c.user_id)); // read locally, on the client, where it's actually
-                                                                    // loaded
+            gearPerUser.add(ViewerFollowerGear.getGear(c.user_id));
+            minecraftUsernames.add(ViewerFollowerGear.getMinecraftUsername(c.user_id));
         }
     }
 
@@ -40,6 +41,7 @@ public class SyncViewerListPacket implements IMessage {
                 buf.writeInt(piece.metadata);
                 buf.writeInt(piece.slot);
             }
+            writeString(buf, minecraftUsernames.get(i));
         }
     }
 
@@ -59,6 +61,7 @@ public class SyncViewerListPacket implements IMessage {
                 gear.add(piece);
             }
             gearPerUser.add(gear);
+            minecraftUsernames.add(readString(buf));
         }
     }
 
