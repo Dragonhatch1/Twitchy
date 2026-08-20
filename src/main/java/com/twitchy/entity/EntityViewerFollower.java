@@ -16,7 +16,7 @@ import com.twitchy.entity.ai.AiStareAtOwner;
 public class EntityViewerFollower extends EntityWolf {
 
     private String twitchUserId;
-    private static final int WATCHER_MINECRAFT_USERNAME = 20;
+    private static final int WATCHER_MINECRAFT_USERNAME = 25;
 
     public EntityViewerFollower(World world) {
         super(world);

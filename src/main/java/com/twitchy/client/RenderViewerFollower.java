@@ -1,13 +1,25 @@
 package com.twitchy.client;
 
+import java.net.Proxy;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
+import com.mojang.authlib.Agent;
+import com.mojang.authlib.GameProfile;
+import com.mojang.authlib.GameProfileRepository;
+import com.mojang.authlib.ProfileLookupCallback;
+import com.mojang.authlib.minecraft.MinecraftProfileTexture;
+import com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService;
+
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.renderer.entity.RenderBiped;
+import net.minecraft.client.resources.SkinManager;
 import net.minecraft.util.ResourceLocation;
 
+import com.twitchy.Twitchy;
 import com.twitchy.entity.EntityViewerFollower;
 
 public class RenderViewerFollower extends RenderBiped {
@@ -16,6 +28,12 @@ public class RenderViewerFollower extends RenderBiped {
 
     private static final Map<String, ResourceLocation> resolvedSkins = new ConcurrentHashMap<>();
     private static final Set<String> pendingLookups = ConcurrentHashMap.newKeySet();
+
+    // Minecraft's own client doesn't expose a profile-repository getter the way it does for
+    // SkinManager (func_152342_ad()), so Twitchy builds its own, matching the exact same
+    // constructor pattern Minecraft.java itself uses to build its session service.
+    private static final GameProfileRepository PROFILE_REPO =
+        new YggdrasilAuthenticationService(Proxy.NO_PROXY, UUID.randomUUID().toString()).createProfileRepository();
 
     public RenderViewerFollower() {
         super(new ModelBiped(), 0.5F);
@@ -39,18 +57,34 @@ public class RenderViewerFollower extends RenderBiped {
         return this.getEntityTexture((EntityViewerFollower) entity);
     }
 
-    /** Called once per poll cycle (via ViewerFollowerClientPoller) so stored usernames get
-     *  re-checked for skin changes on the same cadence as everything else, rather than resolving
-     *  once and caching forever. */
     public static void invalidateSkinCache() {
         resolvedSkins.clear();
         pendingLookups.clear();
     }
 
-    // TODO: real username -> GameProfile -> texture resolution via authlib. Stubbed for now -
-    // logs the attempt and leaves the entity on the Steve fallback until this is implemented.
     private static void resolveSkinAsync(String username) {
-        com.twitchy.Twitchy.LOG.info("[TODO] Would resolve real skin for username: {}", username);
-        pendingLookups.remove(username);
+        PROFILE_REPO.findProfilesByNames(new String[] { username }, Agent.MINECRAFT, new ProfileLookupCallback() {
+            @Override
+            public void onProfileLookupSucceeded(GameProfile profile) {
+                SkinManager skinManager = Minecraft.getMinecraft().func_152342_ad();
+                GameProfile filled = Minecraft.getMinecraft().func_152347_ac().fillProfileProperties(profile, false);
+
+                skinManager.func_152790_a(filled, new SkinManager.SkinAvailableCallback() {
+                    @Override
+                    public void func_152121_a(MinecraftProfileTexture.Type type, ResourceLocation location) {
+                        if (type == MinecraftProfileTexture.Type.SKIN) {
+                            resolvedSkins.put(username, location);
+                        }
+                        pendingLookups.remove(username);
+                    }
+                }, false);
+            }
+
+            @Override
+            public void onProfileLookupFailed(GameProfile profile, Exception exception) {
+                Twitchy.LOG.warn("Skin lookup failed for username '{}': {}", username, exception.getMessage());
+                pendingLookups.remove(username);
+            }
+        });
     }
 }

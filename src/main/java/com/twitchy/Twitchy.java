@@ -74,7 +74,8 @@ public class Twitchy {
 // TODO Spawn entity on Sub | Twilight forest Entity | Ravens, Tiny Birds,
 // TODO Pong as a captcha?
 
-// TODO Viewers would like their own skins | !setusername <name> to store a Minecraft username and look up users? Can store it ChatterGear.json as they give info
+
 // TODO Splash potion of healing redeem
 // TODO people are getting boss kills when no bosses spawn
 // TODO if Shrunken installed, allow users to adjust their size.
+// TODO move to Equipment flags so we can have an equip system. Just unlock armor and equip it with !equip

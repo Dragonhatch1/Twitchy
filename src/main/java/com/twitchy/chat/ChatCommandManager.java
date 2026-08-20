@@ -63,7 +63,13 @@ public final class ChatCommandManager {
             return;
         }
 
-        String username = parts[1].trim();
+        String username = parts[1].trim().replaceAll("[^a-zA-Z0-9_]", "");
+        if (username.isBlank()) {
+            TwitchSessionManager.INSTANCE.sendChatMessage(
+                event.chatter_user_name + " - that doesn't look like a valid Minecraft username.");
+            return;
+        }
+
         ViewerFollowerGear.setMinecraftUsername(event.chatter_user_id, username);
 
         TwitchSessionManager.INSTANCE.sendChatMessage(
