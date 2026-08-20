@@ -12,7 +12,7 @@ public class KillCreditHandler implements IMessageHandler<KillCreditPacket, IMes
     @Override
     public IMessage onMessage(KillCreditPacket message, MessageContext ctx) {
         ViewerFollowerGear.addKill(message.viewerUserId);
-        if (message.killedEntityName != null && MobSpawningConfig.isAllowed(message.killedEntityName)) {
+        if (message.killedEntityName != null && MobSpawningConfig.isBoss(message.killedEntityName)) {
             ViewerFollowerGear.addBossKill(message.viewerUserId);
         }
         return null;

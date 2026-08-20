@@ -93,4 +93,13 @@ public final class MobSpawningConfig {
         }
         return picks;
     }
+
+    /**
+     * Client-side: is this specific entity name in the boss pool specifically - distinct from
+     * isAllowed(String), which intentionally doesn't distinguish categories. Used for boss-kill
+     * crediting, where the category genuinely matters.
+     */
+    public static boolean isBoss(String entityName) {
+        return pools.boss.contains(entityName);
+    }
 }
