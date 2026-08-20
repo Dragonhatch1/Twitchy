@@ -1,5 +1,6 @@
 package com.twitchy.entity;
 
+import com.twitchy.Twitchy;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
@@ -37,17 +38,19 @@ public class ViewerFollowerHandler {
 
     @SubscribeEvent
     public void onLivingDeath(LivingDeathEvent event) {
-        // Credit a kill if a viewer follower landed the final blow - tell the owning streamer's
-        // client directly, since kill data (and now the boss-pool check itself) lives entirely in
-        // THEIR local files, not the server's.
         if (event.source != null && event.source.getEntity() instanceof EntityViewerFollower killer) {
+            Twitchy.LOG.info("[DEBUG] Kill detected. killer follower userId={}, followerName={}, killedEntity={}",
+                killer.getTwitchUserId(), killer.getCommandSenderName(), EntityList.getEntityString(event.entityLiving));
+
             if (killer.getTargetPlayer() instanceof EntityPlayerMP owner) {
                 String killedEntityName = EntityList.getEntityString(event.entityLiving);
+                Twitchy.LOG.info("[DEBUG] Crediting kill to owner={} (userId={})", owner.getCommandSenderName(), killer.getTwitchUserId());
                 PacketHandler.sendTo(new KillCreditPacket(killer.getTwitchUserId(), killedEntityName), owner);
+            } else {
+                Twitchy.LOG.warn("[DEBUG] killer.getTargetPlayer() did not resolve to a valid EntityPlayerMP!");
             }
         }
 
-        // Existing logic: a viewer follower itself dying, for respawn tracking.
         if (!(event.entityLiving instanceof EntityViewerFollower follower)) return;
         if (follower.worldObj.isRemote) return;
 

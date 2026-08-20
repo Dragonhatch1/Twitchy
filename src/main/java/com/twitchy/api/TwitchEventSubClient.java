@@ -21,7 +21,7 @@ import com.twitchy.auth.TwitchCredentials;
  */
 public class TwitchEventSubClient implements WebSocket.Listener {
 
-    private static final String EVENTSUB_WS_URL = "wss://eventsub.wss.twitch.tv/ws";
+    private static final String EVENTSUB_WS_URL = Config.eventSubWsUrl;
     private static final Gson GSON = new Gson();
 
     private final TwitchCredentials credentials;

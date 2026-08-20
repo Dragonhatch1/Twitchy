@@ -21,23 +21,28 @@ public final class RaidManager {
     private RaidManager() {}
 
     public static void handleRaid(RaidEvent event) {
+        Twitchy.LOG.info("[DEBUG] handleRaid called. mobSpawnOnRaid={}, viewers={}, from={}",
+            Config.mobSpawnOnRaid, event.viewers, event.from_broadcaster_user_name);
+
         if (Config.mobSpawnOnRaid) {
-            int regularCount = event.viewer_count;
-            int bossCount = event.viewer_count / RAIDERS_PER_BOSS;
+            int regularCount = event.viewers;
+            int bossCount = event.viewers / RAIDERS_PER_BOSS;
 
             Twitchy.LOG.info(
                 "Incoming raid from {} with {} viewers - spawning {} regular, {} boss.",
                 event.from_broadcaster_user_name,
-                event.viewer_count,
+                event.viewers,
                 regularCount,
                 bossCount);
 
             if (regularCount > 0) {
                 List<String> regularPicks = MobSpawningConfig.pickRandom(regularCount, false);
+                Twitchy.LOG.info("[DEBUG] regularPicks={}", regularPicks);
                 PacketHandler.sendToServer(new RequestMobSpawnPacket(regularPicks, false));
             }
             if (bossCount > 0) {
                 List<String> bossPicks = MobSpawningConfig.pickRandom(bossCount, true);
+                Twitchy.LOG.info("[DEBUG] bossPicks={}", bossPicks);
                 PacketHandler.sendToServer(new RequestMobSpawnPacket(bossPicks, true));
             }
         }
@@ -58,7 +63,7 @@ public final class RaidManager {
         fake.from_broadcaster_user_id = "test-raider-id";
         fake.from_broadcaster_user_login = "testraider";
         fake.from_broadcaster_user_name = "TestRaider";
-        fake.viewer_count = viewerCount;
+        fake.viewers = viewerCount;
         handleRaid(fake);
     }
 }

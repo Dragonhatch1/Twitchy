@@ -184,6 +184,6 @@ public final class TwitchModels {
         public String from_broadcaster_user_id;
         public String from_broadcaster_user_login;
         public String from_broadcaster_user_name;
-        public int viewer_count;
+        public int viewers;
     }
 }

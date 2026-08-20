@@ -74,7 +74,7 @@ public class Twitchy {
 // TODO Spawn entity on Sub | Twilight forest Entity | Ravens, Tiny Birds,
 // TODO Pong as a captcha?
 
-// TODO Raids currently not working. Triggering Shoutout, but not the mob spawning.
+// TODO Viewers would like their own skins | !setusername <name> to store a Minecraft username and look up users? Can store it ChatterGear.json as they give info
 // TODO Splash potion of healing redeem
 // TODO people are getting boss kills when no bosses spawn
 // TODO back them up a bit, feeling claustrophobic. Also getting in the way alot.

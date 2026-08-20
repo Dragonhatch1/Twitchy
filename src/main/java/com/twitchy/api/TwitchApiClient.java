@@ -26,7 +26,7 @@ import com.twitchy.auth.TwitchCredentials;
 /** Thin wrapper around the bits of Twitch's Helix REST API this mod needs. Client-side only. */
 public final class TwitchApiClient {
 
-    private static final String HELIX_BASE = "https://api.twitch.tv/helix";
+    private static final String HELIX_BASE = Config.helixApiBaseUrl;
     private static final Gson GSON = new Gson();
     private static final HttpClient HTTP = HttpClient.newBuilder()
         .connectTimeout(Duration.ofSeconds(10))

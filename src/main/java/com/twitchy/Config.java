@@ -37,6 +37,14 @@ public class Config {
     /** If true, automatically sends a Twitch Shoutout to the raiding broadcaster on an incoming raid. */
     public static boolean autoShoutout = false;
 
+    /** WebSocket URL for the EventSub connection. Only change this for local testing against the
+     *  Twitch CLI's mock EventSub server - leave as default for real streaming use. */
+    public static String eventSubWsUrl = "wss://eventsub.wss.twitch.tv/ws";
+
+    /** Base URL for Helix API calls. Only change this for local testing against the Twitch CLI's
+     *  mock server - leave as default for real streaming use. */
+    public static String helixApiBaseUrl = "https://api.twitch.tv/helix";
+
     // Channel-point deposit container location, set/moved via /twitchy setstorage.
     public static int storageX = 0;
     public static int storageY = 0;
@@ -121,6 +129,17 @@ public class Config {
             "Raids",
             autoShoutout,
             "Automatically send a Twitch Shoutout to the broadcaster that raided you.");
+
+        eventSubWsUrl = configuration.getString(
+            "eventSubWsUrl",
+            "Networking",
+            eventSubWsUrl,
+            "EventSub WebSocket URL. Only change for local dev testing against the Twitch CLI mock server.");
+        helixApiBaseUrl = configuration.getString(
+            "helixApiBaseUrl",
+            "Networking",
+            helixApiBaseUrl,
+            "Helix API base URL. Only change for local dev testing against the Twitch CLI mock server.");
 
         if (configuration.hasChanged()) {
             configuration.save();
