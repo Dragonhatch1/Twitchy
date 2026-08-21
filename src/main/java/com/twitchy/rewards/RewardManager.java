@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
-import com.twitchy.network.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.util.ChatComponentText;
@@ -22,6 +21,7 @@ import com.twitchy.client.ToastEffect;
 import com.twitchy.client.TwitchSessionManager;
 import com.twitchy.entity.MobSpawningConfig;
 import com.twitchy.entity.ViewerFollowerGear;
+import com.twitchy.network.*;
 
 /**
  * Client-side only. Handles an incoming redemption event: resolves the configured action and

@@ -6,19 +6,18 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
-import com.mojang.authlib.Agent;
-import com.mojang.authlib.GameProfile;
-import com.mojang.authlib.GameProfileRepository;
-import com.mojang.authlib.ProfileLookupCallback;
-import com.mojang.authlib.minecraft.MinecraftProfileTexture;
-import com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.renderer.entity.RenderBiped;
 import net.minecraft.client.resources.SkinManager;
 import net.minecraft.util.ResourceLocation;
 
+import com.mojang.authlib.Agent;
+import com.mojang.authlib.GameProfile;
+import com.mojang.authlib.GameProfileRepository;
+import com.mojang.authlib.ProfileLookupCallback;
+import com.mojang.authlib.minecraft.MinecraftProfileTexture;
+import com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService;
 import com.twitchy.Twitchy;
 import com.twitchy.entity.EntityViewerFollower;
 
@@ -32,8 +31,10 @@ public class RenderViewerFollower extends RenderBiped {
     // Minecraft's own client doesn't expose a profile-repository getter the way it does for
     // SkinManager (func_152342_ad()), so Twitchy builds its own, matching the exact same
     // constructor pattern Minecraft.java itself uses to build its session service.
-    private static final GameProfileRepository PROFILE_REPO =
-        new YggdrasilAuthenticationService(Proxy.NO_PROXY, UUID.randomUUID().toString()).createProfileRepository();
+    private static final GameProfileRepository PROFILE_REPO = new YggdrasilAuthenticationService(
+        Proxy.NO_PROXY,
+        UUID.randomUUID()
+            .toString()).createProfileRepository();
 
     public RenderViewerFollower() {
         super(new ModelBiped(), 0.5F);
@@ -64,12 +65,17 @@ public class RenderViewerFollower extends RenderBiped {
 
     private static void resolveSkinAsync(String username) {
         PROFILE_REPO.findProfilesByNames(new String[] { username }, Agent.MINECRAFT, new ProfileLookupCallback() {
+
             @Override
             public void onProfileLookupSucceeded(GameProfile profile) {
-                SkinManager skinManager = Minecraft.getMinecraft().func_152342_ad();
-                GameProfile filled = Minecraft.getMinecraft().func_152347_ac().fillProfileProperties(profile, false);
+                SkinManager skinManager = Minecraft.getMinecraft()
+                    .func_152342_ad();
+                GameProfile filled = Minecraft.getMinecraft()
+                    .func_152347_ac()
+                    .fillProfileProperties(profile, false);
 
                 skinManager.func_152790_a(filled, new SkinManager.SkinAvailableCallback() {
+
                     @Override
                     public void func_152121_a(MinecraftProfileTexture.Type type, ResourceLocation location) {
                         if (type == MinecraftProfileTexture.Type.SKIN) {

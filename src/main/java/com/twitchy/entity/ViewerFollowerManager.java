@@ -18,7 +18,7 @@ public class ViewerFollowerManager {
     private static final Map<String, EntityViewerFollower> activeFollowers = new HashMap<>();
 
     public static void reconcile(EntityPlayerMP target, List<String> userIds, List<String> userLogins,
-                                 List<List<RewardAction.GearPiece>> gearPerUser, List<String> minecraftUsernames, List<Float> scales) {
+        List<List<RewardAction.GearPiece>> gearPerUser, List<String> minecraftUsernames, List<Float> scales) {
         Set<String> currentIds = new HashSet<>(userIds);
 
         for (int i = 0; i < userIds.size(); i++) {
@@ -57,7 +57,7 @@ public class ViewerFollowerManager {
     }
 
     public static void spawnFollower(EntityPlayerMP target, String userId, String userLogin,
-                                     List<RewardAction.GearPiece> gear, String minecraftUsername, float scale) {
+        List<RewardAction.GearPiece> gear, String minecraftUsername, float scale) {
         EntityViewerFollower follower = new EntityViewerFollower(target.worldObj);
         follower.setPosition(target.posX, target.posY, target.posZ);
         follower.initFollow(target, userId, userLogin, minecraftUsername, scale);

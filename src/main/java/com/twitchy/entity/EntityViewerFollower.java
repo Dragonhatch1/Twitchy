@@ -25,7 +25,8 @@ public class EntityViewerFollower extends EntityWolf {
 
     public EntityViewerFollower(World world) {
         super(world);
-        this.setSize(BASE_WIDTH, BASE_HEIGHT); // Wolf's own constructor sets wolf-sized proportions - restore player-like size
+        this.setSize(BASE_WIDTH, BASE_HEIGHT); // Wolf's own constructor sets wolf-sized proportions - restore
+                                               // player-like size
         this.dataWatcher.addObject(WATCHER_MINECRAFT_USERNAME, "");
         this.dataWatcher.addObject(WATCHER_SCALE, 1.0F);
 
@@ -40,7 +41,8 @@ public class EntityViewerFollower extends EntityWolf {
     }
 
     /** Call once, right after construction, before spawning into the world. */
-    public void initFollow(EntityLivingBase target, String twitchUserId, String viewerName, String minecraftUsername, float scale) {
+    public void initFollow(EntityLivingBase target, String twitchUserId, String viewerName, String minecraftUsername,
+        float scale) {
         this.twitchUserId = twitchUserId;
         this.setTamed(true);
         this.func_152115_b(
@@ -61,7 +63,9 @@ public class EntityViewerFollower extends EntityWolf {
         return getOwner();
     }
 
-    public String getMinecraftUsername() { return this.dataWatcher.getWatchableObjectString(WATCHER_MINECRAFT_USERNAME); }
+    public String getMinecraftUsername() {
+        return this.dataWatcher.getWatchableObjectString(WATCHER_MINECRAFT_USERNAME);
+    }
 
     public float getFollowerScale() {
         return this.dataWatcher.getWatchableObjectFloat(WATCHER_SCALE);
@@ -107,6 +111,16 @@ public class EntityViewerFollower extends EntityWolf {
     }
 
     @Override
+    protected void dropFewItems(boolean recentlyHit, int lootingLevel) {
+        // Followers never drop anything of their own - no species drop, no gear.
+    }
+
+    @Override
+    protected void dropEquipment(boolean recentlyHit, int lootingLevel) {
+        // Explicitly suppress the vanilla chance-based equipped-item drop too.
+    }
+
+    @Override
     public boolean isWet() {
         return false;
     }
@@ -121,6 +135,5 @@ public class EntityViewerFollower extends EntityWolf {
             applyReflectiveResize(syncedScale);
         }
     }
-
 
 }

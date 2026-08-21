@@ -56,24 +56,26 @@ public final class ChatCommandManager {
     }
 
     private static void handleSetNameCommand(ChatMessageEvent event) {
-        String[] parts = event.message.text.trim().split("\\s+", 2);
+        String[] parts = event.message.text.trim()
+            .split("\\s+", 2);
         if (parts.length < 2 || parts[1].isBlank()) {
-            TwitchSessionManager.INSTANCE.sendChatMessage(
-                event.chatter_user_name + " - usage: !setname <your Minecraft username>");
+            TwitchSessionManager.INSTANCE
+                .sendChatMessage(event.chatter_user_name + " - usage: !setname <your Minecraft username>");
             return;
         }
 
-        String username = parts[1].trim().replaceAll("[^a-zA-Z0-9_]", "");
+        String username = parts[1].trim()
+            .replaceAll("[^a-zA-Z0-9_]", "");
         if (username.isBlank()) {
-            TwitchSessionManager.INSTANCE.sendChatMessage(
-                event.chatter_user_name + " - that doesn't look like a valid Minecraft username.");
+            TwitchSessionManager.INSTANCE
+                .sendChatMessage(event.chatter_user_name + " - that doesn't look like a valid Minecraft username.");
             return;
         }
 
         ViewerFollowerGear.setMinecraftUsername(event.chatter_user_id, username);
 
-        TwitchSessionManager.INSTANCE.sendChatMessage(
-            event.chatter_user_name + " - your entity will now use " + username + "'s skin!");
+        TwitchSessionManager.INSTANCE
+            .sendChatMessage(event.chatter_user_name + " - your entity will now use " + username + "'s skin!");
     }
 
     /** Simulates a trigger locally for testing (/twitchy testchat), bypassing Twitch entirely. */

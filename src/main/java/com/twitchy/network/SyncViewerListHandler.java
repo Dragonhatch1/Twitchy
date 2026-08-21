@@ -14,7 +14,13 @@ public class SyncViewerListHandler implements IMessageHandler<SyncViewerListPack
     public IMessage onMessage(SyncViewerListPacket message, MessageContext ctx) {
         EntityPlayerMP sender = ctx.getServerHandler().playerEntity;
         if (sender == null) return null;
-        ViewerFollowerManager.reconcile(sender, message.userIds, message.userLogins, message.gearPerUser, message.minecraftUsernames, message.scales);
+        ViewerFollowerManager.reconcile(
+            sender,
+            message.userIds,
+            message.userLogins,
+            message.gearPerUser,
+            message.minecraftUsernames,
+            message.scales);
         return null;
     }
 }
