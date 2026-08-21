@@ -17,11 +17,17 @@ public class EntityViewerFollower extends EntityWolf {
 
     private String twitchUserId;
     private static final int WATCHER_MINECRAFT_USERNAME = 25;
+    private static final int WATCHER_SCALE = 26;
+    private static java.lang.reflect.Method methodSetSize;
+
+    private static final float BASE_WIDTH = 0.6F;
+    private static final float BASE_HEIGHT = 1.8F;
 
     public EntityViewerFollower(World world) {
         super(world);
-        this.setSize(0.6F, 1.8F); // Wolf's own constructor sets wolf-sized proportions - restore player-like size
+        this.setSize(BASE_WIDTH, BASE_HEIGHT); // Wolf's own constructor sets wolf-sized proportions - restore player-like size
         this.dataWatcher.addObject(WATCHER_MINECRAFT_USERNAME, "");
+        this.dataWatcher.addObject(WATCHER_SCALE, 1.0F);
 
         this.tasks.removeTask(this.aiSit);
         this.tasks.taskEntries.removeIf(entry -> entry.action instanceof net.minecraft.entity.ai.EntityAIMate);
@@ -34,7 +40,7 @@ public class EntityViewerFollower extends EntityWolf {
     }
 
     /** Call once, right after construction, before spawning into the world. */
-    public void initFollow(EntityLivingBase target, String twitchUserId, String viewerName, String minecraftUsername) {
+    public void initFollow(EntityLivingBase target, String twitchUserId, String viewerName, String minecraftUsername, float scale) {
         this.twitchUserId = twitchUserId;
         this.setTamed(true);
         this.func_152115_b(
@@ -44,6 +50,7 @@ public class EntityViewerFollower extends EntityWolf {
         this.setAlwaysRenderNameTag(true);
         this.tasks.addTask(6, new AiStareAtOwner(this, target));
         this.dataWatcher.updateObject(WATCHER_MINECRAFT_USERNAME, minecraftUsername == null ? "" : minecraftUsername);
+        this.setFollowerScale(scale);
     }
 
     public String getTwitchUserId() {
@@ -55,6 +62,27 @@ public class EntityViewerFollower extends EntityWolf {
     }
 
     public String getMinecraftUsername() { return this.dataWatcher.getWatchableObjectString(WATCHER_MINECRAFT_USERNAME); }
+
+    public float getFollowerScale() {
+        return this.dataWatcher.getWatchableObjectFloat(WATCHER_SCALE);
+    }
+
+    public void setFollowerScale(float scale) {
+        this.dataWatcher.updateObject(WATCHER_SCALE, scale);
+
+        try {
+            if (methodSetSize == null) {
+                methodSetSize = cpw.mods.fml.relauncher.ReflectionHelper.findMethod(
+                    net.minecraft.entity.Entity.class,
+                    this,
+                    new String[] { "setSize", "func_70105_a", "a" },
+                    new Class[] { Float.TYPE, Float.TYPE });
+            }
+            methodSetSize.invoke(this, BASE_WIDTH * scale, BASE_HEIGHT * scale);
+        } catch (Exception e) {
+            com.twitchy.Twitchy.LOG.warn("Failed to resize follower hitbox via reflection", e);
+        }
+    }
 
     @Override
     protected boolean canDespawn() {

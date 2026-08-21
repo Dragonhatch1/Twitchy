@@ -46,6 +46,7 @@ public final class PacketHandler {
         WRAPPER.registerMessage(KillCreditHandler.class, KillCreditPacket.class, nextId++, Side.CLIENT);
         WRAPPER.registerMessage(RequestMobSpawnHandler.class, RequestMobSpawnPacket.class, nextId++, Side.SERVER);
         WRAPPER.registerMessage(RerollMobRequestHandler.class, RerollMobRequestPacket.class, nextId++, Side.CLIENT);
+        WRAPPER.registerMessage(ResizeFollowerHandler.class, ResizeFollowerPacket.class, nextId++, Side.SERVER);
     }
 
     public static void sendToServer(IMessage message) {

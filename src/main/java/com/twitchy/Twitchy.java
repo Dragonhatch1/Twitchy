@@ -78,3 +78,4 @@ public class Twitchy {
 // TODO Splash potion of healing redeem
 // TODO if Shrunken installed, allow users to adjust their size.
 // TODO move to Equipment flags so we can have an equip system. Just unlock armor and equip it with !equip
+// TODO Stop Drops from Followers

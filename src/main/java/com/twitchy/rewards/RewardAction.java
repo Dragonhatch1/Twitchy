@@ -99,4 +99,6 @@ public class RewardAction {
     public int regularSpawnCount = 0;
     /** KEY_SEQUENCE_CHALLENGE: how many boss-pool mobs to spawn on failure. 0 = none. */
     public int bossSpawnCount = 0;
+    /** RESIZE_FOLLOWER: amount to add to the viewer's current scale. Negative to shrink. */
+    public float resizeDelta = 0.0F;
 }

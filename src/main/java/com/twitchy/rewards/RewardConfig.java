@@ -438,6 +438,28 @@ public class RewardConfig {
         randomMobs.action.regularSpawnCount = 3;
         defaults.add(randomMobs);
 
+        RewardMapping growFollower = new RewardMapping();
+        growFollower.key = "grow_follower";
+        growFollower.enabled = false;
+        growFollower.title = "Grow your Follower!";
+        growFollower.cost = 150;
+        growFollower.prompt = "Grow your follower a little bigger!";
+        growFollower.action = new RewardAction();
+        growFollower.action.type = RewardActionType.RESIZE_FOLLOWER;
+        growFollower.action.resizeDelta = 0.10F;
+        defaults.add(growFollower);
+
+        RewardMapping shrinkFollower = new RewardMapping();
+        shrinkFollower.key = "shrink_follower";
+        shrinkFollower.enabled = false;
+        shrinkFollower.title = "Shrink your Follower!";
+        shrinkFollower.cost = 150;
+        shrinkFollower.prompt = "Shrink your follower a little smaller!";
+        shrinkFollower.action = new RewardAction();
+        shrinkFollower.action.type = RewardActionType.RESIZE_FOLLOWER;
+        shrinkFollower.action.resizeDelta = -0.10F;
+        defaults.add(shrinkFollower);
+
         return defaults;
     }
 }

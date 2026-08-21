@@ -24,6 +24,9 @@ public final class ViewerFollowerGear {
         .create();
     private static Map<String, ChatterRecord> chatters = new HashMap<>();
 
+    private static final float MIN_SCALE = 0.25F;
+    private static final float MAX_SCALE = 3.0F;
+
     private ViewerFollowerGear() {}
 
     public static class ChatterRecord {
@@ -32,6 +35,7 @@ public final class ViewerFollowerGear {
         public int lastHits = 0;
         public int bossLastHits = 0;
         public String minecraftUsername = "";
+        public float scale = 1.0F;
     }
 
     private static File file() {
@@ -155,5 +159,20 @@ public final class ViewerFollowerGear {
     public static String getMinecraftUsername(String userId) {
         ChatterRecord record = chatters.get(userId);
         return record != null ? record.minecraftUsername : "";
+    }
+
+    // ===================== Scaling =====================
+
+    public static float getScale(String userId) {
+        ChatterRecord record = chatters.get(userId);
+        return record != null ? record.scale : 1.0F;
+    }
+
+    /** Returns the resulting clamped scale, so callers can report it back to the viewer. */
+    public static float adjustScale(String userId, float delta) {
+        ChatterRecord record = recordFor(userId);
+        record.scale = Math.max(MIN_SCALE, Math.min(MAX_SCALE, record.scale + delta));
+        save();
+        return record.scale;
     }
 }

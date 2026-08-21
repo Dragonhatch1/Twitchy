@@ -40,5 +40,8 @@ public enum RewardActionType {
      * MobSpawning.json pools - same pipeline the WASD captcha failure uses, just triggered directly
      * by redeeming rather than as a consequence.
      */
-    SPAWN_RANDOM_MOBS
+    SPAWN_RANDOM_MOBS,
+    /** Grows or shrinks the redeeming viewer's follower by resizeDelta (e.g. +0.10 or -0.10),
+     *  persisted and clamped in ViewerFollowerGear. */
+    RESIZE_FOLLOWER
 }

@@ -87,4 +87,12 @@ public class RenderViewerFollower extends RenderBiped {
             }
         });
     }
+
+    @Override
+    protected void preRenderCallback(net.minecraft.entity.EntityLivingBase entity, float partialTicks) {
+        if (entity instanceof EntityViewerFollower follower) {
+            float scale = follower.getFollowerScale();
+            org.lwjgl.opengl.GL11.glScalef(scale, scale, scale);
+        }
+    }
 }
