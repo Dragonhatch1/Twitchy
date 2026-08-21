@@ -80,6 +80,7 @@ public class RewardActionSerializer implements JsonSerializer<RewardAction> {
                 if (action.regularSpawnCount > 0) json.addProperty("regularSpawnCount", action.regularSpawnCount);
                 if (action.bossSpawnCount > 0) json.addProperty("bossSpawnCount", action.bossSpawnCount);
             }
+            case RESIZE_FOLLOWER -> json.addProperty("resizeDelta", action.resizeDelta);
         }
 
         // Toast fields apply to any type, but only worth writing if a toast is actually configured.
