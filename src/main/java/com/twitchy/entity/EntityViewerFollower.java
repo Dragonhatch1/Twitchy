@@ -69,7 +69,9 @@ public class EntityViewerFollower extends EntityWolf {
 
     public void setFollowerScale(float scale) {
         this.dataWatcher.updateObject(WATCHER_SCALE, scale);
+    }
 
+    private void applyReflectiveResize(float scale) {
         try {
             if (methodSetSize == null) {
                 methodSetSize = cpw.mods.fml.relauncher.ReflectionHelper.findMethod(
@@ -107,6 +109,17 @@ public class EntityViewerFollower extends EntityWolf {
     @Override
     public boolean isWet() {
         return false;
+    }
+
+    @Override
+    public void onUpdate() {
+        super.onUpdate();
+
+        float syncedScale = getFollowerScale();
+        float expectedHeight = BASE_HEIGHT * syncedScale;
+        if (Math.abs(this.height - expectedHeight) > 0.001F) {
+            applyReflectiveResize(syncedScale);
+        }
     }
 
 
