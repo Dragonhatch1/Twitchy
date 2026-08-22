@@ -3,6 +3,7 @@ package com.twitchy.chat;
 import java.util.Optional;
 
 import com.twitchy.api.TwitchModels.ChatMessageEvent;
+import com.twitchy.client.FollowerModelRegistry;
 import com.twitchy.client.TwitchSessionManager;
 import com.twitchy.entity.ViewerFollowerGear;
 import com.twitchy.network.FollowerModelPacket;
@@ -86,19 +87,26 @@ public final class ChatCommandManager {
 
     private static void handleModelsCommand(ChatMessageEvent event) {
         String[] parts = event.message.text.trim().split("\\s+", 2);
-        if (parts.length < 2 || (!parts[1].trim().equalsIgnoreCase("biped") && !parts[1].trim().equalsIgnoreCase("spider"))) {
-            TwitchSessionManager.INSTANCE
-                .sendChatMessage(event.chatter_user_name + " - usage: !models <biped|spider>");
+        if (parts.length < 2 || parts[1].isBlank()) {
+            TwitchSessionManager.INSTANCE.sendChatMessage(
+                event.chatter_user_name + " - usage: !models <model>. Available: "
+                    + String.join(", ", FollowerModelRegistry.availableKeys()));
             return;
         }
 
-        String model = parts[1].trim().equalsIgnoreCase("spider") ? "SPIDER" : "BIPED";
-        ViewerFollowerGear.setFollowerModel(event.chatter_user_id, model);
-        com.twitchy.network.PacketHandler.sendToServer(
-            new FollowerModelPacket(event.chatter_user_id, model));
+        String choice = parts[1].trim().toUpperCase();
+        if (!FollowerModelRegistry.isAvailable(choice)) {
+            TwitchSessionManager.INSTANCE.sendChatMessage(
+                event.chatter_user_name + " - not available. Try: "
+                    + String.join(", ", FollowerModelRegistry.availableKeys()));
+            return;
+        }
 
-        TwitchSessionManager.INSTANCE
-            .sendChatMessage(event.chatter_user_name + " - your follower is now a " + model.toLowerCase() + "!");
+        ViewerFollowerGear.setFollowerModel(event.chatter_user_id, choice);
+        com.twitchy.network.PacketHandler
+            .sendToServer(new com.twitchy.network.FollowerModelPacket(event.chatter_user_id, choice));
+        TwitchSessionManager.INSTANCE.sendChatMessage(
+            event.chatter_user_name + " - your follower is now " + choice.toLowerCase() + "!");
     }
 
     /** Simulates a trigger locally for testing (/twitchy testchat), bypassing Twitch entirely. */

@@ -1,12 +1,14 @@
 package com.twitchy.client;
 
 import java.net.Proxy;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.model.ModelSpider;
 import net.minecraft.client.renderer.entity.RenderBiped;
@@ -32,6 +34,7 @@ public class RenderViewerFollower extends RenderBiped {
 
     private static final Map<String, ResourceLocation> resolvedSkins = new ConcurrentHashMap<>();
     private static final Set<String> pendingLookups = ConcurrentHashMap.newKeySet();
+    private final Map<String, ModelBase> modelCache = new HashMap<>();
 
     // Minecraft's own client doesn't expose a profile-repository getter the way it does for
     // SkinManager (func_152342_ad()), so Twitchy builds its own, matching the exact same
@@ -46,11 +49,14 @@ public class RenderViewerFollower extends RenderBiped {
     }
 
     protected ResourceLocation getEntityTexture(EntityViewerFollower entity) {
-        if (entity.getFollowerModel() == EntityViewerFollower.FollowerModel.SPIDER) {
-            return SPIDER_TEXTURE;
+        String key = entity.getFollowerModelKey();
+        FollowerModelRegistry.Entry regEntry = FollowerModelRegistry.get(key);
+
+        if (regEntry != null && !"BIPED".equals(key)) {
+            return regEntry.texture; // non-biped entries always use their own fixed texture
         }
 
-        // existing skin-resolution logic, unchanged, only used in BIPED mode
+        // BIPED specifically still supports real skin resolution
         String username = entity.getMinecraftUsername();
         if (username == null || username.isBlank()) return STEVE_TEXTURE;
         ResourceLocation cached = resolvedSkins.get(username);
@@ -106,9 +112,11 @@ public class RenderViewerFollower extends RenderBiped {
     @Override
     public void doRender(EntityLiving entity, double x, double y, double z, float yaw, float partialTicks) {
         if (entity instanceof EntityViewerFollower follower) {
-            this.mainModel = follower.getFollowerModel() == EntityViewerFollower.FollowerModel.SPIDER
-                ? spiderModel
-                : bipedModel;
+            String key = follower.getFollowerModelKey();
+            FollowerModelRegistry.Entry regEntry = FollowerModelRegistry.get(key);
+            if (regEntry != null) {
+                this.mainModel = modelCache.computeIfAbsent(key, k -> regEntry.modelSupplier.get());
+            }
         }
         super.doRender(entity, x, y, z, yaw, partialTicks);
     }

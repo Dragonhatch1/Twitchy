@@ -11,10 +11,7 @@ public class FollowerModelHandler implements IMessageHandler<FollowerModelPacket
 
     @Override
     public IMessage onMessage(FollowerModelPacket message, MessageContext ctx) {
-        EntityViewerFollower.FollowerModel model = "SPIDER".equals(message.model)
-            ? EntityViewerFollower.FollowerModel.SPIDER
-            : EntityViewerFollower.FollowerModel.BIPED;
-        ViewerFollowerManager.setFollowerModel(message.userId, model);
+        ViewerFollowerManager.setFollowerModel(message.userId, message.model);
         return null;
     }
 }

@@ -27,11 +27,6 @@ public class EntityViewerFollower extends EntityWolf {
 
     private static final double BASE_MAX_HEALTH = 10.0D;
 
-    public enum FollowerModel {
-        BIPED,
-        SPIDER
-    }
-
     public EntityViewerFollower(World world) {
         super(world);
         this.setSize(BASE_WIDTH, BASE_HEIGHT); // Wolf's own constructor sets wolf-sized proportions - restore
@@ -47,7 +42,7 @@ public class EntityViewerFollower extends EntityWolf {
         this.tasks.taskEntries.removeIf(entry -> entry.action instanceof net.minecraft.entity.ai.EntityAIWatchClosest);
         this.tasks.taskEntries.removeIf(entry -> entry.action instanceof net.minecraft.entity.ai.EntityAIFollowOwner);
         this.tasks.addTask(5, new net.minecraft.entity.ai.EntityAIFollowOwner(this, 1.0D, 7.0F, 4.0F));
-        this.dataWatcher.addObject(WATCHER_MODEL_TYPE, (byte) 0);
+        this.dataWatcher.addObject(WATCHER_MODEL_TYPE, "BIPED");
     }
 
     /** Call once, right after construction, before spawning into the world. */
@@ -113,14 +108,13 @@ public class EntityViewerFollower extends EntityWolf {
         }
     }
 
-    public FollowerModel getFollowerModel() {
-        return this.dataWatcher.getWatchableObjectByte(WATCHER_MODEL_TYPE) == 1
-            ? FollowerModel.SPIDER
-            : FollowerModel.BIPED;
+    public String getFollowerModelKey() {
+        String key = this.dataWatcher.getWatchableObjectString(WATCHER_MODEL_TYPE);
+        return key == null || key.isBlank() ? "BIPED" : key;
     }
 
-    public void setFollowerModel(FollowerModel model) {
-        this.dataWatcher.updateObject(WATCHER_MODEL_TYPE, (byte) (model == FollowerModel.SPIDER ? 1 : 0));
+    public void setFollowerModelKey(String key) {
+        this.dataWatcher.updateObject(WATCHER_MODEL_TYPE, key == null ? "BIPED" : key);
     }
 
     @Override

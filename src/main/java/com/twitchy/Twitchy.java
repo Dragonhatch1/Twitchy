@@ -75,4 +75,5 @@ public class Twitchy {
 // TODO Pong as a captcha?
 
 // TODO move to Equipment flags so we can have an equip system. Just unlock armor and equip it with !equip
-// TODO would like them to be able to change models
+// TODO Vanilla Models
+// TODO Twilight Forest Models

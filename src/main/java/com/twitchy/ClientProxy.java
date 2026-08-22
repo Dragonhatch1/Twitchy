@@ -1,13 +1,10 @@
 package com.twitchy;
 
+import com.twitchy.client.*;
 import net.minecraftforge.client.ClientCommandHandler;
 import net.minecraftforge.common.MinecraftForge;
 
 import com.twitchy.chat.ChatCommandConfig;
-import com.twitchy.client.ClientEventHandler;
-import com.twitchy.client.PlayerFlipRenderer;
-import com.twitchy.client.RenderViewerFollower;
-import com.twitchy.client.ToastEffect;
 import com.twitchy.command.CommandTwitchy;
 import com.twitchy.entity.EntityViewerFollower;
 import com.twitchy.entity.MobSpawningConfig;
@@ -43,6 +40,7 @@ public class ClientProxy extends CommonProxy {
         MinecraftForge.EVENT_BUS.register(new PlayerFlipRenderer());
         MinecraftForge.EVENT_BUS.register(new ToastEffect());
         RenderingRegistry.registerEntityRenderingHandler(EntityViewerFollower.class, new RenderViewerFollower());
+        FollowerModelRegistry.registerDefaults();
     }
 
     @Override

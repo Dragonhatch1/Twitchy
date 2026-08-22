@@ -63,9 +63,7 @@ public class ViewerFollowerManager {
         EntityViewerFollower follower = new EntityViewerFollower(target.worldObj);
         follower.setPosition(target.posX, target.posY, target.posZ);
         follower.initFollow(target, userId, userLogin, minecraftUsername, scale);
-        follower.setFollowerModel(
-            "SPIDER".equals(followerModel) ? EntityViewerFollower.FollowerModel.SPIDER
-                : EntityViewerFollower.FollowerModel.BIPED);
+        follower.setFollowerModelKey(followerModel);
         RedeemActionHandler resolver = new RedeemActionHandler();
         for (RewardAction.GearPiece piece : gear) {
             Item item = resolver.resolveItem(piece.item);
@@ -107,9 +105,9 @@ public class ViewerFollowerManager {
         return true;
     }
 
-    public static void setFollowerModel(String userId, EntityViewerFollower.FollowerModel model) {
+    public static void setFollowerModel(String userId, String model) {
         EntityViewerFollower follower = activeFollowers.get(userId);
-        if (follower != null) follower.setFollowerModel(model);
+        if (follower != null) follower.setFollowerModelKey(model);
     }
 
 }
