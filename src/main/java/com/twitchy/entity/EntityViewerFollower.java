@@ -92,7 +92,15 @@ public class EntityViewerFollower extends EntityWolf {
 
     public void healWithEffect(float amount) {
         this.heal(amount);
-        this.playTameEffect(true);
+
+        if (this.worldObj instanceof net.minecraft.world.WorldServer server) {
+            server.func_147487_a(
+                "heart",
+                this.posX, this.posY + this.height * 0.5D, this.posZ,
+                7,                          // particle count, matching vanilla's own loop count
+                this.width * 0.5D, this.height * 0.5D, this.width * 0.5D,  // spread
+                0.0D);                      // speed
+        }
     }
 
     @Override
