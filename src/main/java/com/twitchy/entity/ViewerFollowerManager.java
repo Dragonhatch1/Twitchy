@@ -18,7 +18,8 @@ public class ViewerFollowerManager {
     private static final Map<String, EntityViewerFollower> activeFollowers = new HashMap<>();
 
     public static void reconcile(EntityPlayerMP target, List<String> userIds, List<String> userLogins,
-        List<List<RewardAction.GearPiece>> gearPerUser, List<String> minecraftUsernames, List<Float> scales) {
+                                 List<List<RewardAction.GearPiece>> gearPerUser, List<String> minecraftUsernames, List<Float> scales,
+                                 List<String> followerModels) {
         Set<String> currentIds = new HashSet<>(userIds);
 
         for (int i = 0; i < userIds.size(); i++) {
@@ -26,7 +27,8 @@ public class ViewerFollowerManager {
 
             if (activeFollowers.containsKey(id)) continue;
 
-            spawnFollower(target, id, userLogins.get(i), gearPerUser.get(i), minecraftUsernames.get(i), scales.get(i));
+            spawnFollower(target, id, userLogins.get(i), gearPerUser.get(i), minecraftUsernames.get(i), scales.get(i),
+                followerModels.get(i));
         }
 
         activeFollowers.entrySet()
@@ -57,10 +59,13 @@ public class ViewerFollowerManager {
     }
 
     public static void spawnFollower(EntityPlayerMP target, String userId, String userLogin,
-        List<RewardAction.GearPiece> gear, String minecraftUsername, float scale) {
+                                     List<RewardAction.GearPiece> gear, String minecraftUsername, float scale, String followerModel) {
         EntityViewerFollower follower = new EntityViewerFollower(target.worldObj);
         follower.setPosition(target.posX, target.posY, target.posZ);
         follower.initFollow(target, userId, userLogin, minecraftUsername, scale);
+        follower.setFollowerModel(
+            "SPIDER".equals(followerModel) ? EntityViewerFollower.FollowerModel.SPIDER
+                : EntityViewerFollower.FollowerModel.BIPED);
         RedeemActionHandler resolver = new RedeemActionHandler();
         for (RewardAction.GearPiece piece : gear) {
             Item item = resolver.resolveItem(piece.item);
@@ -101,4 +106,10 @@ public class ViewerFollowerManager {
         follower.healWithEffect(follower.getMaxHealth() * healPercent);
         return true;
     }
+
+    public static void setFollowerModel(String userId, EntityViewerFollower.FollowerModel model) {
+        EntityViewerFollower follower = activeFollowers.get(userId);
+        if (follower != null) follower.setFollowerModel(model);
+    }
+
 }

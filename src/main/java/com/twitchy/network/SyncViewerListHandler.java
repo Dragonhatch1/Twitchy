@@ -20,7 +20,8 @@ public class SyncViewerListHandler implements IMessageHandler<SyncViewerListPack
             message.userLogins,
             message.gearPerUser,
             message.minecraftUsernames,
-            message.scales);
+            message.scales,
+            message.followerModels);
         return null;
     }
 }

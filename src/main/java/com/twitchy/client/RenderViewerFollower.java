@@ -8,8 +8,10 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBiped;
+import net.minecraft.client.model.ModelSpider;
 import net.minecraft.client.renderer.entity.RenderBiped;
 import net.minecraft.client.resources.SkinManager;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.ResourceLocation;
 
 import com.mojang.authlib.Agent;
@@ -23,6 +25,9 @@ import com.twitchy.entity.EntityViewerFollower;
 
 public class RenderViewerFollower extends RenderBiped {
 
+    private final ModelBiped bipedModel = new ModelBiped();
+    private final ModelSpider spiderModel = new ModelSpider();
+    private static final ResourceLocation SPIDER_TEXTURE = new ResourceLocation("textures/entity/spider/spider.png");
     private static final ResourceLocation STEVE_TEXTURE = new ResourceLocation("textures/entity/steve.png");
 
     private static final Map<String, ResourceLocation> resolvedSkins = new ConcurrentHashMap<>();
@@ -41,26 +46,22 @@ public class RenderViewerFollower extends RenderBiped {
     }
 
     protected ResourceLocation getEntityTexture(EntityViewerFollower entity) {
+        if (entity.getFollowerModel() == EntityViewerFollower.FollowerModel.SPIDER) {
+            return SPIDER_TEXTURE;
+        }
+
+        // existing skin-resolution logic, unchanged, only used in BIPED mode
         String username = entity.getMinecraftUsername();
         if (username == null || username.isBlank()) return STEVE_TEXTURE;
-
         ResourceLocation cached = resolvedSkins.get(username);
         if (cached != null) return cached;
-
-        if (pendingLookups.add(username)) {
-            resolveSkinAsync(username);
-        }
+        if (pendingLookups.add(username)) resolveSkinAsync(username);
         return STEVE_TEXTURE;
     }
 
     @Override
     protected ResourceLocation getEntityTexture(net.minecraft.entity.Entity entity) {
         return this.getEntityTexture((EntityViewerFollower) entity);
-    }
-
-    public static void invalidateSkinCache() {
-        resolvedSkins.clear();
-        pendingLookups.clear();
     }
 
     private static void resolveSkinAsync(String username) {
@@ -100,5 +101,15 @@ public class RenderViewerFollower extends RenderBiped {
             float scale = follower.getFollowerScale();
             org.lwjgl.opengl.GL11.glScalef(scale, scale, scale);
         }
+    }
+
+    @Override
+    public void doRender(EntityLiving entity, double x, double y, double z, float yaw, float partialTicks) {
+        if (entity instanceof EntityViewerFollower follower) {
+            this.mainModel = follower.getFollowerModel() == EntityViewerFollower.FollowerModel.SPIDER
+                ? spiderModel
+                : bipedModel;
+        }
+        super.doRender(entity, x, y, z, yaw, partialTicks);
     }
 }

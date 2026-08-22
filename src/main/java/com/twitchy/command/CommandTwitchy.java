@@ -1,5 +1,7 @@
 package com.twitchy.command;
 
+import com.twitchy.entity.EntityViewerFollower;
+import com.twitchy.entity.ViewerFollowerManager;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.ChatComponentText;

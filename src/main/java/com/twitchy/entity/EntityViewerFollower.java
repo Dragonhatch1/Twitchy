@@ -19,12 +19,18 @@ public class EntityViewerFollower extends EntityWolf {
     private String twitchUserId;
     private static final int WATCHER_MINECRAFT_USERNAME = 25;
     private static final int WATCHER_SCALE = 26;
+    private static final int WATCHER_MODEL_TYPE = 27;
     private static java.lang.reflect.Method methodSetSize;
 
     private static final float BASE_WIDTH = 0.6F;
     private static final float BASE_HEIGHT = 1.8F;
 
     private static final double BASE_MAX_HEALTH = 10.0D;
+
+    public enum FollowerModel {
+        BIPED,
+        SPIDER
+    }
 
     public EntityViewerFollower(World world) {
         super(world);
@@ -41,6 +47,7 @@ public class EntityViewerFollower extends EntityWolf {
         this.tasks.taskEntries.removeIf(entry -> entry.action instanceof net.minecraft.entity.ai.EntityAIWatchClosest);
         this.tasks.taskEntries.removeIf(entry -> entry.action instanceof net.minecraft.entity.ai.EntityAIFollowOwner);
         this.tasks.addTask(5, new net.minecraft.entity.ai.EntityAIFollowOwner(this, 1.0D, 7.0F, 4.0F));
+        this.dataWatcher.addObject(WATCHER_MODEL_TYPE, (byte) 0);
     }
 
     /** Call once, right after construction, before spawning into the world. */
@@ -104,6 +111,16 @@ public class EntityViewerFollower extends EntityWolf {
                 this.width * 0.5D, this.height * 0.5D, this.width * 0.5D,  // spread
                 0.0D);                      // speed
         }
+    }
+
+    public FollowerModel getFollowerModel() {
+        return this.dataWatcher.getWatchableObjectByte(WATCHER_MODEL_TYPE) == 1
+            ? FollowerModel.SPIDER
+            : FollowerModel.BIPED;
+    }
+
+    public void setFollowerModel(FollowerModel model) {
+        this.dataWatcher.updateObject(WATCHER_MODEL_TYPE, (byte) (model == FollowerModel.SPIDER ? 1 : 0));
     }
 
     @Override

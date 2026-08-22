@@ -5,6 +5,7 @@ import java.util.Optional;
 import com.twitchy.api.TwitchModels.ChatMessageEvent;
 import com.twitchy.client.TwitchSessionManager;
 import com.twitchy.entity.ViewerFollowerGear;
+import com.twitchy.network.FollowerModelPacket;
 
 /** Client-side only. Watches incoming Twitch chat messages for configured trigger phrases. */
 public final class ChatCommandManager {
@@ -23,6 +24,11 @@ public final class ChatCommandManager {
 
         if (firstWord.equalsIgnoreCase("!setname")) {
             handleSetNameCommand(event);
+            return;
+        }
+
+        if (firstWord.equalsIgnoreCase("!models")) {
+            handleModelsCommand(event);
             return;
         }
 
@@ -76,6 +82,23 @@ public final class ChatCommandManager {
 
         TwitchSessionManager.INSTANCE
             .sendChatMessage(event.chatter_user_name + " - your entity will now use " + username + "'s skin!");
+    }
+
+    private static void handleModelsCommand(ChatMessageEvent event) {
+        String[] parts = event.message.text.trim().split("\\s+", 2);
+        if (parts.length < 2 || (!parts[1].trim().equalsIgnoreCase("biped") && !parts[1].trim().equalsIgnoreCase("spider"))) {
+            TwitchSessionManager.INSTANCE
+                .sendChatMessage(event.chatter_user_name + " - usage: !models <biped|spider>");
+            return;
+        }
+
+        String model = parts[1].trim().equalsIgnoreCase("spider") ? "SPIDER" : "BIPED";
+        ViewerFollowerGear.setFollowerModel(event.chatter_user_id, model);
+        com.twitchy.network.PacketHandler.sendToServer(
+            new FollowerModelPacket(event.chatter_user_id, model));
+
+        TwitchSessionManager.INSTANCE
+            .sendChatMessage(event.chatter_user_name + " - your follower is now a " + model.toLowerCase() + "!");
     }
 
     /** Simulates a trigger locally for testing (/twitchy testchat), bypassing Twitch entirely. */

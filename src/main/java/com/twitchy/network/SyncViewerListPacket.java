@@ -17,6 +17,7 @@ public class SyncViewerListPacket implements IMessage {
     public List<List<GearPiece>> gearPerUser = new ArrayList<>();
     public List<String> minecraftUsernames = new ArrayList<>();
     public List<Float> scales = new ArrayList<>();
+    public List<String> followerModels = new ArrayList<>();
 
     public SyncViewerListPacket() {}
 
@@ -27,6 +28,7 @@ public class SyncViewerListPacket implements IMessage {
             gearPerUser.add(ViewerFollowerGear.getGear(c.user_id));
             minecraftUsernames.add(ViewerFollowerGear.getMinecraftUsername(c.user_id));
             scales.add(ViewerFollowerGear.getScale(c.user_id));
+            followerModels.add(ViewerFollowerGear.getFollowerModel(c.user_id));
         }
     }
 
@@ -45,6 +47,7 @@ public class SyncViewerListPacket implements IMessage {
             }
             writeString(buf, minecraftUsernames.get(i));
             buf.writeFloat(scales.get(i));
+            writeString(buf, followerModels.get(i));
         }
     }
 
@@ -66,6 +69,7 @@ public class SyncViewerListPacket implements IMessage {
             gearPerUser.add(gear);
             minecraftUsernames.add(readString(buf));
             scales.add(buf.readFloat());
+            followerModels.add(readString(buf));
         }
     }
 
