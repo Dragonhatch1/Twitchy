@@ -45,5 +45,9 @@ public enum RewardActionType {
      * Grows or shrinks the redeeming viewer's follower by resizeDelta (e.g. +0.10 or -0.10),
      * persisted and clamped in ViewerFollowerGear.
      */
-    RESIZE_FOLLOWER
+    RESIZE_FOLLOWER,
+    /** Heals the redeeming viewer's follower by healPercent of its current max HP (scales
+     *  automatically with any future max-HP changes). Refunds if not currently spawned or already
+     *  at full health. */
+    HEAL_FOLLOWER
 }

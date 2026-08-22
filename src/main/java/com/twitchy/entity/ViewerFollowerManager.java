@@ -92,4 +92,13 @@ public class ViewerFollowerManager {
         EntityViewerFollower follower = activeFollowers.get(userId);
         if (follower != null) follower.setFollowerScale(scale);
     }
+
+    public static boolean healFollower(String userId, float healPercent) {
+        EntityViewerFollower follower = activeFollowers.get(userId);
+        if (follower == null) return false;
+        if (follower.getHealth() >= follower.getMaxHealth()) return false;
+
+        follower.healWithEffect(follower.getMaxHealth() * healPercent);
+        return true;
+    }
 }

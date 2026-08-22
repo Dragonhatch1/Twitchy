@@ -90,6 +90,11 @@ public class EntityViewerFollower extends EntityWolf {
         }
     }
 
+    public void healWithEffect(float amount) {
+        this.heal(amount);
+        this.playTameEffect(true);
+    }
+
     @Override
     protected boolean canDespawn() {
         return false;

@@ -101,4 +101,6 @@ public class RewardAction {
     public int bossSpawnCount = 0;
     /** RESIZE_FOLLOWER: amount to add to the viewer's current scale. Negative to shrink. */
     public float resizeDelta = 0.0F;
+    /** HEAL_FOLLOWER: fraction of current max HP to heal, e.g. 0.75 for 75%. */
+    public float healPercent = 0.0F;
 }

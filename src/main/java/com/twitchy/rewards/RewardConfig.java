@@ -460,6 +460,17 @@ public class RewardConfig {
         shrinkFollower.action.resizeDelta = -0.10F;
         defaults.add(shrinkFollower);
 
+        RewardMapping healFollower = new RewardMapping();
+        healFollower.key = "heal_follower";
+        healFollower.enabled = false;
+        healFollower.title = "Heal your Follower!";
+        healFollower.cost = 100;
+        healFollower.prompt = "Heal your follower for 75% of their max health!";
+        healFollower.action = new RewardAction();
+        healFollower.action.type = RewardActionType.HEAL_FOLLOWER;
+        healFollower.action.healPercent = 0.75F;
+        defaults.add(healFollower);
+
         return defaults;
     }
 }

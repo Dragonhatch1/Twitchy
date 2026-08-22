@@ -107,6 +107,11 @@ public final class RewardManager {
             fulfill(redemptionId, twitchRewards, true);
             return;
         }
+        if (action.type == RewardActionType.HEAL_FOLLOWER) {
+            PacketHandler.sendToServer(
+                new HealFollowerPacket(viewerUserId, redemptionId, twitchRewards, action.healPercent));
+            return;
+        }
         if (action.type == RewardActionType.CLIENT_EFFECT) {
             applyClientEffect(action, viewerDisplayName, userInput);
             fulfill(redemptionId, twitchRewards, true);

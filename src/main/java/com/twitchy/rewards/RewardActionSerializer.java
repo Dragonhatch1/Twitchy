@@ -54,6 +54,8 @@ public class RewardActionSerializer implements JsonSerializer<RewardAction> {
             case GRAVITY_FLIP -> json.addProperty("cameraFlipSeconds", action.cameraFlipSeconds);
             case INVENTORY_SCRAMBLE -> json.addProperty("target", action.target);
             case FOV_CHANGE -> json.addProperty("fovOffset", action.fovOffset);
+            case RESIZE_FOLLOWER -> json.addProperty("resizeDelta", action.resizeDelta);
+            case HEAL_FOLLOWER -> json.addProperty("healPercent", action.healPercent);
             case PLAY_SOUND -> {
                 json.addProperty("sound", action.sound);
                 json.addProperty("soundVolume", action.soundVolume);
@@ -80,7 +82,6 @@ public class RewardActionSerializer implements JsonSerializer<RewardAction> {
                 if (action.regularSpawnCount > 0) json.addProperty("regularSpawnCount", action.regularSpawnCount);
                 if (action.bossSpawnCount > 0) json.addProperty("bossSpawnCount", action.bossSpawnCount);
             }
-            case RESIZE_FOLLOWER -> json.addProperty("resizeDelta", action.resizeDelta);
         }
 
         // Toast fields apply to any type, but only worth writing if a toast is actually configured.

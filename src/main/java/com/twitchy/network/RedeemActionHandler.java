@@ -59,6 +59,7 @@ public class RedeemActionHandler implements IMessageHandler<RedeemActionPacket, 
             case GRAVITY_FLIP -> gravityFlip(action, sender);
             case INVENTORY_SCRAMBLE -> scrambleInventory(server, action, message, sender);
             case RESIZE_FOLLOWER -> true;
+            case HEAL_FOLLOWER -> true;
             case GEAR_UPGRADE -> true;
             case FOV_CHANGE -> true;
             case PLAY_SOUND -> true;
