@@ -23,8 +23,6 @@ public class ViewerFollowerClientPoller {
         if (now - lastPollMillis < POLL_INTERVAL_MS) return;
         lastPollMillis = now;
 
-        RenderViewerFollower.invalidateSkinCache();
-
         pollInFlight = true;
         TwitchApiClient.getChatters(TwitchSessionManager.INSTANCE.credentials())
             .thenAccept(response -> {

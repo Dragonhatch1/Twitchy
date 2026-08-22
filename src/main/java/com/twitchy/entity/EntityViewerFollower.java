@@ -1,6 +1,7 @@
 package com.twitchy.entity;
 
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.passive.EntityWolf;
 import net.minecraft.world.World;
 
@@ -22,6 +23,8 @@ public class EntityViewerFollower extends EntityWolf {
 
     private static final float BASE_WIDTH = 0.6F;
     private static final float BASE_HEIGHT = 1.8F;
+
+    private static final double BASE_MAX_HEALTH = 10.0D;
 
     public EntityViewerFollower(World world) {
         super(world);
@@ -96,7 +99,7 @@ public class EntityViewerFollower extends EntityWolf {
         if (this.worldObj instanceof net.minecraft.world.WorldServer server) {
             server.func_147487_a(
                 "heart",
-                this.posX, this.posY + this.height * 0.5D, this.posZ,
+                this.posX, this.posY + this.height, this.posZ,
                 7,                          // particle count, matching vanilla's own loop count
                 this.width * 0.5D, this.height * 0.5D, this.width * 0.5D,  // spread
                 0.0D);                      // speed
@@ -136,6 +139,12 @@ public class EntityViewerFollower extends EntityWolf {
     @Override
     public boolean isWet() {
         return false;
+    }
+
+    @Override
+    protected void applyEntityAttributes() {
+        super.applyEntityAttributes();
+        this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(BASE_MAX_HEALTH);
     }
 
     @Override
