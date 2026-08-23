@@ -21,7 +21,12 @@ import com.twitchy.client.ToastEffect;
 import com.twitchy.client.TwitchSessionManager;
 import com.twitchy.entity.MobSpawningConfig;
 import com.twitchy.entity.ViewerFollowerGear;
-import com.twitchy.network.*;
+import com.twitchy.network.ApplyGearPacket;
+import com.twitchy.network.HealFollowerPacket;
+import com.twitchy.network.PacketHandler;
+import com.twitchy.network.RedeemActionPacket;
+import com.twitchy.network.RequestMobSpawnPacket;
+import com.twitchy.network.ResizeFollowerPacket;
 
 /**
  * Client-side only. Handles an incoming redemption event: resolves the configured action and

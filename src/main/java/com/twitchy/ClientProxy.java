@@ -4,7 +4,11 @@ import net.minecraftforge.client.ClientCommandHandler;
 import net.minecraftforge.common.MinecraftForge;
 
 import com.twitchy.chat.ChatCommandConfig;
-import com.twitchy.client.*;
+import com.twitchy.client.ClientEventHandler;
+import com.twitchy.client.FollowerModelRegistry;
+import com.twitchy.client.PlayerFlipRenderer;
+import com.twitchy.client.RenderViewerFollower;
+import com.twitchy.client.ToastEffect;
 import com.twitchy.command.CommandTwitchy;
 import com.twitchy.entity.EntityViewerFollower;
 import com.twitchy.entity.MobSpawningConfig;
