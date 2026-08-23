@@ -108,8 +108,8 @@ public final class RewardManager {
             return;
         }
         if (action.type == RewardActionType.HEAL_FOLLOWER) {
-            PacketHandler.sendToServer(
-                new HealFollowerPacket(viewerUserId, redemptionId, twitchRewards, action.healPercent));
+            PacketHandler
+                .sendToServer(new HealFollowerPacket(viewerUserId, redemptionId, twitchRewards, action.healPercent));
             return;
         }
         if (action.type == RewardActionType.CLIENT_EFFECT) {

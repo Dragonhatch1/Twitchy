@@ -1,6 +1,5 @@
 package com.twitchy.network;
 
-import com.twitchy.entity.EntityViewerFollower;
 import com.twitchy.entity.ViewerFollowerManager;
 
 import cpw.mods.fml.common.network.simpleimpl.IMessage;

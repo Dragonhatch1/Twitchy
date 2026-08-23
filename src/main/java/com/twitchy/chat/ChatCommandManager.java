@@ -6,7 +6,6 @@ import com.twitchy.api.TwitchModels.ChatMessageEvent;
 import com.twitchy.client.FollowerModelRegistry;
 import com.twitchy.client.TwitchSessionManager;
 import com.twitchy.entity.ViewerFollowerGear;
-import com.twitchy.network.FollowerModelPacket;
 
 /** Client-side only. Watches incoming Twitch chat messages for configured trigger phrases. */
 public final class ChatCommandManager {
@@ -86,7 +85,8 @@ public final class ChatCommandManager {
     }
 
     private static void handleModelsCommand(ChatMessageEvent event) {
-        String[] parts = event.message.text.trim().split("\\s+", 2);
+        String[] parts = event.message.text.trim()
+            .split("\\s+", 2);
         if (parts.length < 2 || parts[1].isBlank()) {
             TwitchSessionManager.INSTANCE.sendChatMessage(
                 event.chatter_user_name + " - usage: !models <model>. Available: "
@@ -94,7 +94,8 @@ public final class ChatCommandManager {
             return;
         }
 
-        String choice = parts[1].trim().toUpperCase();
+        String choice = parts[1].trim()
+            .toUpperCase();
         if (!FollowerModelRegistry.isAvailable(choice)) {
             TwitchSessionManager.INSTANCE.sendChatMessage(
                 event.chatter_user_name + " - not available. Try: "
@@ -105,8 +106,8 @@ public final class ChatCommandManager {
         ViewerFollowerGear.setFollowerModel(event.chatter_user_id, choice);
         com.twitchy.network.PacketHandler
             .sendToServer(new com.twitchy.network.FollowerModelPacket(event.chatter_user_id, choice));
-        TwitchSessionManager.INSTANCE.sendChatMessage(
-            event.chatter_user_name + " - your follower is now " + choice.toLowerCase() + "!");
+        TwitchSessionManager.INSTANCE
+            .sendChatMessage(event.chatter_user_name + " - your follower is now " + choice.toLowerCase() + "!");
     }
 
     /** Simulates a trigger locally for testing (/twitchy testchat), bypassing Twitch entirely. */

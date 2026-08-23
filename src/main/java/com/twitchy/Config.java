@@ -49,8 +49,10 @@ public class Config {
      */
     public static String helixApiBaseUrl = "https://api.twitch.tv/helix";
 
-    /** If true, the broadcaster's own account also gets a viewer-follower entity spawned for them,
-     *  same as any other chatter. Off by default. */
+    /**
+     * If true, the broadcaster's own account also gets a viewer-follower entity spawned for them,
+     * same as any other chatter. Off by default.
+     */
     public static boolean spawnBroadcasterFollower = false;
 
     // Channel-point deposit container location, set/moved via /twitchy setstorage.

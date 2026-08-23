@@ -4,8 +4,6 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.function.Supplier;
 
-import cpw.mods.fml.common.Loader;
-
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.model.ModelBlaze;
@@ -19,6 +17,8 @@ import net.minecraft.client.model.ModelVillager;
 import net.minecraft.client.model.ModelWitch;
 import net.minecraft.client.model.ModelZombie;
 import net.minecraft.util.ResourceLocation;
+
+import cpw.mods.fml.common.Loader;
 
 public final class FollowerModelRegistry {
 
@@ -40,38 +40,31 @@ public final class FollowerModelRegistry {
     private FollowerModelRegistry() {}
 
     public static void registerDefaults() {
-        register("BIPED", null, ModelBiped::new,
-            new ResourceLocation("textures/entity/steve.png"));
+        register("BIPED", null, ModelBiped::new, new ResourceLocation("textures/entity/steve.png"));
 
-        register("SPIDER", null, ModelSpider::new,
-            new ResourceLocation("textures/entity/spider/spider.png"));
+        register("SPIDER", null, ModelSpider::new, new ResourceLocation("textures/entity/spider/spider.png"));
 
-        register("ZOMBIE", null, ModelZombie::new,
-            new ResourceLocation("textures/entity/zombie/zombie.png"));
+        register("ZOMBIE", null, ModelZombie::new, new ResourceLocation("textures/entity/zombie/zombie.png"));
 
-        register("ENDERMAN", null, ModelEnderman::new,
-            new ResourceLocation("textures/entity/enderman/enderman.png"));
+        register("ENDERMAN", null, ModelEnderman::new, new ResourceLocation("textures/entity/enderman/enderman.png"));
 
-        register("CREEPER", null, ModelCreeper::new,
-            new ResourceLocation("textures/entity/creeper/creeper.png"));
+        register("CREEPER", null, ModelCreeper::new, new ResourceLocation("textures/entity/creeper/creeper.png"));
 
-        register("VILLAGER", null, () -> new ModelVillager(0.0F),
+        register(
+            "VILLAGER",
+            null,
+            () -> new ModelVillager(0.0F),
             new ResourceLocation("textures/entity/villager/villager.png"));
 
-        register("WITCH", null, () -> new ModelWitch(0.0F),
-            new ResourceLocation("textures/entity/witch.png"));
+        register("WITCH", null, () -> new ModelWitch(0.0F), new ResourceLocation("textures/entity/witch.png"));
 
-        register("BLAZE", null, ModelBlaze::new,
-            new ResourceLocation("textures/entity/blaze.png"));
+        register("BLAZE", null, ModelBlaze::new, new ResourceLocation("textures/entity/blaze.png"));
 
-        register("COW", null, ModelCow::new,
-            new ResourceLocation("textures/entity/cow/cow.png"));
+        register("COW", null, ModelCow::new, new ResourceLocation("textures/entity/cow/cow.png"));
 
-        register("PIG", null, ModelPig::new,
-            new ResourceLocation("textures/entity/pig/pig.png"));
+        register("PIG", null, ModelPig::new, new ResourceLocation("textures/entity/pig/pig.png"));
 
-        register("CHICKEN", null, ModelChicken::new,
-            new ResourceLocation("textures/entity/chicken.png"));
+        register("CHICKEN", null, ModelChicken::new, new ResourceLocation("textures/entity/chicken.png"));
 
         // ===================== Add vetted modded entries below =====================
         // Each one requires: confirming a no-arg constructor exists on the model class,
@@ -79,24 +72,25 @@ public final class FollowerModelRegistry {
         // it actually renders correctly before adding it here.
         //
         // registerReflective("ENDERZOO_DIREWOLF", "enderzoo",
-        //     "com.mcreator.enderzoo.model.ModelDireWolf", "enderzoo", "textures/entity/direwolf.png");
+        // "com.mcreator.enderzoo.model.ModelDireWolf", "enderzoo", "textures/entity/direwolf.png");
     }
 
     private static void register(String key, String requiredModId, Supplier<ModelBase> modelSupplier,
-                                 ResourceLocation texture) {
+        ResourceLocation texture) {
         if (requiredModId != null && !Loader.isModLoaded(requiredModId)) return;
         entries.put(key, new Entry(key, modelSupplier, texture));
     }
 
-    private static void registerReflective(String key, String requiredModId, String className,
-                                           String textureNamespace, String texturePath) {
+    private static void registerReflective(String key, String requiredModId, String className, String textureNamespace,
+        String texturePath) {
         if (requiredModId != null && !Loader.isModLoaded(requiredModId)) return;
 
         try {
             Class<?> modelClass = Class.forName(className);
             Supplier<ModelBase> supplier = () -> {
                 try {
-                    return (ModelBase) modelClass.getDeclaredConstructor().newInstance();
+                    return (ModelBase) modelClass.getDeclaredConstructor()
+                        .newInstance();
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
