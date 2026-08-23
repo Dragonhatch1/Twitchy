@@ -8,15 +8,18 @@ import cpw.mods.fml.common.Loader;
 
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelBiped;
+import net.minecraft.client.model.ModelBlaze;
+import net.minecraft.client.model.ModelChicken;
+import net.minecraft.client.model.ModelCow;
+import net.minecraft.client.model.ModelCreeper;
+import net.minecraft.client.model.ModelEnderman;
+import net.minecraft.client.model.ModelPig;
 import net.minecraft.client.model.ModelSpider;
+import net.minecraft.client.model.ModelVillager;
+import net.minecraft.client.model.ModelWitch;
+import net.minecraft.client.model.ModelZombie;
 import net.minecraft.util.ResourceLocation;
 
-/** Client-side only. Holds the set of follower models actually available on this specific
- *  install - each entry is gated by an optional required mod ID, checked at registration time,
- *  so absent mods simply mean that entry never appears rather than crashing anything. Every
- *  entry here has been manually vetted (confirmed no-arg constructor, confirmed correct texture
- *  path, confirmed it renders through RenderBiped without issue) - this is deliberately a curated
- *  allowlist, not an automatic discovery dump. */
 public final class FollowerModelRegistry {
 
     public static class Entry {
@@ -36,13 +39,39 @@ public final class FollowerModelRegistry {
 
     private FollowerModelRegistry() {}
 
-    /** Call once, client-side, during init. */
     public static void registerDefaults() {
         register("BIPED", null, ModelBiped::new,
-            new ResourceLocation("textures/entity/steve.png")); // overridden by real skin resolution when set
+            new ResourceLocation("textures/entity/steve.png"));
 
         register("SPIDER", null, ModelSpider::new,
             new ResourceLocation("textures/entity/spider/spider.png"));
+
+        register("ZOMBIE", null, ModelZombie::new,
+            new ResourceLocation("textures/entity/zombie/zombie.png"));
+
+        register("ENDERMAN", null, ModelEnderman::new,
+            new ResourceLocation("textures/entity/enderman/enderman.png"));
+
+        register("CREEPER", null, ModelCreeper::new,
+            new ResourceLocation("textures/entity/creeper/creeper.png"));
+
+        register("VILLAGER", null, () -> new ModelVillager(0.0F),
+            new ResourceLocation("textures/entity/villager/villager.png"));
+
+        register("WITCH", null, () -> new ModelWitch(0.0F),
+            new ResourceLocation("textures/entity/witch.png"));
+
+        register("BLAZE", null, ModelBlaze::new,
+            new ResourceLocation("textures/entity/blaze.png"));
+
+        register("COW", null, ModelCow::new,
+            new ResourceLocation("textures/entity/cow/cow.png"));
+
+        register("PIG", null, ModelPig::new,
+            new ResourceLocation("textures/entity/pig/pig.png"));
+
+        register("CHICKEN", null, ModelChicken::new,
+            new ResourceLocation("textures/entity/chicken.png"));
 
         // ===================== Add vetted modded entries below =====================
         // Each one requires: confirming a no-arg constructor exists on the model class,

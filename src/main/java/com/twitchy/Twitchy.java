@@ -75,7 +75,5 @@ public class Twitchy {
 // TODO Pong as a captcha?
 
 // TODO move to Equipment flags so we can have an equip system. Just unlock armor and equip it with !equip
-// TODO Vanilla Models
 // TODO Twilight Forest Models
-// TODO Hide armour when not Biped
-// TODO Remove Kill Credit Debug
+// TODO Remove armor when Enderman

@@ -39,18 +39,9 @@ public class ViewerFollowerHandler {
     @SubscribeEvent
     public void onLivingDeath(LivingDeathEvent event) {
         if (event.source != null && event.source.getEntity() instanceof EntityViewerFollower killer) {
-            Twitchy.LOG.info(
-                "[DEBUG] Kill detected. killer follower userId={}, followerName={}, killedEntity={}",
-                killer.getTwitchUserId(),
-                killer.getCommandSenderName(),
-                EntityList.getEntityString(event.entityLiving));
 
             if (killer.getTargetPlayer() instanceof EntityPlayerMP owner) {
                 String killedEntityName = EntityList.getEntityString(event.entityLiving);
-                Twitchy.LOG.info(
-                    "[DEBUG] Crediting kill to owner={} (userId={})",
-                    owner.getCommandSenderName(),
-                    killer.getTwitchUserId());
                 PacketHandler.sendTo(new KillCreditPacket(killer.getTwitchUserId(), killedEntityName), owner);
             } else {
                 Twitchy.LOG.warn("[DEBUG] killer.getTargetPlayer() did not resolve to a valid EntityPlayerMP!");
