@@ -49,6 +49,10 @@ public class Config {
      */
     public static String helixApiBaseUrl = "https://api.twitch.tv/helix";
 
+    /** If true, the broadcaster's own account also gets a viewer-follower entity spawned for them,
+     *  same as any other chatter. Off by default. */
+    public static boolean spawnBroadcasterFollower = false;
+
     // Channel-point deposit container location, set/moved via /twitchy setstorage.
     public static int storageX = 0;
     public static int storageY = 0;
@@ -93,6 +97,11 @@ public class Config {
             Configuration.CATEGORY_GENERAL,
             autoConnectOnJoin,
             "Automatically reconnect to Twitch when joining a world, if a token is already saved from a previous /twitchy connect.");
+        spawnBroadcasterFollower = configuration.getBoolean(
+            "SpawnBroadcasterFollower",
+            Configuration.CATEGORY_GENERAL,
+            spawnBroadcasterFollower,
+            "Spawn a follower for the broadcaster as well. Primarily for Debugging purposes, testing redeems, etc.");
 
         storageX = configuration.getInt(
             "storageX",

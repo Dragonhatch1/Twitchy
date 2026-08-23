@@ -3,6 +3,7 @@ package com.twitchy.client;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.twitchy.Config;
 import com.twitchy.Twitchy;
 import com.twitchy.api.TwitchApiClient;
 import com.twitchy.api.TwitchModels;
@@ -29,7 +30,7 @@ public class ViewerFollowerClientPoller {
                 String selfId = TwitchSessionManager.INSTANCE.credentials().userId;
                 List<TwitchModels.Chatter> filtered = new ArrayList<>();
                 for (TwitchModels.Chatter c : response.data) {
-                    // if (!c.user_id.equals(selfId)) // TEMP: broadcaster filter disabled for testing
+                    if (!Config.spawnBroadcasterFollower && c.user_id.equals(selfId)) continue;
                     filtered.add(c);
                 }
                 PacketHandler.sendToServer(new SyncViewerListPacket(filtered));
