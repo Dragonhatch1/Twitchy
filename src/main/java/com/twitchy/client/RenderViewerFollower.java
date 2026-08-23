@@ -120,4 +120,20 @@ public class RenderViewerFollower extends RenderBiped {
         }
         super.doRender(entity, x, y, z, yaw, partialTicks);
     }
+
+    @Override
+    protected int shouldRenderPass(EntityLiving entity, int armorSlot, float partialTicks) {
+        if (entity instanceof EntityViewerFollower && !(this.mainModel instanceof ModelBiped)) {
+            return -1; // suppress armor unless the active model shares biped proportions
+        }
+        return super.shouldRenderPass(entity, armorSlot, partialTicks);
+    }
+
+    @Override
+    protected void renderEquippedItems(EntityLiving entity, float partialTicks) {
+        if (entity instanceof EntityViewerFollower && !(this.mainModel instanceof ModelBiped)) {
+            return; // same gate for the held item
+        }
+        super.renderEquippedItems(entity, partialTicks);
+    }
 }
