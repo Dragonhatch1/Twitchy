@@ -1,11 +1,20 @@
 package com.twitchy.entity;
 
+import com.google.common.collect.Multimap;
+import com.twitchy.Twitchy;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.passive.EntityWolf;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemSword;
+import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 
 import com.twitchy.entity.ai.AiStareAtOwner;
+
+import java.util.Collection;
 
 /**
  * A player-shaped "viewer follower" entity - extends EntityWolf entirely for its proven,
@@ -156,6 +165,27 @@ public class EntityViewerFollower extends EntityWolf {
     protected void applyEntityAttributes() {
         super.applyEntityAttributes();
         this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(BASE_MAX_HEALTH);
+    }
+
+    @Override
+    public boolean attackEntityAsMob(Entity target) {
+        float damage = this.isTamed() ? 4.0F : 2.0F;
+
+        ItemStack held = this.getHeldItem();
+        if (held != null) {
+            Multimap<String, AttributeModifier> modifiers = held.getItem().getAttributeModifiers(held);
+            Collection<AttributeModifier> attackMods = modifiers.get(
+                SharedMonsterAttributes.attackDamage.getAttributeUnlocalizedName());
+            for (AttributeModifier mod : attackMods) {
+                damage += (float) mod.getAmount();
+            }
+        }
+
+        Twitchy.LOG.info(
+            "[DEBUG] {} attacking with {} damage (held: {})",
+            this.getCustomNameTag(), damage, held != null ? held.getDisplayName() : "nothing");
+
+        return target.attackEntityFrom(DamageSource.causeMobDamage(this), damage);
     }
 
     @Override
