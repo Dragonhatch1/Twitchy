@@ -5,7 +5,7 @@ import java.util.Optional;
 import com.twitchy.api.TwitchModels.ChatMessageEvent;
 import com.twitchy.client.FollowerModelRegistry;
 import com.twitchy.client.TwitchSessionManager;
-import com.twitchy.entity.ViewerFollowerGear;
+import com.twitchy.entity.ViewerFollowerProfile;
 
 /** Client-side only. Watches incoming Twitch chat messages for configured trigger phrases. */
 public final class ChatCommandManager {
@@ -41,8 +41,8 @@ public final class ChatCommandManager {
     }
 
     private static void handleKillsCommand(ChatMessageEvent event) {
-        int kills = ViewerFollowerGear.getLastHits(event.chatter_user_id);
-        int bossKills = ViewerFollowerGear.getBossLastHits(event.chatter_user_id);
+        int kills = ViewerFollowerProfile.getLastHits(event.chatter_user_id);
+        int bossKills = ViewerFollowerProfile.getBossLastHits(event.chatter_user_id);
         String name = event.chatter_user_name == null ? "" : event.chatter_user_name;
         String response = name + " has "
             + kills
@@ -78,7 +78,7 @@ public final class ChatCommandManager {
             return;
         }
 
-        ViewerFollowerGear.setMinecraftUsername(event.chatter_user_id, username);
+        ViewerFollowerProfile.setMinecraftUsername(event.chatter_user_id, username);
 
         TwitchSessionManager.INSTANCE
             .sendChatMessage(event.chatter_user_name + " - your entity will now use " + username + "'s skin!");
@@ -103,7 +103,7 @@ public final class ChatCommandManager {
             return;
         }
 
-        ViewerFollowerGear.setFollowerModel(event.chatter_user_id, choice);
+        ViewerFollowerProfile.setFollowerModel(event.chatter_user_id, choice);
         com.twitchy.network.PacketHandler
             .sendToServer(new com.twitchy.network.FollowerModelPacket(event.chatter_user_id, choice));
         TwitchSessionManager.INSTANCE

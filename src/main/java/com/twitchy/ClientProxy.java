@@ -12,7 +12,7 @@ import com.twitchy.client.ToastEffect;
 import com.twitchy.command.CommandTwitchy;
 import com.twitchy.entity.EntityViewerFollower;
 import com.twitchy.entity.MobSpawningConfig;
-import com.twitchy.entity.ViewerFollowerGear;
+import com.twitchy.entity.ViewerFollowerProfile;
 import com.twitchy.rewards.RewardConfig;
 import com.twitchy.rewards.ViewerLinkRegistry;
 
@@ -30,7 +30,7 @@ public class ClientProxy extends CommonProxy {
         RewardConfig.load();
         ViewerLinkRegistry.load();
         ChatCommandConfig.load();
-        ViewerFollowerGear.load();
+        ViewerFollowerProfile.load();
         MobSpawningConfig.load();
     }
 

@@ -18,18 +18,18 @@ import com.twitchy.rewards.RewardAction.GearPiece;
 
 import cpw.mods.fml.common.Loader;
 
-public final class ViewerFollowerGear {
+public final class ViewerFollowerProfile {
 
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting()
         .create();
-    private static Map<String, ChatterRecord> chatters = new HashMap<>();
+    private static Map<String, ViewerRecord> chatters = new HashMap<>();
 
     private static final float MIN_SCALE = 0.20F;
     private static final float MAX_SCALE = 3.0F;
 
-    private ViewerFollowerGear() {}
+    private ViewerFollowerProfile() {}
 
-    public static class ChatterRecord {
+    public static class ViewerRecord {
 
         public List<GearPiece> gear = new ArrayList<>();
         public int lastHits = 0;
@@ -45,15 +45,15 @@ public final class ViewerFollowerGear {
                 .getConfigDir(),
             "twitchy");
         if (!dir.exists()) dir.mkdirs();
-        return new File(dir, "ChatterGear.json");
+        return new File(dir, "ViewerProfile.json");
     }
 
     public static void load() {
         File f = file();
         if (!f.exists()) return;
         try (FileReader reader = new FileReader(f)) {
-            java.lang.reflect.Type type = new TypeToken<Map<String, ChatterRecord>>() {}.getType();
-            Map<String, ChatterRecord> loaded = GSON.fromJson(reader, type);
+            java.lang.reflect.Type type = new TypeToken<Map<String, ViewerRecord>>() {}.getType();
+            Map<String, ViewerRecord> loaded = GSON.fromJson(reader, type);
             if (loaded != null) {
                 chatters = loaded;
             }
@@ -66,18 +66,18 @@ public final class ViewerFollowerGear {
         try (FileWriter writer = new FileWriter(file())) {
             GSON.toJson(chatters, writer);
         } catch (IOException e) {
-            Twitchy.LOG.error("Failed to save ChatterGear.json", e);
+            Twitchy.LOG.error("Failed to save ViewerProfile.json", e);
         }
     }
 
-    private static ChatterRecord recordFor(String userId) {
-        return chatters.computeIfAbsent(userId, id -> new ChatterRecord());
+    private static ViewerRecord recordFor(String userId) {
+        return chatters.computeIfAbsent(userId, id -> new ViewerRecord());
     }
 
     // ===================== Gear =====================
 
     public static List<GearPiece> getGear(String userId) {
-        ChatterRecord record = chatters.get(userId);
+        ViewerRecord record = chatters.get(userId);
         return record != null ? record.gear : Collections.emptyList();
     }
 
@@ -95,7 +95,7 @@ public final class ViewerFollowerGear {
     }
 
     public static void applyUpgrade(String userId, List<GearPiece> newPieces) {
-        ChatterRecord record = recordFor(userId);
+        ViewerRecord record = recordFor(userId);
         for (GearPiece piece : newPieces) {
             record.gear.removeIf(g -> g.slot == piece.slot);
             record.gear.add(piece);
@@ -106,7 +106,7 @@ public final class ViewerFollowerGear {
     // ===================== Kill tracking =====================
 
     public static int getLastHits(String userId) {
-        ChatterRecord record = chatters.get(userId);
+        ViewerRecord record = chatters.get(userId);
         return record != null ? record.lastHits : 0;
     }
 
@@ -123,13 +123,13 @@ public final class ViewerFollowerGear {
 
     public static void spendKills(String userId, int amount) {
         if (amount <= 0) return;
-        ChatterRecord record = recordFor(userId);
+        ViewerRecord record = recordFor(userId);
         record.lastHits = Math.max(0, record.lastHits - amount);
         save();
     }
 
     public static int getBossLastHits(String userId) {
-        ChatterRecord record = chatters.get(userId);
+        ViewerRecord record = chatters.get(userId);
         return record != null ? record.bossLastHits : 0;
     }
 
@@ -145,7 +145,7 @@ public final class ViewerFollowerGear {
 
     public static void spendBossKills(String userId, int amount) {
         if (amount <= 0) return;
-        ChatterRecord record = recordFor(userId);
+        ViewerRecord record = recordFor(userId);
         record.bossLastHits = Math.max(0, record.bossLastHits - amount);
         save();
     }
@@ -158,20 +158,20 @@ public final class ViewerFollowerGear {
     }
 
     public static String getMinecraftUsername(String userId) {
-        ChatterRecord record = chatters.get(userId);
+        ViewerRecord record = chatters.get(userId);
         return record != null ? record.minecraftUsername : "";
     }
 
     // ===================== Scaling =====================
 
     public static float getScale(String userId) {
-        ChatterRecord record = chatters.get(userId);
+        ViewerRecord record = chatters.get(userId);
         return record != null ? record.scale : 1.0F;
     }
 
     /** Returns the resulting clamped scale, so callers can report it back to the viewer. */
     public static float adjustScale(String userId, float delta) {
-        ChatterRecord record = recordFor(userId);
+        ViewerRecord record = recordFor(userId);
         record.scale = Math.max(MIN_SCALE, Math.min(MAX_SCALE, record.scale + delta));
         save();
         return record.scale;
@@ -185,7 +185,7 @@ public final class ViewerFollowerGear {
     }
 
     public static String getFollowerModel(String userId) {
-        ChatterRecord record = chatters.get(userId);
+        ViewerRecord record = chatters.get(userId);
         return record != null ? record.followerModel : "BIPED";
     }
 }

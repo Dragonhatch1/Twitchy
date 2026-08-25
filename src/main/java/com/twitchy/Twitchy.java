@@ -80,4 +80,3 @@ public class Twitchy {
 // TODO Remove armor when Enderman
 // TODO Equipment not reading kill requirements
 // TODO Followers Duel each other | Maybe just turns against the group?
-// TODO ChatterGear renamed to ChatterProfile

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.twitchy.api.TwitchModels;
-import com.twitchy.entity.ViewerFollowerGear;
+import com.twitchy.entity.ViewerFollowerProfile;
 import com.twitchy.rewards.RewardAction.GearPiece;
 
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
@@ -25,10 +25,10 @@ public class SyncViewerListPacket implements IMessage {
         for (TwitchModels.Chatter c : chatters) {
             userIds.add(c.user_id);
             userLogins.add(c.user_login);
-            gearPerUser.add(ViewerFollowerGear.getGear(c.user_id));
-            minecraftUsernames.add(ViewerFollowerGear.getMinecraftUsername(c.user_id));
-            scales.add(ViewerFollowerGear.getScale(c.user_id));
-            followerModels.add(ViewerFollowerGear.getFollowerModel(c.user_id));
+            gearPerUser.add(ViewerFollowerProfile.getGear(c.user_id));
+            minecraftUsernames.add(ViewerFollowerProfile.getMinecraftUsername(c.user_id));
+            scales.add(ViewerFollowerProfile.getScale(c.user_id));
+            followerModels.add(ViewerFollowerProfile.getFollowerModel(c.user_id));
         }
     }
 

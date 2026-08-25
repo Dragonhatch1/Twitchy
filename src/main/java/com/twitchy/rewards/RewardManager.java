@@ -20,7 +20,7 @@ import com.twitchy.client.KeySequenceChallengeManager;
 import com.twitchy.client.ToastEffect;
 import com.twitchy.client.TwitchSessionManager;
 import com.twitchy.entity.MobSpawningConfig;
-import com.twitchy.entity.ViewerFollowerGear;
+import com.twitchy.entity.ViewerFollowerProfile;
 import com.twitchy.network.ApplyGearPacket;
 import com.twitchy.network.HealFollowerPacket;
 import com.twitchy.network.PacketHandler;
@@ -107,8 +107,8 @@ public final class RewardManager {
             return;
         }
         if (action.type == RewardActionType.RESIZE_FOLLOWER) {
-            float oldScale = ViewerFollowerGear.getScale(viewerUserId);
-            float newScale = ViewerFollowerGear.adjustScale(viewerUserId, action.resizeDelta);
+            float oldScale = ViewerFollowerProfile.getScale(viewerUserId);
+            float newScale = ViewerFollowerProfile.adjustScale(viewerUserId, action.resizeDelta);
 
             if (Math.abs(newScale - oldScale) < 0.001F) {
                 String limitName = action.resizeDelta > 0 ? "maximum" : "minimum";
@@ -140,11 +140,11 @@ public final class RewardManager {
             return;
         }
         if (action.type == RewardActionType.GEAR_UPGRADE) {
-            if (!com.twitchy.entity.ViewerFollowerGear.meetsRequirement(viewerUserId, action.prevItemReq)) {
+            if (!ViewerFollowerProfile.meetsRequirement(viewerUserId, action.prevItemReq)) {
                 fulfill(redemptionId, twitchRewards, false);
                 return;
             }
-            if (!com.twitchy.entity.ViewerFollowerGear.hasEnoughKills(viewerUserId, action.requiredKills)) {
+            if (!ViewerFollowerProfile.hasEnoughKills(viewerUserId, action.requiredKills)) {
                 fulfill(redemptionId, twitchRewards, false);
                 return;
             }
@@ -152,8 +152,8 @@ public final class RewardManager {
                 fulfill(redemptionId, twitchRewards, false);
                 return;
             }
-            ViewerFollowerGear.spendKills(viewerUserId, action.requiredKills);
-            ViewerFollowerGear.applyUpgrade(viewerUserId, action.newItem);
+            ViewerFollowerProfile.spendKills(viewerUserId, action.requiredKills);
+            ViewerFollowerProfile.applyUpgrade(viewerUserId, action.newItem);
             PacketHandler.sendToServer(new ApplyGearPacket(viewerUserId, action.newItem));
             fulfill(redemptionId, twitchRewards, true);
             return;
