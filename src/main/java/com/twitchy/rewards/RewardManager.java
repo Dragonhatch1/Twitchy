@@ -112,8 +112,8 @@ public final class RewardManager {
 
             if (Math.abs(newScale - oldScale) < 0.001F) {
                 String limitName = action.resizeDelta > 0 ? "maximum" : "minimum";
-                TwitchSessionManager.INSTANCE.sendChatMessage(
-                    viewerDisplayName + " - your follower is already at " + limitName + " size!");
+                TwitchSessionManager.INSTANCE
+                    .sendChatMessage(viewerDisplayName + " - your follower is already at " + limitName + " size!");
                 fulfill(redemptionId, twitchRewards, false);
                 return;
             }
@@ -142,8 +142,8 @@ public final class RewardManager {
         if (action.type == RewardActionType.GEAR_UPGRADE) {
             if (!ViewerFollowerProfile.meetsRequirement(viewerUserId, action.prevItemReq)) {
                 String needed = formatGearList(action.prevItemReq);
-                TwitchSessionManager.INSTANCE.sendChatMessage(
-                    viewerDisplayName + " - you need " + needed + " equipped first!");
+                TwitchSessionManager.INSTANCE
+                    .sendChatMessage(viewerDisplayName + " - you need " + needed + " equipped first!");
                 fulfill(redemptionId, twitchRewards, false);
                 return;
             }
@@ -152,8 +152,15 @@ public final class RewardManager {
                 int current = ViewerFollowerProfile.getLastHits(viewerUserId);
                 int remaining = action.requiredKills - current;
                 TwitchSessionManager.INSTANCE.sendChatMessage(
-                    viewerDisplayName + " - you need " + remaining + " more last hit"
-                        + (remaining == 1 ? "" : "s") + " (" + current + "/" + action.requiredKills + ")!");
+                    viewerDisplayName + " - you need "
+                        + remaining
+                        + " more last hit"
+                        + (remaining == 1 ? "" : "s")
+                        + " ("
+                        + current
+                        + "/"
+                        + action.requiredKills
+                        + ")!");
                 fulfill(redemptionId, twitchRewards, false);
                 return;
             }

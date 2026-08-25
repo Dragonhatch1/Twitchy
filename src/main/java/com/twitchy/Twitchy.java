@@ -1,6 +1,7 @@
 package com.twitchy;
 
 import net.minecraftforge.common.MinecraftForge;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -74,9 +75,10 @@ public class Twitchy {
 // TODO Mob Spawning every 10 Bits | Boss mob every 100 bits
 // TODO Spawn entity on Sub | Twilight forest Entity | Ravens, Tiny Birds,
 // TODO Pong as a captcha?
-// TODO Clean up Responding to chat about needed equips AFTER Equipment redo | Make sure it doesnt look weird "you need chainmail_boots and chainmail_leggings and chainmail_chestplate and chainmail_helmet equipped first!"
+// TODO Clean up Responding to chat about needed equips AFTER Equipment redo | Make sure it doesnt look weird "you need
+// chainmail_boots and chainmail_leggings and chainmail_chestplate and chainmail_helmet equipped first!"
 
 // TODO move to Equipment flags so we can have an equip system. Just unlock armor and equip it with !equip
 // TODO Twilight Forest Models
-// TODO Remove armor when Enderman
 // TODO Followers Duel each other | Maybe just turns against the group?
+// TODO Spawn lurkers (people who havent typed) as specific models/skins

@@ -10,7 +10,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelBiped;
-import net.minecraft.client.model.ModelSpider;
+import net.minecraft.client.model.ModelEnderman;
 import net.minecraft.client.renderer.entity.RenderBiped;
 import net.minecraft.client.resources.SkinManager;
 import net.minecraft.entity.EntityLiving;
@@ -27,18 +27,12 @@ import com.twitchy.entity.EntityViewerFollower;
 
 public class RenderViewerFollower extends RenderBiped {
 
-    private final ModelBiped bipedModel = new ModelBiped();
-    private final ModelSpider spiderModel = new ModelSpider();
-    private static final ResourceLocation SPIDER_TEXTURE = new ResourceLocation("textures/entity/spider/spider.png");
     private static final ResourceLocation STEVE_TEXTURE = new ResourceLocation("textures/entity/steve.png");
 
     private static final Map<String, ResourceLocation> resolvedSkins = new ConcurrentHashMap<>();
     private static final Set<String> pendingLookups = ConcurrentHashMap.newKeySet();
     private final Map<String, ModelBase> modelCache = new HashMap<>();
 
-    // Minecraft's own client doesn't expose a profile-repository getter the way it does for
-    // SkinManager (func_152342_ad()), so Twitchy builds its own, matching the exact same
-    // constructor pattern Minecraft.java itself uses to build its session service.
     private static final GameProfileRepository PROFILE_REPO = new YggdrasilAuthenticationService(
         Proxy.NO_PROXY,
         UUID.randomUUID()
@@ -56,13 +50,16 @@ public class RenderViewerFollower extends RenderBiped {
             return regEntry.texture; // non-biped entries always use their own fixed texture
         }
 
-        // BIPED specifically still supports real skin resolution
         String username = entity.getMinecraftUsername();
         if (username == null || username.isBlank()) return STEVE_TEXTURE;
         ResourceLocation cached = resolvedSkins.get(username);
         if (cached != null) return cached;
         if (pendingLookups.add(username)) resolveSkinAsync(username);
         return STEVE_TEXTURE;
+    }
+
+    private static boolean isArmorCompatible(ModelBase model) {
+        return model instanceof ModelBiped && !(model instanceof ModelEnderman);
     }
 
     @Override
@@ -80,19 +77,22 @@ public class RenderViewerFollower extends RenderBiped {
                         .func_152347_ac()
                         .fillProfileProperties(profile, false);
 
-                    Minecraft.getMinecraft().func_152344_a(() -> {
-                        SkinManager skinManager = Minecraft.getMinecraft().func_152342_ad();
-                        skinManager.func_152790_a(filled, new SkinManager.SkinAvailableCallback() {
+                    Minecraft.getMinecraft()
+                        .func_152344_a(() -> {
+                            SkinManager skinManager = Minecraft.getMinecraft()
+                                .func_152342_ad();
+                            skinManager.func_152790_a(filled, new SkinManager.SkinAvailableCallback() {
 
-                            @Override
-                            public void func_152121_a(MinecraftProfileTexture.Type type, ResourceLocation location) {
-                                if (type == MinecraftProfileTexture.Type.SKIN) {
-                                    resolvedSkins.put(username, location);
+                                @Override
+                                public void func_152121_a(MinecraftProfileTexture.Type type,
+                                    ResourceLocation location) {
+                                    if (type == MinecraftProfileTexture.Type.SKIN) {
+                                        resolvedSkins.put(username, location);
+                                    }
+                                    pendingLookups.remove(username);
                                 }
-                                pendingLookups.remove(username);
-                            }
-                        }, false);
-                    });
+                            }, false);
+                        });
                 }
 
                 @Override
@@ -126,16 +126,16 @@ public class RenderViewerFollower extends RenderBiped {
 
     @Override
     protected int shouldRenderPass(EntityLiving entity, int armorSlot, float partialTicks) {
-        if (entity instanceof EntityViewerFollower && !(this.mainModel instanceof ModelBiped)) {
-            return -1; // suppress armor unless the active model shares biped proportions
+        if (entity instanceof EntityViewerFollower && !isArmorCompatible(this.mainModel)) {
+            return -1;
         }
         return super.shouldRenderPass(entity, armorSlot, partialTicks);
     }
 
     @Override
     protected void renderEquippedItems(EntityLiving entity, float partialTicks) {
-        if (entity instanceof EntityViewerFollower && !(this.mainModel instanceof ModelBiped)) {
-            return; // same gate for the held item
+        if (entity instanceof EntityViewerFollower && !isArmorCompatible(this.mainModel)) {
+            return;
         }
         super.renderEquippedItems(entity, partialTicks);
     }
