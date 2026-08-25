@@ -1,5 +1,6 @@
 package com.twitchy;
 
+import net.minecraftforge.common.MinecraftForge;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -65,7 +66,7 @@ public class Twitchy {
         FMLCommonHandler.instance()
             .bus()
             .register(viewerFollowerHandler);
-        net.minecraftforge.common.MinecraftForge.EVENT_BUS.register(viewerFollowerHandler);
+        MinecraftForge.EVENT_BUS.register(viewerFollowerHandler);
     }
 }
 
@@ -77,7 +78,6 @@ public class Twitchy {
 // TODO move to Equipment flags so we can have an equip system. Just unlock armor and equip it with !equip
 // TODO Twilight Forest Models
 // TODO Remove armor when Enderman
-// TODO Fix Skin Async call
-// TODO Yell at people in chat for no reason
 // TODO Say when too big/too small
 // TODO Equipment not reading kill requirements
+// TODO Followers Duel each other | Maybe just turns against the group?

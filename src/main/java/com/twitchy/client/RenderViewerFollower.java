@@ -71,33 +71,36 @@ public class RenderViewerFollower extends RenderBiped {
     }
 
     private static void resolveSkinAsync(String username) {
-        PROFILE_REPO.findProfilesByNames(new String[] { username }, Agent.MINECRAFT, new ProfileLookupCallback() {
+        java.util.concurrent.CompletableFuture.runAsync(() -> {
+            PROFILE_REPO.findProfilesByNames(new String[] { username }, Agent.MINECRAFT, new ProfileLookupCallback() {
 
-            @Override
-            public void onProfileLookupSucceeded(GameProfile profile) {
-                SkinManager skinManager = Minecraft.getMinecraft()
-                    .func_152342_ad();
-                GameProfile filled = Minecraft.getMinecraft()
-                    .func_152347_ac()
-                    .fillProfileProperties(profile, false);
+                @Override
+                public void onProfileLookupSucceeded(GameProfile profile) {
+                    GameProfile filled = Minecraft.getMinecraft()
+                        .func_152347_ac()
+                        .fillProfileProperties(profile, false);
 
-                skinManager.func_152790_a(filled, new SkinManager.SkinAvailableCallback() {
+                    Minecraft.getMinecraft().func_152344_a(() -> {
+                        SkinManager skinManager = Minecraft.getMinecraft().func_152342_ad();
+                        skinManager.func_152790_a(filled, new SkinManager.SkinAvailableCallback() {
 
-                    @Override
-                    public void func_152121_a(MinecraftProfileTexture.Type type, ResourceLocation location) {
-                        if (type == MinecraftProfileTexture.Type.SKIN) {
-                            resolvedSkins.put(username, location);
-                        }
-                        pendingLookups.remove(username);
-                    }
-                }, false);
-            }
+                            @Override
+                            public void func_152121_a(MinecraftProfileTexture.Type type, ResourceLocation location) {
+                                if (type == MinecraftProfileTexture.Type.SKIN) {
+                                    resolvedSkins.put(username, location);
+                                }
+                                pendingLookups.remove(username);
+                            }
+                        }, false);
+                    });
+                }
 
-            @Override
-            public void onProfileLookupFailed(GameProfile profile, Exception exception) {
-                Twitchy.LOG.warn("Skin lookup failed for username '{}': {}", username, exception.getMessage());
-                pendingLookups.remove(username);
-            }
+                @Override
+                public void onProfileLookupFailed(GameProfile profile, Exception exception) {
+                    Twitchy.LOG.warn("Skin lookup failed for username '{}': {}", username, exception.getMessage());
+                    pendingLookups.remove(username);
+                }
+            });
         });
     }
 
