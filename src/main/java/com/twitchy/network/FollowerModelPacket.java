@@ -19,7 +19,7 @@ public class FollowerModelPacket implements IMessage {
     @Override
     public void toBytes(ByteBuf buf) {
         ByteBufUtils.writeUTF8String(buf, userId == null ? "" : userId);
-        ByteBufUtils.writeUTF8String(buf, model == null ? "BIPED" : model);
+        ByteBufUtils.writeUTF8String(buf, model == null ? "STEVE" : model);
     }
 
     @Override

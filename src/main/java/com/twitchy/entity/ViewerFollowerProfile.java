@@ -36,7 +36,7 @@ public final class ViewerFollowerProfile {
         public int bossLastHits = 0;
         public String minecraftUsername = "";
         public float scale = 1.0F;
-        public String followerModel = "BIPED";
+        public String followerModel = "STEVE";
     }
 
     private static File file() {
@@ -186,6 +186,6 @@ public final class ViewerFollowerProfile {
 
     public static String getFollowerModel(String userId) {
         ViewerRecord record = chatters.get(userId);
-        return record != null ? record.followerModel : "BIPED";
+        return record != null ? record.followerModel : "STEVE";
     }
 }

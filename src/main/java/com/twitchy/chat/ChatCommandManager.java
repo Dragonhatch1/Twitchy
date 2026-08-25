@@ -27,7 +27,7 @@ public final class ChatCommandManager {
             return;
         }
 
-        if (firstWord.equalsIgnoreCase("!models")) {
+        if (firstWord.equalsIgnoreCase("!model")) {
             handleModelsCommand(event);
             return;
         }
@@ -89,7 +89,7 @@ public final class ChatCommandManager {
             .split("\\s+", 2);
         if (parts.length < 2 || parts[1].isBlank()) {
             TwitchSessionManager.INSTANCE.sendChatMessage(
-                event.chatter_user_name + " - usage: !models <model>. Available: "
+                event.chatter_user_name + " - usage: !model <model>. Available: "
                     + String.join(", ", FollowerModelRegistry.availableKeys()));
             return;
         }

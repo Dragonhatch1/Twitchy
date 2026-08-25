@@ -10,7 +10,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelBiped;
-import net.minecraft.client.model.ModelEnderman;
 import net.minecraft.client.renderer.entity.RenderBiped;
 import net.minecraft.client.resources.SkinManager;
 import net.minecraft.entity.EntityLiving;
@@ -33,6 +32,8 @@ public class RenderViewerFollower extends RenderBiped {
     private static final Set<String> pendingLookups = ConcurrentHashMap.newKeySet();
     private final Map<String, ModelBase> modelCache = new HashMap<>();
 
+    private static final java.util.Set<String> ARMOR_INCOMPATIBLE_KEYS = java.util.Set.of("ENDERMAN", "REDCAP", "MINOSHROOM", "KOBOLD");
+
     private static final GameProfileRepository PROFILE_REPO = new YggdrasilAuthenticationService(
         Proxy.NO_PROXY,
         UUID.randomUUID()
@@ -46,7 +47,7 @@ public class RenderViewerFollower extends RenderBiped {
         String key = entity.getFollowerModelKey();
         FollowerModelRegistry.Entry regEntry = FollowerModelRegistry.get(key);
 
-        if (regEntry != null && !"BIPED".equals(key)) {
+        if (regEntry != null && !"STEVE".equals(key)) {
             return regEntry.texture; // non-biped entries always use their own fixed texture
         }
 
@@ -58,8 +59,8 @@ public class RenderViewerFollower extends RenderBiped {
         return STEVE_TEXTURE;
     }
 
-    private static boolean isArmorCompatible(ModelBase model) {
-        return model instanceof ModelBiped && !(model instanceof ModelEnderman);
+    private static boolean isArmorCompatible(ModelBase model, String key) {
+        return model instanceof ModelBiped && !ARMOR_INCOMPATIBLE_KEYS.contains(key);
     }
 
     @Override
@@ -126,7 +127,8 @@ public class RenderViewerFollower extends RenderBiped {
 
     @Override
     protected int shouldRenderPass(EntityLiving entity, int armorSlot, float partialTicks) {
-        if (entity instanceof EntityViewerFollower && !isArmorCompatible(this.mainModel)) {
+        if (entity instanceof EntityViewerFollower follower
+            && !isArmorCompatible(this.mainModel, follower.getFollowerModelKey())) {
             return -1;
         }
         return super.shouldRenderPass(entity, armorSlot, partialTicks);
@@ -134,7 +136,8 @@ public class RenderViewerFollower extends RenderBiped {
 
     @Override
     protected void renderEquippedItems(EntityLiving entity, float partialTicks) {
-        if (entity instanceof EntityViewerFollower && !isArmorCompatible(this.mainModel)) {
+        if (entity instanceof EntityViewerFollower follower
+            && !isArmorCompatible(this.mainModel, follower.getFollowerModelKey())) {
             return;
         }
         super.renderEquippedItems(entity, partialTicks);

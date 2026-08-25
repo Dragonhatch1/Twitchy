@@ -79,7 +79,7 @@ public class ChatCommandConfig {
 
         ChatCommand commands = new ChatCommand();
         commands.trigger = "!help";
-        commands.response = "discord | kills | setname | models";
+        commands.response = "discord | kills | setname | model";
         defaults.add(commands);
 
         ChatCommand discord = new ChatCommand();

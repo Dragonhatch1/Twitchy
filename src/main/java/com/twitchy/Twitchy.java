@@ -79,6 +79,5 @@ public class Twitchy {
 // chainmail_boots and chainmail_leggings and chainmail_chestplate and chainmail_helmet equipped first!"
 
 // TODO move to Equipment flags so we can have an equip system. Just unlock armor and equip it with !equip
-// TODO Twilight Forest Models
 // TODO Followers Duel each other | Maybe just turns against the group?
 // TODO Spawn lurkers (people who havent typed) as specific models/skins

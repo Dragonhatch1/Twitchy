@@ -50,7 +50,7 @@ public class EntityViewerFollower extends EntityWolf {
         this.tasks.taskEntries.removeIf(entry -> entry.action instanceof net.minecraft.entity.ai.EntityAIWatchClosest);
         this.tasks.taskEntries.removeIf(entry -> entry.action instanceof net.minecraft.entity.ai.EntityAIFollowOwner);
         this.tasks.addTask(5, new net.minecraft.entity.ai.EntityAIFollowOwner(this, 1.0D, 7.0F, 4.0F));
-        this.dataWatcher.addObject(WATCHER_MODEL_TYPE, "BIPED");
+        this.dataWatcher.addObject(WATCHER_MODEL_TYPE, "STEVE");
     }
 
     /** Call once, right after construction, before spawning into the world. */
@@ -122,11 +122,11 @@ public class EntityViewerFollower extends EntityWolf {
 
     public String getFollowerModelKey() {
         String key = this.dataWatcher.getWatchableObjectString(WATCHER_MODEL_TYPE);
-        return key == null || key.isBlank() ? "BIPED" : key;
+        return key == null || key.isBlank() ? "STEVE" : key;
     }
 
     public void setFollowerModelKey(String key) {
-        this.dataWatcher.updateObject(WATCHER_MODEL_TYPE, key == null ? "BIPED" : key);
+        this.dataWatcher.updateObject(WATCHER_MODEL_TYPE, key == null ? "STEVE" : key);
     }
 
     @Override
