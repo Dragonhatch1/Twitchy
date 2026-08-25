@@ -141,17 +141,23 @@ public final class RewardManager {
         }
         if (action.type == RewardActionType.GEAR_UPGRADE) {
             if (!ViewerFollowerProfile.meetsRequirement(viewerUserId, action.prevItemReq)) {
+                String needed = formatGearList(action.prevItemReq);
+                TwitchSessionManager.INSTANCE.sendChatMessage(
+                    viewerDisplayName + " - you need " + needed + " equipped first!");
                 fulfill(redemptionId, twitchRewards, false);
                 return;
             }
+
             if (!ViewerFollowerProfile.hasEnoughKills(viewerUserId, action.requiredKills)) {
+                int current = ViewerFollowerProfile.getLastHits(viewerUserId);
+                int remaining = action.requiredKills - current;
+                TwitchSessionManager.INSTANCE.sendChatMessage(
+                    viewerDisplayName + " - you need " + remaining + " more last hit"
+                        + (remaining == 1 ? "" : "s") + " (" + current + "/" + action.requiredKills + ")!");
                 fulfill(redemptionId, twitchRewards, false);
                 return;
             }
-            if (action.newItem == null || action.newItem.isEmpty()) {
-                fulfill(redemptionId, twitchRewards, false);
-                return;
-            }
+
             ViewerFollowerProfile.spendKills(viewerUserId, action.requiredKills);
             ViewerFollowerProfile.applyUpgrade(viewerUserId, action.newItem);
             PacketHandler.sendToServer(new ApplyGearPacket(viewerUserId, action.newItem));
@@ -285,5 +291,12 @@ public final class RewardManager {
 
     private static int randomChallengeLength() {
         return CHALLENGE_MIN_LENGTH + new java.util.Random().nextInt(CHALLENGE_MAX_LENGTH - CHALLENGE_MIN_LENGTH + 1);
+    }
+
+    private static String formatGearList(List<RewardAction.GearPiece> pieces) {
+        if (pieces == null || pieces.isEmpty()) return "something";
+        return pieces.stream()
+            .map(p -> p.item.contains(":") ? p.item.substring(p.item.indexOf(':') + 1) : p.item)
+            .collect(java.util.stream.Collectors.joining(" and "));
     }
 }
