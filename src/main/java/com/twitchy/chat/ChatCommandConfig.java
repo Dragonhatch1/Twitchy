@@ -78,8 +78,8 @@ public class ChatCommandConfig {
         List<ChatCommand> defaults = new ArrayList<>();
 
         ChatCommand commands = new ChatCommand();
-        commands.trigger = "!commands";
-        commands.response = "discord";
+        commands.trigger = "!help";
+        commands.response = "discord | kills | setname | models";
         defaults.add(commands);
 
         ChatCommand discord = new ChatCommand();
