@@ -79,4 +79,6 @@ public class Twitchy {
 // TODO Twilight Forest Models
 // TODO Remove armor when Enderman
 // TODO Equipment not reading kill requirements
+// TODO If your missing last hits ro boss last hits, respond to viewer and tell them on refund
 // TODO Followers Duel each other | Maybe just turns against the group?
+// TODO increase volume of Powerfail Sound
