@@ -107,7 +107,17 @@ public final class RewardManager {
             return;
         }
         if (action.type == RewardActionType.RESIZE_FOLLOWER) {
+            float oldScale = ViewerFollowerGear.getScale(viewerUserId);
             float newScale = ViewerFollowerGear.adjustScale(viewerUserId, action.resizeDelta);
+
+            if (Math.abs(newScale - oldScale) < 0.001F) {
+                String limitName = action.resizeDelta > 0 ? "maximum" : "minimum";
+                TwitchSessionManager.INSTANCE.sendChatMessage(
+                    viewerDisplayName + " - your follower is already at " + limitName + " size!");
+                fulfill(redemptionId, twitchRewards, false);
+                return;
+            }
+
             PacketHandler.sendToServer(new ResizeFollowerPacket(viewerUserId, newScale));
             fulfill(redemptionId, twitchRewards, true);
             return;

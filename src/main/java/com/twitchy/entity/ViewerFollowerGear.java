@@ -24,7 +24,7 @@ public final class ViewerFollowerGear {
         .create();
     private static Map<String, ChatterRecord> chatters = new HashMap<>();
 
-    private static final float MIN_SCALE = 0.25F;
+    private static final float MIN_SCALE = 0.20F;
     private static final float MAX_SCALE = 3.0F;
 
     private ViewerFollowerGear() {}

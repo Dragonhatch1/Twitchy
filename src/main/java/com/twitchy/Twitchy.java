@@ -78,6 +78,6 @@ public class Twitchy {
 // TODO move to Equipment flags so we can have an equip system. Just unlock armor and equip it with !equip
 // TODO Twilight Forest Models
 // TODO Remove armor when Enderman
-// TODO Say when too big/too small
 // TODO Equipment not reading kill requirements
 // TODO Followers Duel each other | Maybe just turns against the group?
+// TODO ChatterGear renamed to ChatterProfile
