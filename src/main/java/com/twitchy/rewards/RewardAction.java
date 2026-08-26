@@ -69,13 +69,10 @@ public class RewardAction {
      */
     public String[] keySequence;
 
-    /**
-     * GEAR_UPGRADE: items the chatter must already have equipped before this upgrade is granted.
-     * Null or empty = no requirement.
-     */
-    public List<GearPiece> prevItemReq;
-    /** GEAR_UPGRADE: the new gear set to equip - each piece overwrites whatever was in its own slot. */
-    public List<GearPiece> newItem;
+    /** GEAR_UPGRADE: GearSets.json key the viewer must already have unlocked. Null = no requirement. */
+    public String requiredUnlockKey;
+    /** GEAR_UPGRADE: the GearSets.json key this redemption grants on success. */
+    public String unlockKey;
 
     public static class GearPiece {
 

@@ -285,146 +285,110 @@ public class RewardConfig {
         RewardMapping gearleather = new RewardMapping();
         gearleather.key = "gear_leather";
         gearleather.enabled = false;
-        gearleather.title = "Buy Leather Armour!";
+        gearleather.title = "Unlock Leather Armour!";
         gearleather.cost = 1000;
-        gearleather.prompt = "Equip your character with a full Leather Armour set!";
+        gearleather.prompt = "Unlock a full Leather Armour set! Use !equip to wear it.";
         gearleather.action = new RewardAction();
         gearleather.action.type = RewardActionType.GEAR_UPGRADE;
-        gearleather.action.newItem = List.of(
-            gearPiece("minecraft:leather_boots", 0, 1),
-            gearPiece("minecraft:leather_leggings", 0, 2),
-            gearPiece("minecraft:leather_chestplate", 0, 3),
-            gearPiece("minecraft:leather_helmet", 0, 4));
+        gearleather.action.unlockKey = "leatherarmour";
         defaults.add(gearleather);
 
         RewardMapping geargold = new RewardMapping();
         geargold.key = "gear_gold";
         geargold.enabled = false;
-        geargold.title = "Upgrade to Gold Armor!";
+        geargold.title = "Unlock Gold Armor!";
         geargold.cost = 4000;
-        geargold.prompt = "Upgrade your character's armor to Gold! Must have Leather Armour first.";
+        geargold.prompt = "Unlock Gold armor! Must have Leather Armour unlocked first.";
         geargold.action = new RewardAction();
         geargold.action.type = RewardActionType.GEAR_UPGRADE;
-        geargold.action.prevItemReq = List.of(
-            gearPiece("minecraft:leather_boots", 0, 1),
-            gearPiece("minecraft:leather_leggings", 0, 2),
-            gearPiece("minecraft:leather_chestplate", 0, 3),
-            gearPiece("minecraft:leather_helmet", 0, 4));
-        geargold.action.newItem = List.of(
-            gearPiece("minecraft:golden_boots", 0, 1),
-            gearPiece("minecraft:golden_leggings", 0, 2),
-            gearPiece("minecraft:golden_chestplate", 0, 3),
-            gearPiece("minecraft:golden_helmet", 0, 4));
+        geargold.action.requiredUnlockKey = "leatherarmour";
+        geargold.action.unlockKey = "goldarmour";
         defaults.add(geargold);
 
         RewardMapping gearchain = new RewardMapping();
         gearchain.key = "gear_chain";
         gearchain.enabled = false;
-        gearchain.title = "Upgrade to Chain Armor!";
+        gearchain.title = "Unlock Chain Armor!";
         gearchain.cost = 8000;
-        gearchain.prompt = "Upgrade your character's armor to Chain! Must have Gold Armour first.";
+        gearchain.prompt = "Unlock Chain armor! Must have Gold Armour unlocked first.";
         gearchain.action = new RewardAction();
         gearchain.action.type = RewardActionType.GEAR_UPGRADE;
-        gearchain.action.prevItemReq = List.of(
-            gearPiece("minecraft:golden_boots", 0, 1),
-            gearPiece("minecraft:golden_leggings", 0, 2),
-            gearPiece("minecraft:golden_chestplate", 0, 3),
-            gearPiece("minecraft:golden_helmet", 0, 4));
-        gearchain.action.newItem = List.of(
-            gearPiece("minecraft:chainmail_boots", 0, 1),
-            gearPiece("minecraft:chainmail_leggings", 0, 2),
-            gearPiece("minecraft:chainmail_chestplate", 0, 3),
-            gearPiece("minecraft:chainmail_helmet", 0, 4));
+        gearchain.action.requiredUnlockKey = "goldarmour";
+        gearchain.action.unlockKey = "chainarmour";
         defaults.add(gearchain);
 
         RewardMapping geariron = new RewardMapping();
         geariron.key = "gear_iron";
         geariron.enabled = false;
-        geariron.title = "Upgrade to Iron Armor!";
+        geariron.title = "Unlock Iron Armor!";
         geariron.cost = 16000;
-        geariron.prompt = "Upgrade your character's armor to Iron! Must have Chain Armour first.";
+        geariron.prompt = "Unlock Iron armor! Must have Chain Armour unlocked first.";
         geariron.action = new RewardAction();
         geariron.action.type = RewardActionType.GEAR_UPGRADE;
-        geariron.action.prevItemReq = List.of(
-            gearPiece("minecraft:chainmail_boots", 0, 1),
-            gearPiece("minecraft:chainmail_leggings", 0, 2),
-            gearPiece("minecraft:chainmail_chestplate", 0, 3),
-            gearPiece("minecraft:chainmail_helmet", 0, 4));
-        geariron.action.newItem = List.of(
-            gearPiece("minecraft:iron_boots", 0, 1),
-            gearPiece("minecraft:iron_leggings", 0, 2),
-            gearPiece("minecraft:iron_chestplate", 0, 3),
-            gearPiece("minecraft:iron_helmet", 0, 4));
+        geariron.action.requiredUnlockKey = "chainarmour";
+        geariron.action.unlockKey = "ironarmour";
         defaults.add(geariron);
 
         RewardMapping geardiamond = new RewardMapping();
         geardiamond.key = "gear_diamond";
         geardiamond.enabled = false;
-        geardiamond.title = "Upgrade to Diamond Armor!";
+        geardiamond.title = "Unlock Diamond Armor!";
         geardiamond.cost = 32000;
-        geardiamond.prompt = "Upgrade your character's armor to Diamond! Must have Iron Armour first.";
+        geardiamond.prompt = "Unlock Diamond armor! Must have Iron Armour unlocked first.";
         geardiamond.action = new RewardAction();
         geardiamond.action.type = RewardActionType.GEAR_UPGRADE;
-        geardiamond.action.prevItemReq = List.of(
-            gearPiece("minecraft:iron_boots", 0, 1),
-            gearPiece("minecraft:iron_leggings", 0, 2),
-            gearPiece("minecraft:iron_chestplate", 0, 3),
-            gearPiece("minecraft:iron_helmet", 0, 4));
-        geardiamond.action.newItem = List.of(
-            gearPiece("minecraft:diamond_boots", 0, 1),
-            gearPiece("minecraft:diamond_leggings", 0, 2),
-            gearPiece("minecraft:diamond_chestplate", 0, 3),
-            gearPiece("minecraft:diamond_helmet", 0, 4));
+        geardiamond.action.requiredUnlockKey = "ironarmour";
+        geardiamond.action.unlockKey = "diamondarmour";
         defaults.add(geardiamond);
 
         RewardMapping swordWooden = new RewardMapping();
         swordWooden.key = "sword_wooden";
         swordWooden.enabled = false;
-        swordWooden.title = "Buy Wooden Sword!";
+        swordWooden.title = "Unlock Wooden Sword!";
         swordWooden.cost = 500;
-        swordWooden.prompt = "Buy a Wooden Sword! Great at helping with Last Hits.";
+        swordWooden.prompt = "Unlock a Wooden Sword! Great at helping with Last Hits.";
         swordWooden.action = new RewardAction();
         swordWooden.action.type = RewardActionType.GEAR_UPGRADE;
-        swordWooden.action.newItem = List.of(gearPiece("minecraft:wooden_sword", 0, 0));
+        swordWooden.action.unlockKey = "woodensword";
         defaults.add(swordWooden);
 
         RewardMapping swordStone = new RewardMapping();
         swordStone.key = "sword_stone";
         swordStone.enabled = false;
-        swordStone.title = "Upgrade to Stone Sword!";
+        swordStone.title = "Unlock Stone Sword!";
         swordStone.cost = 1000;
-        swordStone.prompt = "Upgrade to a Stone Sword! Requires 3 last hits & a Wooden Sword.";
+        swordStone.prompt = "Unlock a Stone Sword! Requires 3 last hits & a Wooden Sword unlocked.";
         swordStone.action = new RewardAction();
         swordStone.action.type = RewardActionType.GEAR_UPGRADE;
         swordStone.action.requiredKills = 3;
-        swordStone.action.prevItemReq = List.of(gearPiece("minecraft:wooden_sword", 0, 0));
-        swordStone.action.newItem = List.of(gearPiece("minecraft:stone_sword", 0, 0));
+        swordStone.action.requiredUnlockKey = "woodensword";
+        swordStone.action.unlockKey = "stonesword";
         defaults.add(swordStone);
 
         RewardMapping swordIron = new RewardMapping();
         swordIron.key = "sword_Iron";
         swordIron.enabled = false;
-        swordIron.title = "Upgrade to Iron Sword!";
+        swordIron.title = "Unlock Iron Sword!";
         swordIron.cost = 5000;
-        swordIron.prompt = "Upgrade to a Iron Sword! Requires 10 last hits & a Stone Sword.";
+        swordIron.prompt = "Unlock an Iron Sword! Requires 10 last hits & a Stone Sword unlocked.";
         swordIron.action = new RewardAction();
         swordIron.action.type = RewardActionType.GEAR_UPGRADE;
         swordIron.action.requiredKills = 10;
-        swordIron.action.prevItemReq = List.of(gearPiece("minecraft:stone_sword", 0, 0));
-        swordIron.action.newItem = List.of(gearPiece("minecraft:iron_sword", 0, 0));
+        swordIron.action.requiredUnlockKey = "stonesword";
+        swordIron.action.unlockKey = "ironsword";
         defaults.add(swordIron);
 
         RewardMapping swordDiamond = new RewardMapping();
         swordDiamond.key = "sword_diamond";
         swordDiamond.enabled = false;
-        swordDiamond.title = "Upgrade to Diamond Sword!";
+        swordDiamond.title = "Unlock Diamond Sword!";
         swordDiamond.cost = 10000;
-        swordDiamond.prompt = "Upgrade to a Diamond Sword! Requires 30 last hits & a Iron Sword.";
+        swordDiamond.prompt = "Unlock a Diamond Sword! Requires 30 last hits & an Iron Sword unlocked.";
         swordDiamond.action = new RewardAction();
         swordDiamond.action.type = RewardActionType.GEAR_UPGRADE;
         swordDiamond.action.requiredKills = 30;
-        swordDiamond.action.prevItemReq = List.of(gearPiece("minecraft:iron_sword", 0, 0));
-        swordDiamond.action.newItem = List.of(gearPiece("minecraft:diamond_sword", 0, 0));
+        swordDiamond.action.requiredUnlockKey = "ironsword";
+        swordDiamond.action.unlockKey = "diamondsword";
         defaults.add(swordDiamond);
 
         RewardMapping randomMobs = new RewardMapping();

@@ -71,11 +71,11 @@ public class RewardActionSerializer implements JsonSerializer<RewardAction> {
                 }
             }
             case GEAR_UPGRADE -> {
-                if (action.prevItemReq != null && !action.prevItemReq.isEmpty()) {
-                    json.add("prevItemReq", context.serialize(action.prevItemReq));
+                if (action.requiredUnlockKey != null && !action.requiredUnlockKey.isBlank()) {
+                    json.addProperty("requiredUnlockKey", action.requiredUnlockKey);
                 }
-                if (action.newItem != null && !action.newItem.isEmpty()) {
-                    json.add("newItem", context.serialize(action.newItem));
+                if (action.unlockKey != null && !action.unlockKey.isBlank()) {
+                    json.addProperty("unlockKey", action.unlockKey);
                 }
             }
             case SPAWN_RANDOM_MOBS -> {

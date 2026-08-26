@@ -20,8 +20,7 @@ import cpw.mods.fml.common.Loader;
 
 public final class ViewerFollowerProfile {
 
-    private static final Gson GSON = new GsonBuilder().setPrettyPrinting()
-        .create();
+    private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     private static Map<String, ViewerRecord> chatters = new HashMap<>();
 
     private static final float MIN_SCALE = 0.20F;
@@ -31,7 +30,9 @@ public final class ViewerFollowerProfile {
 
     public static class ViewerRecord {
 
-        public List<GearPiece> gear = new ArrayList<>();
+        public List<String> unlocked = new ArrayList<>();
+        public Map<Integer, GearPiece> equipped = new HashMap<>();
+
         public int lastHits = 0;
         public int bossLastHits = 0;
         public String minecraftUsername = "";
@@ -40,10 +41,7 @@ public final class ViewerFollowerProfile {
     }
 
     private static File file() {
-        File dir = new File(
-            Loader.instance()
-                .getConfigDir(),
-            "twitchy");
+        File dir = new File(Loader.instance().getConfigDir(), "twitchy");
         if (!dir.exists()) dir.mkdirs();
         return new File(dir, "ViewerProfile.json");
     }
@@ -74,36 +72,40 @@ public final class ViewerFollowerProfile {
         return chatters.computeIfAbsent(userId, id -> new ViewerRecord());
     }
 
-    // ===================== Gear =====================
-
-    public static List<GearPiece> getGear(String userId) {
+    public static List<String> getUnlocked(String userId) {
         ViewerRecord record = chatters.get(userId);
-        return record != null ? record.gear : Collections.emptyList();
+        return record != null ? record.unlocked : Collections.emptyList();
     }
 
-    public static boolean meetsRequirement(String userId, List<GearPiece> required) {
-        if (required == null || required.isEmpty()) return true;
-        List<GearPiece> current = getGear(userId);
-        for (GearPiece req : required) {
-            boolean found = current.stream()
-                .anyMatch(g -> g.item.equals(req.item) && g.metadata == req.metadata);
-            if (!found) {
-                return false;
-            }
-        }
+    public static boolean hasUnlocked(String userId, String key) {
+        return getUnlocked(userId).contains(key);
+    }
+
+    /** Returns false if the viewer already has this key - callers use this to refuse/refund
+     *  rather than let someone waste points re-buying something they already own. */
+    public static boolean grantUnlock(String userId, String key) {
+        ViewerRecord record = recordFor(userId);
+        if (record.unlocked.contains(key)) return false;
+        record.unlocked.add(key);
+        save();
         return true;
     }
 
-    public static void applyUpgrade(String userId, List<GearPiece> newPieces) {
-        ViewerRecord record = recordFor(userId);
-        for (GearPiece piece : newPieces) {
-            record.gear.removeIf(g -> g.slot == piece.slot);
-            record.gear.add(piece);
-        }
-        save();
+    public static List<GearPiece> getEquippedGear(String userId) {
+        ViewerRecord record = chatters.get(userId);
+        return record != null ? new ArrayList<>(record.equipped.values()) : Collections.emptyList();
     }
 
-    // ===================== Kill tracking =====================
+    /** Equips a specific piece into its slot, only if the viewer has actually unlocked a set
+     *  containing it. Returns false (does nothing) if they haven't. */
+    public static boolean equipPiece(String userId, int slot, String itemNameQuery) {
+        ViewerRecord record = recordFor(userId);
+        GearPiece piece = GearSets.findPieceInSets(record.unlocked, slot, itemNameQuery);
+        if (piece == null) return false;
+        record.equipped.put(slot, piece);
+        save();
+        return true;
+    }
 
     public static int getLastHits(String userId) {
         ViewerRecord record = chatters.get(userId);
@@ -150,8 +152,6 @@ public final class ViewerFollowerProfile {
         save();
     }
 
-    // ===================== Skins =====================
-
     public static void setMinecraftUsername(String userId, String minecraftUsername) {
         recordFor(userId).minecraftUsername = minecraftUsername;
         save();
@@ -162,22 +162,17 @@ public final class ViewerFollowerProfile {
         return record != null ? record.minecraftUsername : "";
     }
 
-    // ===================== Scaling =====================
-
     public static float getScale(String userId) {
         ViewerRecord record = chatters.get(userId);
         return record != null ? record.scale : 1.0F;
     }
 
-    /** Returns the resulting clamped scale, so callers can report it back to the viewer. */
     public static float adjustScale(String userId, float delta) {
         ViewerRecord record = recordFor(userId);
         record.scale = Math.max(MIN_SCALE, Math.min(MAX_SCALE, record.scale + delta));
         save();
         return record.scale;
     }
-
-    // ===================== Models =====================
 
     public static void setFollowerModel(String userId, String model) {
         recordFor(userId).followerModel = model;

@@ -1,5 +1,6 @@
 package com.twitchy;
 
+import com.twitchy.entity.GearSets;
 import net.minecraftforge.client.ClientCommandHandler;
 import net.minecraftforge.common.MinecraftForge;
 
@@ -32,6 +33,7 @@ public class ClientProxy extends CommonProxy {
         ChatCommandConfig.load();
         ViewerFollowerProfile.load();
         MobSpawningConfig.load();
+        GearSets.load();
     }
 
     @Override

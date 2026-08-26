@@ -1,16 +1,22 @@
 package com.twitchy.chat;
 
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import com.twitchy.api.TwitchModels.ChatMessageEvent;
 import com.twitchy.client.FollowerModelRegistry;
 import com.twitchy.client.TwitchSessionManager;
 import com.twitchy.entity.ViewerFollowerProfile;
+import com.twitchy.rewards.RewardAction.GearPiece;
 
 /** Client-side only. Watches incoming Twitch chat messages for configured trigger phrases. */
 public final class ChatCommandManager {
 
     private ChatCommandManager() {}
+
+    private static final Map<String, Integer> SLOT_NAMES = Map.of(
+        "head", 4, "chest", 3, "legs", 2, "feet", 1, "weapon", 0);
 
     public static void handleChatMessage(ChatMessageEvent event) {
         if (event.message == null || event.message.text == null) return;
@@ -29,6 +35,11 @@ public final class ChatCommandManager {
 
         if (firstWord.equalsIgnoreCase("!model")) {
             handleModelsCommand(event);
+            return;
+        }
+
+        if (firstWord.equalsIgnoreCase("!equip")) {
+            handleEquipCommand(event);
             return;
         }
 
@@ -108,6 +119,53 @@ public final class ChatCommandManager {
             .sendToServer(new com.twitchy.network.FollowerModelPacket(event.chatter_user_id, choice));
         TwitchSessionManager.INSTANCE
             .sendChatMessage(event.chatter_user_name + " - your follower is now " + choice.toLowerCase() + "!");
+    }
+
+    private static void handleEquipCommand(ChatMessageEvent event) {
+        String[] parts = event.message.text.trim().split("\\s+", 3);
+        if (parts.length < 2) {
+            TwitchSessionManager.INSTANCE.sendChatMessage(
+                event.chatter_user_name + " - usage: !equip <head|chest|legs|feet|weapon> [item]");
+            return;
+        }
+
+        Integer slot = SLOT_NAMES.get(parts[1].toLowerCase());
+        if (slot == null) {
+            TwitchSessionManager.INSTANCE.sendChatMessage(
+                event.chatter_user_name + " - valid slots: head, chest, legs, feet, weapon");
+            return;
+        }
+
+        // "!equip <slot>" with no item - list what's available for that slot
+        if (parts.length < 3) {
+            List<String> unlocked = ViewerFollowerProfile.getUnlocked(event.chatter_user_id);
+            List<GearPiece> options = com.twitchy.entity.GearSets.findAllPiecesForSlot(unlocked, slot);
+            if (options.isEmpty()) {
+                TwitchSessionManager.INSTANCE.sendChatMessage(
+                    event.chatter_user_name + " - you haven't unlocked anything for that slot yet!");
+                return;
+            }
+            String names = options.stream()
+                .map(p -> p.item.contains(":") ? p.item.substring(p.item.indexOf(':') + 1) : p.item)
+                .collect(java.util.stream.Collectors.joining(", "));
+            TwitchSessionManager.INSTANCE.sendChatMessage(
+                event.chatter_user_name + " - available for " + parts[1].toLowerCase() + ": " + names);
+            return;
+        }
+
+        boolean equipped = ViewerFollowerProfile.equipPiece(event.chatter_user_id, slot, parts[2]);
+        if (!equipped) {
+            TwitchSessionManager.INSTANCE.sendChatMessage(
+                event.chatter_user_name + " - you haven't unlocked that for that slot!");
+            return;
+        }
+
+        List<GearPiece> gear = ViewerFollowerProfile.getEquippedGear(event.chatter_user_id);
+        com.twitchy.network.PacketHandler.sendToServer(
+            new com.twitchy.network.ApplyGearPacket(event.chatter_user_id, gear));
+
+        TwitchSessionManager.INSTANCE.sendChatMessage(
+            event.chatter_user_name + " - equipped " + parts[2] + "!");
     }
 
     /** Simulates a trigger locally for testing (/twitchy testchat), bypassing Twitch entirely. */

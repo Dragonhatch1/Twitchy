@@ -25,7 +25,7 @@ public class SyncViewerListPacket implements IMessage {
         for (TwitchModels.Chatter c : chatters) {
             userIds.add(c.user_id);
             userLogins.add(c.user_login);
-            gearPerUser.add(ViewerFollowerProfile.getGear(c.user_id));
+            gearPerUser.add(ViewerFollowerProfile.getEquippedGear(c.user_id));
             minecraftUsernames.add(ViewerFollowerProfile.getMinecraftUsername(c.user_id));
             scales.add(ViewerFollowerProfile.getScale(c.user_id));
             followerModels.add(ViewerFollowerProfile.getFollowerModel(c.user_id));

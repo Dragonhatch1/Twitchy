@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
+import com.twitchy.entity.GearSets;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.util.ChatComponentText;
@@ -140,10 +141,17 @@ public final class RewardManager {
             return;
         }
         if (action.type == RewardActionType.GEAR_UPGRADE) {
-            if (!ViewerFollowerProfile.meetsRequirement(viewerUserId, action.prevItemReq)) {
-                String needed = formatGearList(action.prevItemReq);
-                TwitchSessionManager.INSTANCE
-                    .sendChatMessage(viewerDisplayName + " - you need " + needed + " equipped first!");
+            if (action.requiredUnlockKey != null
+                && !ViewerFollowerProfile.hasUnlocked(viewerUserId, action.requiredUnlockKey)) {
+                TwitchSessionManager.INSTANCE.sendChatMessage(
+                    viewerDisplayName + " - you need " + GearSets.getDisplayName(action.requiredUnlockKey) + " unlocked first!");
+                fulfill(redemptionId, twitchRewards, false);
+                return;
+            }
+
+            if (ViewerFollowerProfile.hasUnlocked(viewerUserId, action.unlockKey)) {
+                TwitchSessionManager.INSTANCE.sendChatMessage(
+                    viewerDisplayName + " - you already have " + GearSets.getDisplayName(action.unlockKey) + " unlocked!");
                 fulfill(redemptionId, twitchRewards, false);
                 return;
             }
@@ -152,22 +160,16 @@ public final class RewardManager {
                 int current = ViewerFollowerProfile.getLastHits(viewerUserId);
                 int remaining = action.requiredKills - current;
                 TwitchSessionManager.INSTANCE.sendChatMessage(
-                    viewerDisplayName + " - you need "
-                        + remaining
-                        + " more last hit"
-                        + (remaining == 1 ? "" : "s")
-                        + " ("
-                        + current
-                        + "/"
-                        + action.requiredKills
-                        + ")!");
+                    viewerDisplayName + " - you need " + remaining + " more last hit"
+                        + (remaining == 1 ? "" : "s") + " (" + current + "/" + action.requiredKills + ")!");
                 fulfill(redemptionId, twitchRewards, false);
                 return;
             }
 
             ViewerFollowerProfile.spendKills(viewerUserId, action.requiredKills);
-            ViewerFollowerProfile.applyUpgrade(viewerUserId, action.newItem);
-            PacketHandler.sendToServer(new ApplyGearPacket(viewerUserId, action.newItem));
+            ViewerFollowerProfile.grantUnlock(viewerUserId, action.unlockKey);
+            TwitchSessionManager.INSTANCE.sendChatMessage(
+                viewerDisplayName + " - unlocked " + GearSets.getDisplayName(action.unlockKey) + "! Use !equip to wear it.");
             fulfill(redemptionId, twitchRewards, true);
             return;
         }
