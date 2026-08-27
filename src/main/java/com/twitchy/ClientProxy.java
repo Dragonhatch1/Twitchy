@@ -1,6 +1,7 @@
 package com.twitchy;
 
 import com.twitchy.entity.GearSets;
+import cpw.mods.fml.client.registry.ClientRegistry;
 import net.minecraftforge.client.ClientCommandHandler;
 import net.minecraftforge.common.MinecraftForge;
 
@@ -40,6 +41,9 @@ public class ClientProxy extends CommonProxy {
     public void init(FMLInitializationEvent event) {
         super.init(event);
         ClientCommandHandler.instance.registerCommand(new CommandTwitchy());
+
+        ClientRegistry.registerKeyBinding(ClientEventHandler.OPEN_GEARSET_BUILDER);
+
         FMLCommonHandler.instance()
             .bus()
             .register(new ClientEventHandler());

@@ -153,4 +153,17 @@ public final class GearSets {
         p.slot = slot;
         return p;
     }
+
+    public static void putSet(String key, String displayName, List<GearPiece> pieces) {
+        GearSetEntry entry = new GearSetEntry();
+        entry.displayName = displayName;
+        entry.pieces = pieces;
+        sets.put(key, entry);
+        save();
+    }
+
+    public static void deleteSet(String key) {
+        sets.remove(key);
+        save();
+    }
 }

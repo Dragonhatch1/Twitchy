@@ -3,10 +3,16 @@ package com.twitchy.client;
 import com.twitchy.Config;
 import com.twitchy.Twitchy;
 
+import com.twitchy.gui.GearSetBuilderContainer;
+import com.twitchy.gui.GearSetBuilderGui;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.InputEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.ClientTickEvent;
 import cpw.mods.fml.common.network.FMLNetworkEvent;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.settings.KeyBinding;
+import org.lwjgl.input.Keyboard;
 
 /**
  * Client-side only. Tears down the live EventSub session whenever the player leaves a world -
@@ -18,6 +24,8 @@ import cpw.mods.fml.common.network.FMLNetworkEvent;
 public class ClientEventHandler {
 
     private final ViewerFollowerClientPoller viewerFollowerPoller = new ViewerFollowerClientPoller();
+    public static final KeyBinding OPEN_GEARSET_BUILDER = new KeyBinding(
+        "key.twitchy.geargui", Keyboard.KEY_PERIOD, "key.categories.twitchy");
 
     @SubscribeEvent
     public void onDisconnect(FMLNetworkEvent.ClientDisconnectionFromServerEvent event) {
@@ -59,6 +67,16 @@ public class ClientEventHandler {
             FovEffectManager.tick();
             viewerFollowerPoller.tick();
             KeySequenceChallengeManager.tick();
+        }
+    }
+
+    @SubscribeEvent
+    public void onKeyInput(InputEvent.KeyInputEvent event) {
+        if (OPEN_GEARSET_BUILDER.isPressed()) {
+            Minecraft mc = Minecraft.getMinecraft();
+            if (mc.currentScreen == null) { // don't yank the player out of another open GUI
+                mc.displayGuiScreen(new GearSetBuilderGui(new GearSetBuilderContainer(mc.thePlayer.inventory)));
+            }
         }
     }
 }

@@ -1,5 +1,8 @@
 package com.twitchy.command;
 
+import com.twitchy.gui.GearSetBuilderContainer;
+import com.twitchy.gui.GearSetBuilderGui;
+import net.minecraft.client.Minecraft;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.ChatComponentText;
