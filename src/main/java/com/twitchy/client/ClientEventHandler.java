@@ -74,8 +74,8 @@ public class ClientEventHandler {
     public void onKeyInput(InputEvent.KeyInputEvent event) {
         if (OPEN_GEARSET_BUILDER.isPressed()) {
             Minecraft mc = Minecraft.getMinecraft();
-            if (mc.currentScreen == null) { // don't yank the player out of another open GUI
-                mc.displayGuiScreen(new GearSetBuilderGui(new GearSetBuilderContainer(mc.thePlayer.inventory)));
+            if (mc.currentScreen == null) {
+                mc.displayGuiScreen(new GearSetBuilderGui(new GearSetBuilderContainer()));
             }
         }
     }

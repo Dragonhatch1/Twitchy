@@ -25,6 +25,7 @@ public class GearSetBuilderGui extends GuiContainer {
     private static final int TEXT = 0xFFF0F0F0;
     private static final int LABEL = 0xFF888888;
     private static final int ACCENT = 0xFF22C55E;
+    private static final int GOLD_BORDER = 0xFFD9A441;
 
     private final GearSetBuilderContainer builderContainer;
     private GuiTextField keyField;
@@ -37,13 +38,10 @@ public class GearSetBuilderGui extends GuiContainer {
     private static final int BTN_DELETE = 2;
     private static final int BTN_DROPDOWN = 3;
 
-    private static final int GOLD_BORDER = 0xFFD9A441;
-
-    // staging box coordinates, relative to the GUI's own top-left
     private static final int STAGING_BOX_LEFT = 16;
     private static final int STAGING_BOX_TOP = 118;
-    private static final int STAGING_BOX_RIGHT_MARGIN = 16; // from xSize
-    private static final int STAGING_BOX_BOTTOM = 176; // flush with the buttons' top edge
+    private static final int STAGING_BOX_RIGHT_MARGIN = 16;
+    private static final int STAGING_BOX_BOTTOM = 176;
 
     public GearSetBuilderGui(GearSetBuilderContainer container) {
         super(container);
@@ -97,6 +95,10 @@ public class GearSetBuilderGui extends GuiContainer {
         drawRect(boxLeft - 1, boxTop - 1, boxRight + 1, boxBottom + 1, GOLD_BORDER);
         drawRect(boxLeft, boxTop, boxRight, boxBottom, PANEL);
 
+        // No manual item drawing needed anymore - these are real Slot objects again
+        // (SlotDummy extends Slot), so GuiContainer's own base draw loop renders their
+        // contents automatically, exactly like every vanilla inventory screen.
+
         if (dropdownOpen) {
             int dy = top + 40;
             for (int i = 0; i < knownKeys.size(); i++) {
@@ -111,7 +113,10 @@ public class GearSetBuilderGui extends GuiContainer {
 
     @Override
     protected void mouseClicked(int mouseX, int mouseY, int button) {
+        // Plain vanilla click handling now - ContainerExtended.slotClick already routes
+        // correctly to SlotDummy for any real click landing on one of these slots.
         super.mouseClicked(mouseX, mouseY, button);
+
         keyField.mouseClicked(mouseX, mouseY, button);
         nameField.mouseClicked(mouseX, mouseY, button);
 
@@ -154,10 +159,11 @@ public class GearSetBuilderGui extends GuiContainer {
         keyField.setText(key);
         nameField.setText(GearSets.getDisplayName(key));
 
-        RedeemActionHandler resolver = new RedeemActionHandler();
         for (int i = 0; i < builderContainer.getStaging().getSizeInventory(); i++) {
             builderContainer.getStaging().setInventorySlotContents(i, null);
         }
+
+        RedeemActionHandler resolver = new RedeemActionHandler();
         List<GearPiece> pieces = GearSets.getSet(key);
         for (int i = 0; i < pieces.size() && i < GearSetBuilderContainer.STAGING_SLOTS; i++) {
             GearPiece piece = pieces.get(i);
