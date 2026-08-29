@@ -32,7 +32,8 @@ public class RenderViewerFollower extends RenderBiped {
     private static final Set<String> pendingLookups = ConcurrentHashMap.newKeySet();
     private final Map<String, ModelBase> modelCache = new HashMap<>();
 
-    private static final java.util.Set<String> ARMOR_INCOMPATIBLE_KEYS = java.util.Set.of("ENDERMAN", "REDCAP", "MINOSHROOM", "KOBOLD");
+    private static final java.util.Set<String> ARMOR_INCOMPATIBLE_KEYS = java.util.Set
+        .of("ENDERMAN", "REDCAP", "MINOSHROOM", "KOBOLD");
 
     private static final GameProfileRepository PROFILE_REPO = new YggdrasilAuthenticationService(
         Proxy.NO_PROXY,

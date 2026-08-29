@@ -1,7 +1,5 @@
 package com.twitchy.rewards;
 
-import java.util.List;
-
 /**
  * Describes one configured action for a reward redemption. Only the fields relevant to
  * {@link #type} need to be set in rewards.json; the rest are ignored.

@@ -20,7 +20,8 @@ import cpw.mods.fml.common.Loader;
 
 public final class ViewerFollowerProfile {
 
-    private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
+    private static final Gson GSON = new GsonBuilder().setPrettyPrinting()
+        .create();
     private static Map<String, ViewerRecord> chatters = new HashMap<>();
 
     private static final float MIN_SCALE = 0.20F;
@@ -41,7 +42,10 @@ public final class ViewerFollowerProfile {
     }
 
     private static File file() {
-        File dir = new File(Loader.instance().getConfigDir(), "twitchy");
+        File dir = new File(
+            Loader.instance()
+                .getConfigDir(),
+            "twitchy");
         if (!dir.exists()) dir.mkdirs();
         return new File(dir, "ViewerProfile.json");
     }
@@ -81,8 +85,10 @@ public final class ViewerFollowerProfile {
         return getUnlocked(userId).contains(key);
     }
 
-    /** Returns false if the viewer already has this key - callers use this to refuse/refund
-     *  rather than let someone waste points re-buying something they already own. */
+    /**
+     * Returns false if the viewer already has this key - callers use this to refuse/refund
+     * rather than let someone waste points re-buying something they already own.
+     */
     public static boolean grantUnlock(String userId, String key) {
         ViewerRecord record = recordFor(userId);
         if (record.unlocked.contains(key)) return false;
@@ -96,8 +102,10 @@ public final class ViewerFollowerProfile {
         return record != null ? new ArrayList<>(record.equipped.values()) : Collections.emptyList();
     }
 
-    /** Equips a specific piece into its slot, only if the viewer has actually unlocked a set
-     *  containing it. Returns false (does nothing) if they haven't. */
+    /**
+     * Equips a specific piece into its slot, only if the viewer has actually unlocked a set
+     * containing it. Returns false (does nothing) if they haven't.
+     */
     public static boolean equipPiece(String userId, int slot, String itemNameQuery) {
         ViewerRecord record = recordFor(userId);
         GearPiece piece = GearSets.findPieceInSets(record.unlocked, slot, itemNameQuery);

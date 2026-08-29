@@ -78,3 +78,5 @@ public class Twitchy {
 
 // TODO Followers Duel each other | Maybe just turns against the group?
 // TODO Spawn lurkers (people who havent typed) as specific models/skins
+
+// TODO Fix Gear Set List being under buttons

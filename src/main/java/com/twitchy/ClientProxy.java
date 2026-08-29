@@ -13,6 +13,7 @@ import com.twitchy.client.RenderViewerFollower;
 import com.twitchy.client.ToastEffect;
 import com.twitchy.command.CommandTwitchy;
 import com.twitchy.entity.EntityViewerFollower;
+import com.twitchy.entity.GearSets;
 import com.twitchy.entity.MobSpawningConfig;
 import com.twitchy.entity.ViewerFollowerProfile;
 import com.twitchy.rewards.RewardConfig;

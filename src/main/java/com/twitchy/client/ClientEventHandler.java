@@ -14,13 +14,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
 import org.lwjgl.input.Keyboard;
 
-/**
- * Client-side only. Tears down the live EventSub session whenever the player leaves a world -
- * whether that's exiting a singleplayer world (which also runs its own integrated server
- * connection under the hood) or disconnecting from a multiplayer server. Without this, staying
- * "connected" across world switches means Twitchy could end up listening from a stale session
- * while the player is free to run /twitchy connect again elsewhere.
- */
+
 public class ClientEventHandler {
 
     private final ViewerFollowerClientPoller viewerFollowerPoller = new ViewerFollowerClientPoller();

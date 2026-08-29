@@ -94,29 +94,49 @@ public class GearSetBuilderGui extends GuiContainer {
 
         drawRect(boxLeft - 1, boxTop - 1, boxRight + 1, boxBottom + 1, GOLD_BORDER);
         drawRect(boxLeft, boxTop, boxRight, boxBottom, PANEL);
+    }
 
-        // No manual item drawing needed anymore - these are real Slot objects again
-        // (SlotDummy extends Slot), so GuiContainer's own base draw loop renders their
-        // contents automatically, exactly like every vanilla inventory screen.
+    @Override
+    protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
+        if (!dropdownOpen) return;
 
-        if (dropdownOpen) {
-            int dy = top + 40;
-            for (int i = 0; i < knownKeys.size(); i++) {
-                drawRect(left + 16, dy + i * 16, left + xSize - 16, dy + i * 16 + 16, PANEL);
-                fontRendererObj.drawString(GearSets.getDisplayName(knownKeys.get(i)), left + 20, dy + i * 16 + 4, TEXT);
-            }
-            int newY = dy + knownKeys.size() * 16;
-            drawRect(left + 16, newY, left + xSize - 16, newY + 16, PANEL);
-            fontRendererObj.drawString("+ New Set", left + 20, newY + 4, ACCENT);
+        GL11.glDisable(GL11.GL_DEPTH_TEST);
+
+        int dy = 40;
+        for (int i = 0; i < knownKeys.size(); i++) {
+            drawRect(16, dy + i * 16, xSize - 16, dy + i * 16 + 16, PANEL);
+            fontRendererObj.drawString(GearSets.getDisplayName(knownKeys.get(i)), 20, dy + i * 16 + 4, TEXT);
         }
+        int newY = dy + knownKeys.size() * 16;
+        drawRect(16, newY, xSize - 16, newY + 16, PANEL);
+        fontRendererObj.drawString("+ New Set", 20, newY + 4, ACCENT);
     }
 
     @Override
     protected void mouseClicked(int mouseX, int mouseY, int button) {
-        // Plain vanilla click handling now - ContainerExtended.slotClick already routes
-        // correctly to SlotDummy for any real click landing on one of these slots.
-        super.mouseClicked(mouseX, mouseY, button);
+        if (dropdownOpen) {
+            int left = (width - xSize) / 2;
+            int top = (height - ySize) / 2;
+            int dy = top + 40;
+            for (int i = 0; i < knownKeys.size(); i++) {
+                if (isInRect(mouseX, mouseY, left + 16, dy + i * 16, xSize - 32, 16)) {
+                    loadSet(knownKeys.get(i));
+                    dropdownOpen = false;
+                    return;
+                }
+            }
+            int newY = dy + knownKeys.size() * 16;
+            if (isInRect(mouseX, mouseY, left + 16, newY, xSize - 32, 16)) {
+                clearForm();
+                dropdownOpen = false;
+                return;
+            }
 
+            dropdownOpen = false;
+            return;
+        }
+
+        super.mouseClicked(mouseX, mouseY, button);
         keyField.mouseClicked(mouseX, mouseY, button);
         nameField.mouseClicked(mouseX, mouseY, button);
 

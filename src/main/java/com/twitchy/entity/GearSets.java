@@ -19,20 +19,23 @@ import cpw.mods.fml.common.Loader;
 
 public final class GearSets {
 
-    private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
+    private static final Gson GSON = new GsonBuilder().setPrettyPrinting()
+        .create();
     private static Map<String, GearSetEntry> sets = new LinkedHashMap<>();
 
     private GearSets() {}
 
     public static class GearSetEntry {
 
-
         public String displayName;
         public List<GearPiece> pieces;
     }
 
     private static File file() {
-        File dir = new File(Loader.instance().getConfigDir(), "twitchy");
+        File dir = new File(
+            Loader.instance()
+                .getConfigDir(),
+            "twitchy");
         if (!dir.exists()) dir.mkdirs();
         return new File(dir, "GearSets.json");
     }
@@ -71,9 +74,7 @@ public final class GearSets {
     public static String getDisplayName(String key) {
         if (key == null) return "";
         GearSetEntry entry = sets.get(key);
-        return entry != null && entry.displayName != null && !entry.displayName.isBlank()
-            ? entry.displayName
-            : key;
+        return entry != null && entry.displayName != null && !entry.displayName.isBlank() ? entry.displayName : key;
     }
 
     public static boolean exists(String key) {
@@ -89,8 +90,7 @@ public final class GearSets {
         for (String key : unlockedKeys) {
             for (GearPiece piece : getSet(key)) {
                 if (piece.slot != slot) continue;
-                String shortName = piece.item.contains(":")
-                    ? piece.item.substring(piece.item.indexOf(':') + 1)
+                String shortName = piece.item.contains(":") ? piece.item.substring(piece.item.indexOf(':') + 1)
                     : piece.item;
                 if (shortName.equalsIgnoreCase(query)) return piece;
             }
@@ -111,25 +111,50 @@ public final class GearSets {
     private static Map<String, GearSetEntry> defaultSets() {
         Map<String, GearSetEntry> defaults = new LinkedHashMap<>();
 
-        defaults.put("leatherarmour", entry("Leather Armour",
-            piece("minecraft:leather_helmet", 0, 4), piece("minecraft:leather_chestplate", 0, 3),
-            piece("minecraft:leather_leggings", 0, 2), piece("minecraft:leather_boots", 0, 1)));
+        defaults.put(
+            "leatherarmour",
+            entry(
+                "Leather Armour",
+                piece("minecraft:leather_helmet", 0, 4),
+                piece("minecraft:leather_chestplate", 0, 3),
+                piece("minecraft:leather_leggings", 0, 2),
+                piece("minecraft:leather_boots", 0, 1)));
 
-        defaults.put("goldarmour", entry("Gold Armour",
-            piece("minecraft:golden_helmet", 0, 4), piece("minecraft:golden_chestplate", 0, 3),
-            piece("minecraft:golden_leggings", 0, 2), piece("minecraft:golden_boots", 0, 1)));
+        defaults.put(
+            "goldarmour",
+            entry(
+                "Gold Armour",
+                piece("minecraft:golden_helmet", 0, 4),
+                piece("minecraft:golden_chestplate", 0, 3),
+                piece("minecraft:golden_leggings", 0, 2),
+                piece("minecraft:golden_boots", 0, 1)));
 
-        defaults.put("chainarmour", entry("Chain Armour",
-            piece("minecraft:chainmail_helmet", 0, 4), piece("minecraft:chainmail_chestplate", 0, 3),
-            piece("minecraft:chainmail_leggings", 0, 2), piece("minecraft:chainmail_boots", 0, 1)));
+        defaults.put(
+            "chainarmour",
+            entry(
+                "Chain Armour",
+                piece("minecraft:chainmail_helmet", 0, 4),
+                piece("minecraft:chainmail_chestplate", 0, 3),
+                piece("minecraft:chainmail_leggings", 0, 2),
+                piece("minecraft:chainmail_boots", 0, 1)));
 
-        defaults.put("ironarmour", entry("Iron Armour",
-            piece("minecraft:iron_helmet", 0, 4), piece("minecraft:iron_chestplate", 0, 3),
-            piece("minecraft:iron_leggings", 0, 2), piece("minecraft:iron_boots", 0, 1)));
+        defaults.put(
+            "ironarmour",
+            entry(
+                "Iron Armour",
+                piece("minecraft:iron_helmet", 0, 4),
+                piece("minecraft:iron_chestplate", 0, 3),
+                piece("minecraft:iron_leggings", 0, 2),
+                piece("minecraft:iron_boots", 0, 1)));
 
-        defaults.put("diamondarmour", entry("Diamond Armour",
-            piece("minecraft:diamond_helmet", 0, 4), piece("minecraft:diamond_chestplate", 0, 3),
-            piece("minecraft:diamond_leggings", 0, 2), piece("minecraft:diamond_boots", 0, 1)));
+        defaults.put(
+            "diamondarmour",
+            entry(
+                "Diamond Armour",
+                piece("minecraft:diamond_helmet", 0, 4),
+                piece("minecraft:diamond_chestplate", 0, 3),
+                piece("minecraft:diamond_leggings", 0, 2),
+                piece("minecraft:diamond_boots", 0, 1)));
 
         defaults.put("woodensword", entry("Wooden Sword", piece("minecraft:wooden_sword", 0, 0)));
         defaults.put("stonesword", entry("Stone Sword", piece("minecraft:stone_sword", 0, 0)));

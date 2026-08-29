@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
-import com.twitchy.entity.GearSets;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.util.ChatComponentText;
@@ -20,9 +19,9 @@ import com.twitchy.client.FovEffectManager;
 import com.twitchy.client.KeySequenceChallengeManager;
 import com.twitchy.client.ToastEffect;
 import com.twitchy.client.TwitchSessionManager;
+import com.twitchy.entity.GearSets;
 import com.twitchy.entity.MobSpawningConfig;
 import com.twitchy.entity.ViewerFollowerProfile;
-import com.twitchy.network.ApplyGearPacket;
 import com.twitchy.network.HealFollowerPacket;
 import com.twitchy.network.PacketHandler;
 import com.twitchy.network.RedeemActionPacket;
@@ -144,14 +143,18 @@ public final class RewardManager {
             if (action.requiredUnlockKey != null
                 && !ViewerFollowerProfile.hasUnlocked(viewerUserId, action.requiredUnlockKey)) {
                 TwitchSessionManager.INSTANCE.sendChatMessage(
-                    viewerDisplayName + " - you need " + GearSets.getDisplayName(action.requiredUnlockKey) + " unlocked first!");
+                    viewerDisplayName + " - you need "
+                        + GearSets.getDisplayName(action.requiredUnlockKey)
+                        + " unlocked first!");
                 fulfill(redemptionId, twitchRewards, false);
                 return;
             }
 
             if (ViewerFollowerProfile.hasUnlocked(viewerUserId, action.unlockKey)) {
                 TwitchSessionManager.INSTANCE.sendChatMessage(
-                    viewerDisplayName + " - you already have " + GearSets.getDisplayName(action.unlockKey) + " unlocked!");
+                    viewerDisplayName + " - you already have "
+                        + GearSets.getDisplayName(action.unlockKey)
+                        + " unlocked!");
                 fulfill(redemptionId, twitchRewards, false);
                 return;
             }
@@ -160,8 +163,15 @@ public final class RewardManager {
                 int current = ViewerFollowerProfile.getLastHits(viewerUserId);
                 int remaining = action.requiredKills - current;
                 TwitchSessionManager.INSTANCE.sendChatMessage(
-                    viewerDisplayName + " - you need " + remaining + " more last hit"
-                        + (remaining == 1 ? "" : "s") + " (" + current + "/" + action.requiredKills + ")!");
+                    viewerDisplayName + " - you need "
+                        + remaining
+                        + " more last hit"
+                        + (remaining == 1 ? "" : "s")
+                        + " ("
+                        + current
+                        + "/"
+                        + action.requiredKills
+                        + ")!");
                 fulfill(redemptionId, twitchRewards, false);
                 return;
             }
@@ -169,7 +179,9 @@ public final class RewardManager {
             ViewerFollowerProfile.spendKills(viewerUserId, action.requiredKills);
             ViewerFollowerProfile.grantUnlock(viewerUserId, action.unlockKey);
             TwitchSessionManager.INSTANCE.sendChatMessage(
-                viewerDisplayName + " - unlocked " + GearSets.getDisplayName(action.unlockKey) + "! Use !equip to wear it.");
+                viewerDisplayName + " - unlocked "
+                    + GearSets.getDisplayName(action.unlockKey)
+                    + "! Use !equip to wear it.");
             fulfill(redemptionId, twitchRewards, true);
             return;
         }
